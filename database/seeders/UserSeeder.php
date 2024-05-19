@@ -1,0 +1,50 @@
+<?php
+
+namespace Database\Seeders;
+
+use App\Models\User;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
+
+class UserSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     */
+    public function run(): void
+    {
+        $admin = User::create([
+            'name' => 'Administrator',
+            'email' => 'admin@hme.poliban.ac.id',
+            'password' => bcrypt('admin123'),
+        ]);
+
+        $admin->assignRole('admin');
+
+        $admin = User::create([
+            'name' => 'Mimin',
+            'email' => 'mimin@hme.poliban.ac.id',
+            'password' => bcrypt('admin123'),
+        ]);
+
+        $admin->assignRole('admin');
+
+        $user = User::create([
+            'name' => 'Bima Haekal Akbar',
+            'email' => 'c030322108@mahasiswa.poliban.ac.id',
+            'password' => bcrypt('c030322108'),
+        ]);
+
+        $user->assignRole('user');
+        // User::factory(5)->create();
+
+        // User::create([
+        //     'name' => 'Bima Haekal Akbar',
+        //     'email' => 'c030322108@mahasiswa.poliban.ac.id',
+        //     'email_verified_at' => now(),
+        //     'password' => Hash::make('c030322108'),
+        //     'roles' => 'mahasiswa',
+        // ]);
+    }
+}
