@@ -17,11 +17,6 @@ class ScheduleController extends Controller
         $schedules = Schedule::paginate(10)->withQueryString();
         return view('pages.schedules.index', ['schedules' => $schedules]);
     }
-    // public function create()
-    //     // $schedules = Schedule::paginate(10)->withQueryString();
-    //     // return view('pages.schedules.index', ['schedules' => $schedules]);
-    //     return view('pages.schedules.index');
-    // }
 
     public function listSchedule(Request $request){
         $start = date('Y-m-d', strtotime($request->start));

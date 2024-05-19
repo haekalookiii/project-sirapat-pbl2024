@@ -32,12 +32,8 @@ Route::middleware(['auth'])->group(function () {
     })->name('home');
     Route::resource('profile', ProfileController::class);
     Route::middleware('role:admin')->resource('user', UserController::class);
-<<<<<<< HEAD
-    Route::middleware('role:admin')->resource('schedule', ScheduleController::class);
-=======
     Route::get('schedule/list', [ScheduleController::class, 'listSchedule'])->name('schedule.list');
     Route::resource('schedule', ScheduleController::class);
->>>>>>> 772407a (bug calander)
     Route::middleware('role:admin')->resource('student', StudentController::class);
 });
 

@@ -12,9 +12,6 @@ class ScheduleSeeder extends Seeder
      */
     public function run(): void
     {
-<<<<<<< HEAD
-        Schedule::factory(30)->create();
-=======
         // Schedule::factory(30)->create();
         $days = [[1, 3], 5, 6, 9, [12, 13]];
         $fake = fake('id_ID');
@@ -41,8 +38,6 @@ class ScheduleSeeder extends Seeder
                 ];
             }
         }
-
         Schedule::insert($schedules);
->>>>>>> 772407a (bug calander)
     }
 }

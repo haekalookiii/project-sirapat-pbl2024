@@ -37,8 +37,6 @@
                             </div>
                             <div class="card-body">
                                 <div id='calendar'></div>
-<<<<<<< HEAD
-=======
                                 <div id="modal-action" class="modal" tabindex="-1">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
@@ -56,7 +54,6 @@
                                         </div>
                                     </div>
                                 </div>
->>>>>>> 772407a (bug calander)
                             </div>
                         </div>
                     </div>
@@ -68,37 +65,20 @@
 @push('scripts')
     <!-- JS Libraies -->
     <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js'></script>
-<<<<<<< HEAD
-    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
-    <script src='https://cdn.jsdelivr.net/npm/@fullcalendar/bootstrap5@6.1.11/index.global.min.js'></script>
-    <script>
-
-=======
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
     <script src='https://cdn.jsdelivr.net/npm/@fullcalendar/bootstrap5@6.1.11/index.global.min.js'></script>
     <script>
->>>>>>> 772407a (bug calander)
     document.addEventListener('DOMContentLoaded', function() {
         var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: 'dayGridMonth',
         themeSystem: 'bootstrap5',
-<<<<<<< HEAD
-        events: [
-            {
-                id:1 ,
-                title: 'All Day Event',
-                start: '2024-05-16'
-            }
-        ]
-=======
         events: '{{ route('schedule.list') }}',
         dateClick: function(info) {
                 console.log(info);
                 $('#modal-action').modal('show');
             }
->>>>>>> 772407a (bug calander)
         });
         calendar.render();
     });

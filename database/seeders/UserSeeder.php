@@ -37,14 +37,5 @@ class UserSeeder extends Seeder
         ]);
 
         $user->assignRole('user');
-        // User::factory(5)->create();
-
-        // User::create([
-        //     'name' => 'Bima Haekal Akbar',
-        //     'email' => 'c030322108@mahasiswa.poliban.ac.id',
-        //     'email_verified_at' => now(),
-        //     'password' => Hash::make('c030322108'),
-        //     'roles' => 'mahasiswa',
-        // ]);
     }
 }
