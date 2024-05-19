@@ -38,6 +38,7 @@ class ScheduleSeeder extends Seeder
                 ];
             }
         }
+
         Schedule::insert($schedules);
     }
 }
