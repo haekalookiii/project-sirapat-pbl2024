@@ -16,7 +16,11 @@
         crossorigin="anonymous"
         referrerpolicy="no-referrer" />
 
-    @stack('style')
+    <!-- CSS Libraries -->
+    <link rel="stylesheet" href="{{ asset('library/selectric/public/selectric.css') }}">
+    <link href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css' rel='stylesheet'>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 
     <!-- Template CSS -->
     <link rel="stylesheet"
@@ -57,11 +61,7 @@
             @include('components.footer')
         </div>
     </div>
-<<<<<<< HEAD
-
-=======
     
->>>>>>> 772407a (bug calander)
     <!-- General JS Scripts -->
     <script src="{{ asset('library/jquery/dist/jquery.min.js') }}"></script>
     <script src="{{ asset('library/popper.js/dist/umd/popper.js') }}"></script>
@@ -70,15 +70,19 @@
     <script src="{{ asset('library/jquery.nicescroll/dist/jquery.nicescroll.min.js') }}"></script>
     <script src="{{ asset('library/moment/min/moment.min.js') }}"></script>
     <script src="{{ asset('js/stisla.js') }}"></script>
-<<<<<<< HEAD
 
-    @stack('scripts')
-=======
+    <!-- JS Libraies -->
+    <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js'></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
+    <script src='https://cdn.jsdelivr.net/npm/@fullcalendar/bootstrap5@6.1.11/index.global.min.js'></script>
     
     @stack('scripts')
     
->>>>>>> 772407a (bug calander)
-
+    <script src="{{ asset('library/selectric/public/jquery.selectric.min.js') }}"></script>
+    <!-- Page Specific JS File -->
+    <script src="{{ asset('js/page/features-posts.js') }}"></script>
+    
     <!-- Template JS File -->
     <script src="{{ asset('js/scripts.js') }}"></script>
     <script src="{{ asset('js/custom.js') }}"></script>
