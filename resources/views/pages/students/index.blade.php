@@ -60,8 +60,8 @@
                                             <th>Nomor Induk Mahasiswa</th>
                                             <th>Tanggal Lahir</th>
                                             <th>Jenis Kelamin</th>
+                                            <th>Program Studi</th>
                                             <th>Angkatan Mahasiswa</th>
-                                            <th>Hobby</th>
                                             <th>Action</th>
                                         </tr>
                                         
@@ -88,10 +88,10 @@
                                                     {{ $student->jenis_kelamin }}
                                                 </td>
                                                 <td>
-                                                    {{ $student->angkatan_mahasiswa }}
+                                                    {{ $student->program_studi }}
                                                 </td>
                                                 <td>
-                                                    {{ $student->hobby }}
+                                                    {{ $student->angkatan_mahasiswa }}
                                                 </td>
                                                 <td>
                                                     <div class="d-flex justify-content-center">

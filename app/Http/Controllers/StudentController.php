@@ -18,7 +18,7 @@ class StudentController extends Controller
     public function index()
     {
         // ->withQueryString()
-        $student = Student::paginate(1);
+        $student = Student::paginate(5);
         return view('pages.students.index', ['students' => $student]);
     }
     public function create()
@@ -37,7 +37,7 @@ class StudentController extends Controller
             'jenis_kelamin' => 'nullable|in:L,P',
             'foto_profil' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'angkatan_mahasiswa' => 'nullable|numeric',
-            'hobby' => 'nullable|array',    
+            'program_studi' => 'nullable',    
         ]);
         //dd($validasiData['foto_profil']);
         try {
@@ -56,7 +56,6 @@ class StudentController extends Controller
         }
 
             // Konversi array 'hobby' menjadi string dipisahkan oleh koma
-            $validasiData['hobby'] = $request->input('hobby') ? implode(',', $request->input('hobby')) : null;
 
             // Simpan data ke dalam basis data
             Student::create(
@@ -98,7 +97,7 @@ class StudentController extends Controller
             'jenis_kelamin' => 'nullable|in:L,P',
             'foto_profil' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'angkatan_mahasiswa' => 'nullable|numeric',
-            'hobby' => 'nullable|array',    
+            'program_studi' => 'nullable',    
         ]);
         try {
             // Validasi data
@@ -121,7 +120,7 @@ class StudentController extends Controller
                 $validasiData['foto_profil'] = $student->foto_profil;
             }
             
-            $validasiData['hobby'] = $request->input('hobby') ? implode(',', $request->input('hobby')) : $student->hobby;
+            // $validasiData['hobby'] = $request->input('hobby') ? implode(',', $request->input('hobby')) : $student->hobby;
 
             // Update data
             $student->update($validasiData);

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PresenceController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\StudentController;
@@ -34,7 +35,10 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware('role:admin')->resource('user', UserController::class);
     Route::get('schedule/list', [ScheduleController::class, 'listSchedule'])->name('schedule.list');
     Route::resource('schedule', ScheduleController::class);
-    Route::middleware('role:admin')->resource('student', StudentController::class);
+    // Route::middleware('role:admin')->resource('student', StudentController::class);
+    Route::resource('student', StudentController::class);
+    Route::resource('presence', PresenceController::class);
+    Route::get('/create-presence', [PresenceController::class, 'create'])->name('create-presence');
 });
 
 

@@ -22,13 +22,13 @@ class UpdateStudentRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'foto_profil' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'nama_lengkap' => 'string',
             'nim' => 'string',
             'tanggal_lahir' => 'string',
             'jenis_kelamin' => 'string',
-            'foto_profil' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'program_studi' => 'string',
             'angkatan_mahasiswa' => 'string',
-            'hobby' => 'nullable|array',
         ];
     }
 }

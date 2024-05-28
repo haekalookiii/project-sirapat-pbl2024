@@ -38,27 +38,14 @@
         </section>
 
         <div class="modal" id="modal-action" tabindex="-1">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Modal title</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p>Modal body text goes here.</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                </div>
-                </div>
-            </div>
+            
         </div>
     </div>
 @endsection
 
 @push('scripts')
     <script>
+        const modal = $('#modal-action')
     document.addEventListener('DOMContentLoaded', function() {
         var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {
@@ -67,7 +54,33 @@
         events: '{{ route('schedule.list') }}',
         dateClick: function(info) {
                 console.log(info);
-                $('#modal-action').modal('show')
+                $.ajax({
+                    url: '{{ route('schedule.create') }}',
+                    data: {
+                        start_date: info.dateStr,
+                        end_date: info.dateStr
+                    },
+                    success: function (res) {
+                        modal.html(res).modal('show')
+
+                        $('#form-action').on('submit', function(e) {
+                            e.preventDefault()
+                            const form = this
+                            const formData = new FormData(form)
+                            $.ajax({
+                                url: form-action,
+                                method: form-action,
+                                data: formData,
+                                processData: false,
+                                contentType: false,
+                                success: function (res) {
+                                    modal.modal('hide')
+                                    calendar.refetchEvents()
+                                }
+                            })
+                        })
+                    }
+                })
             }
         });
         calendar.render();

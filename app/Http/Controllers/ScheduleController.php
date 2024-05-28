@@ -34,30 +34,24 @@ class ScheduleController extends Controller
         return response()->json($schedules);
     }
 
-    public function create()
+    public function create(Schedule $schedule)
     {
-        return view('pages.schedules.create');
+        return view('pages.schedules.schedule-form',['data' => $schedule, 'action' => route('schedule.store')]);
     }
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreSchedulRequest $request)
+    public function store(StoreSchedulRequest $request, Schedule $schedule)
     {
-        Schedule::create([
-            'subject_id' => $request['subject_id'],
-            'hari' => $request['hari'],
-            'jam_mulai' => $request['jam_mulai'],
-            'jam_selesai' => $request['jam_selesai'],
-            'ruangan' => $request['ruangan'],
-            'kode_absensi' => $request['kode_absensi'],
-            'tahun_akademik' => $request['tahun_akademik'],
-            'semester' => $request['semester'],
-            'created_by' => $request['created_by'],
-            'updated_by' => $request['updated_by'],
-            'deleted_by' => $request['deleted_by'],
-        ]);
+        $schedule->start_date = $request->start_date;
+        $schedule->end_date = $request->end_date;
+        $schedule->title = $request->title;
+        $schedule->category = $request->category;
 
-        return redirect(route('schedule.index'))->with('success', 'data berhasil disimpan');
+        $schedule->save();
+
+        return back()
+        ->with('success', 'Schedule created successfully.');
     }
 
     public function edit(Schedule $schedule)

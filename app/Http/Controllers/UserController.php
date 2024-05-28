@@ -27,7 +27,7 @@ class UserController extends Controller
         //     ->paginate(15);
         // return view('pages.users.index', compact('users'));
 
-        $pengguna = User::paginate(2);
+        $pengguna = User::paginate(3);
         return view('pages.users.index',[
             'users' => $pengguna,
         ]);
@@ -50,7 +50,7 @@ class UserController extends Controller
             'password' => Hash::make($request['password']),
         ]);
         // dd($user);
-        $a = Student::create([
+        Student::create([
             'user_id' => $user->id,
             'nama_lengkap' => $request['name'],
         ]);

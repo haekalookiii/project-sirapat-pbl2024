@@ -22,17 +22,10 @@ class StoreSchedulRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'subject_id' => 'required',
-            'hari' => 'required',
-            'jam_mulai' => 'required',
-            'jam_selesai' => 'required',
-            'ruangan' => 'required',
-            'kode_absensi' => 'required',
-            'tahun_akademik' => 'required',
-            'semester' => 'string',
-            'created_by' => 'string',
-            'updated_by' => 'string',
-            'deleted_by' => 'string',
+            'start_date' => 'required|date_format:Y-m-d',
+            'end_date' => 'required|date_format:Y-m-d',
+            'title' => 'required',
+            'category' => 'required',
         ];
     }
 }

@@ -11,10 +11,15 @@
             <li class="nav-item">
                     <a href="{{ route('home') }}" class="nav-link"><i class="fas fa-fire"></i><span>Dashboard</span></a>
             </li>
+        @can('user')
             <li class="nav-item">
                     <a href="{{ route('profile.index') }}" class="nav-link"><i class="fas fa-fire"></i><span>Profil</span></a>
             </li>
-            @can('admin')
+        @endcan
+            <li class="nav-item">
+                    <a href="{{ route('presence.index') }}" class="nav-link"><i class="fas fa-fire"></i><span>Dashboard</span></a>
+            </li>
+        @can('admin')
             <li class="nav-item">
                     <a href="{{ route('schedule.index') }}" class="nav-link"><i class="fas fa-fire"></i><span>Jadwal Rapat</span></a>
             </li>
@@ -24,6 +29,6 @@
             <li class="nav-item">
                     <a href="{{ route('student.index') }}" class="nav-link"><i class="fas fa-fire"></i><span>Mahasiswa</span></a>
             </li>
-            @endcan
+        @endcan
     </aside>
 </div>

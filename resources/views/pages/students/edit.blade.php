@@ -119,9 +119,24 @@
                             @enderror
                         </div>
                             <div class="form-group">
+                            <label>Program Studi</label>
+                            <select class="form-control @error('program_studi') is-invalid @enderror" name="program_studi">
+                                <option value="" selected disabled>Pilih Program Studi</option>
+                                <option value="Listrik" {{ old('program_studi', $student->program_studi) == 'Listrik' ? 'selected' : '' }}>Listrik</option>
+                                <option value="TI" {{ old('program_studi', $student->program_studi) == 'TI' ? 'selected' : '' }}>TI</option>
+                                <option value="SIKC" {{ old('program_studi', $student->program_studi) == 'SIKC' ? 'selected' : '' }}>SIKC</option>
+                                <!-- Add other options as needed -->
+                            </select>
+                            @error('angkatan_mahasiswa')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+                        <div class="form-group">
                             <label>Angkatan Mahasiswa</label>
                             <select class="form-control @error('angkatan_mahasiswa') is-invalid @enderror" name="angkatan_mahasiswa">
-                                <option value="" selected disabled>Pilih Tahun Angkatan</option>
+                                <option value="" selected disabled>Pilih Program Studi</option>
                                 <option value="2021" {{ old('angkatan_mahasiswa', $student->angkatan_mahasiswa) == '2021' ? 'selected' : '' }}>2021</option>
                                 <option value="2022" {{ old('angkatan_mahasiswa', $student->angkatan_mahasiswa) == '2022' ? 'selected' : '' }}>2022</option>
                                 <option value="2023" {{ old('angkatan_mahasiswa', $student->angkatan_mahasiswa) == '2023' ? 'selected' : '' }}>2023</option>
@@ -133,33 +148,6 @@
                                 </div>
                             @enderror
                         </div>
-                           <div class="form-group">
-                            <label>Hobby</label>
-                            <div class="form-check">
-                                <input type="checkbox"
-                                    class="form-check-input @error('hobby') is-invalid @enderror"
-                                    name="hobby[]" value="Bola" {{ in_array('Bola', old('hobby', explode(',', $student->hobby ?? ''))) ? 'checked' : '' }}>
-                                <label class="form-check-label">Bola</label>
-                            </div>
-                            <div class="form-check">
-                                <input type="checkbox"
-                                    class="form-check-input @error('hobby') is-invalid @enderror"
-                                    name="hobby[]" value="Baca" {{ in_array('Baca', old('hobby', explode(',', $student->hobby ?? ''))) ? 'checked' : '' }}>
-                                <label class="form-check-label">Baca</label>
-                            </div>
-                            <div class="form-check">
-                                <input type="checkbox"
-                                    class="form-check-input @error('hobby') is-invalid @enderror"
-                                    name="hobby[]" value="Menyanyi" {{ in_array('Menyanyi', old('hobby', explode(',', $student->hobby ?? ''))) ? 'checked' : '' }}>
-                                <label class="form-check-label">Menyanyi</label>
-                            </div>
-                            @error('hobby')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
-                            @enderror
-                        </div>
-
 
                         <div class="card-footer text-right">
                             <a class="btn btn-danger" href="{{ route('student.index') }}">Batal</a>
