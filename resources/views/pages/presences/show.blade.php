@@ -52,6 +52,9 @@
                                         <tr>
                                             <th>No.</th>
                                             <th>Agenda Rapat</th>
+                                            <th>NIM</th>
+                                            <th>Nama Lengkap</th>
+                                            <th>Status Kehadiran</th>
                                             <th>Created At</th>
                                             <th>Action</th>
                                         </tr>
@@ -59,12 +62,12 @@
                                         <tr>
                                                 <td>{{ $number+1 }}</td>
                                                 <td>{{ $presence->title }}</td>
+                                                <td>{{ $presence->student->nim }}</td>
+                                                <td>{{ $presence->student->nama_lengkap }}</td>
+                                                <td>{{ $presence->attendance->status_kehadiran }}</td>
                                                 <td>{{ $presence->created_at }}</td>
                                                 <td>
                                                     <div class="d-flex justify-content-center">
-                                                        <a href="{{ route('presence.show', $presence->title) }}" class="btn btn-sm btn-secondary btn-icon">
-                                                            <i class="fas fa-edit"></i> Detail
-                                                        </a>
                                                         <a href="{{ route('presence.edit', $presence->id) }}" class="btn btn-sm btn-info btn-icon">
                                                             <i class="fas fa-edit"></i> Edit
                                                         </a>

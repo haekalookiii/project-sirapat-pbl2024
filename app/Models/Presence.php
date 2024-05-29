@@ -9,12 +9,16 @@ class Presence extends Model
 {
     use HasFactory;
     
-    protected $fillable = [
-        'schedule_id',
-        'student_id',
-        'nim',
-        'nama_lengkap',
-        'status_kehadiran'
+    // protected $fillable = [
+    //     'schedule_id',
+    //     'student_id',
+    //     'nim',
+    //     'nama_lengkap',
+    //     'status_kehadiran'
+    // ];
+
+    protected $guarded =[
+        'id'
     ];
 
     public function schedule()
@@ -25,5 +29,10 @@ class Presence extends Model
     public function student()
     {
         return $this->belongsTo(Student::class);
+    }
+
+    public function attendance()
+    {
+        return $this->belongsTo(Attendance::class, 'attendance_id', 'id');
     }
 }

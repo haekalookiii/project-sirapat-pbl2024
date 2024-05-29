@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'New User')
+@section('title', 'Create Presence')
 
 @push('style')
     <!-- CSS Libraries -->
@@ -10,83 +10,42 @@
     <div class="main-content">
         <section class="section">
             <div class="section-header">
-                <h1>New User</h1>
+                <h1>Create Presence</h1>
                 <div class="section-header-breadcrumb">
                     <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
-                    <div class="breadcrumb-item"><a href="#">Users</a></div>
-                    <div class="breadcrumb-item">New User</div>
+                    <div class="breadcrumb-item"><a href="#">Presence</a></div>
+                    <div class="breadcrumb-item">Create Presence</div>
                 </div>
             </div>
 
             <div class="section-body">
-
                 <div class="card">
-                    <form action="{{ route('user.store') }}" method="POST">
+                    <form action="{{ route('presence.store') }}" method="POST">
                         @csrf
                         <div class="card-header">
-                            <h4>New User</h4>
+                            <h4>Create Presence</h4>
                         </div>
                         <div class="card-body">
                             <div class="form-group">
-                                <label>Name</label>
-                                <input type="text"
-                                    class="form-control @error('name')
-                                    is-invalid
-                                @enderror"
-                                    name="name">
-                                @error('name')
+                                <label for="schedule_id">Select Schedule</label>
+                                <select name="schedule_id" id="schedule_id" class="form-control @error('schedule_id') is-invalid @enderror" required>
+                                    <option value="" disabled selected>Select a schedule</option>
+                                    @foreach($schedules as $schedule)
+                                    <option value="{{ $schedule->id }}">{{ $schedule->title }}</option>
+                                    @endforeach
+                                </select>
+                                @error('schedule_id')
                                     <div class="invalid-feedback">
                                         {{ $message }}
                                     </div>
                                 @enderror
-                            </div>
-                            <div class="form-group">
-                                <label>Email</label>
-                                <input type="email"
-                                    class="form-control @error('email')
-                                    is-invalid
-                                @enderror"
-                                    name="email">
-                                @error('email')
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
-                            </div>
-                            <div class="form-group">
-                                <label>Password</label>
-                                <input type="password"
-                                    class="form-control @error('password')
-                                    is-invalid
-                                @enderror"
-                                    name="password">
-                                @error('password')
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Roles</label>
-                                <div class="selectgroup w-100">
-                                    <label class="selectgroup-item">
-                                        <input type="radio" name="roles" value="admin" class="selectgroup-input"
-                                            checked="">
-                                        <span class="selectgroup-button">Admin</span>
-                                    </label>
-                                    <label class="selectgroup-item">
-                                        <input type="radio" name="roles" value="user" class="selectgroup-input">
-                                        <span class="selectgroup-button">User</span>
-                                    </label>
-                                </div>
                             </div>
                         </div>
                         <div class="card-footer text-right">
-                            <button class="btn btn-primary">Submit</button>
+                            <button type="submit" class="btn btn-primary">Submit</button>
                         </div>
                     </form>
                 </div>
-
             </div>
         </section>
     </div>
@@ -94,6 +53,5 @@
 
 @push('scripts')
     <!-- JS Libraies -->
-
     <!-- Page Specific JS File -->
 @endpush
