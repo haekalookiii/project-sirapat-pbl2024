@@ -64,7 +64,7 @@
                                                 <td>{{ $presence->title }}</td>
                                                 <td>{{ $presence->student->nim }}</td>
                                                 <td>{{ $presence->student->nama_lengkap }}</td>
-                                                <td>{{ $presence->attendance->status_kehadiran }}</td>
+                                                <td>{{ $presence->status_kehadiran }}</td>
                                                 <td>{{ $presence->created_at }}</td>
                                                 <td>
                                                     <div class="d-flex justify-content-center">
@@ -84,9 +84,9 @@
                                         @endforeach
                                     </table>
                                 </div>
-                                <div class="float-right">
-                                    {{ $presences->withQueryString()->links() }}
-                                </div>
+                                {{-- <div class="float-right">
+                                    {{ $presences->links() }}
+                                </div> --}}
                             </div>
                         </div>
                     </div>

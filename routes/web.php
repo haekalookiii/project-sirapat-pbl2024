@@ -37,9 +37,9 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('schedule', ScheduleController::class);
     // Route::middleware('role:admin')->resource('student', StudentController::class);
     Route::resource('student', StudentController::class);
-    Route::resource('presence', PresenceController::class);
+    Route::resource('presence', PresenceController::class)->except('show');
     // Route::get('/create-presence', [PresenceController::class, 'create'])->name('create-presence');
-    Route::get('/presence/{presence:title}', [PresenceController::class, 'show'])->name('presence.show');
+    Route::get('/presence/{schedule:title}', [PresenceController::class, 'show'])->name('presence.show');
 });
 
 

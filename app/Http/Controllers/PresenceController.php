@@ -11,12 +11,11 @@ use Illuminate\Http\Request;
 
 class PresenceController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
-        $presence = Schedule::latest()
-            ->paginate(10); // Pagination with 10 items per page
-
-        return view('pages.presences.index', ['presences' => $presence]);
+        return view('pages.presences.index', [
+            'schedules' => Schedule::with(['presence'])->latest()->paginate(10),
+        ]);
     }
 
     public function create()
@@ -59,11 +58,11 @@ class PresenceController extends Controller
         //
     }
 
-    public function show(Presence $presence)
+    public function show(Schedule $schedule)
     {
-        $presence = $presence->with(['schedule', 'student', 'attendance'])
-            ->paginate(10); // Pagination with 10 items per page
-
-        return view('pages.presences.show', ['presences' => $presence]);
+        // dd($schedule->presence());
+        return view('pages.presences.show', [
+            'presences' => $schedule->presence()->with(['schedule', 'student', 'attendance'])->latest()->paginate(10)->withQueryString()
+        ]);
     }
 }

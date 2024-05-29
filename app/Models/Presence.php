@@ -8,27 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 class Presence extends Model
 {
     use HasFactory;
-    
-    // protected $fillable = [
-    //     'schedule_id',
-    //     'student_id',
-    //     'nim',
-    //     'nama_lengkap',
-    //     'status_kehadiran'
-    // ];
-
-    protected $guarded =[
-        'id'
-    ];
+    protected $table = 'presences';
+    protected $guarded = ['id'];
 
     public function schedule()
     {
-        return $this->belongsTo(Schedule::class);
+        return $this->belongsTo(Schedule::class, 'schedule_id', 'id');
     }
 
     public function student()
     {
-        return $this->belongsTo(Student::class);
+        return $this->belongsTo(Student::class, 'student_id', 'id');
     }
 
     public function attendance()

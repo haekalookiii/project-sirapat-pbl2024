@@ -55,20 +55,20 @@
                                             <th>Created At</th>
                                             <th>Action</th>
                                         </tr>
-                                        @foreach ($presences as $number => $presence)
+                                        @foreach ($schedules as $number => $schedule)
                                         <tr>
                                                 <td>{{ $number+1 }}</td>
-                                                <td>{{ $presence->title }}</td>
-                                                <td>{{ $presence->created_at }}</td>
+                                                <td>{{ $schedule->title }}</td>
+                                                <td>{{ $schedule->created_at }}</td>
                                                 <td>
                                                     <div class="d-flex justify-content-center">
-                                                        <a href="{{ route('presence.show', $presence->title) }}" class="btn btn-sm btn-secondary btn-icon">
+                                                        <a href="{{ route('presence.show', $schedule->title) }}" class="btn btn-sm btn-secondary btn-icon">
                                                             <i class="fas fa-edit"></i> Detail
                                                         </a>
-                                                        <a href="{{ route('presence.edit', $presence->id) }}" class="btn btn-sm btn-info btn-icon">
+                                                        <a href="{{ route('presence.edit', $schedule->id) }}" class="btn btn-sm btn-info btn-icon">
                                                             <i class="fas fa-edit"></i> Edit
                                                         </a>
-                                                        <form action="{{ route('presence.destroy', $presence->id) }}" method="POST" class="ml-2">
+                                                        <form action="{{ route('presence.destroy', $schedule->id) }}" method="POST" class="ml-2">
                                                             @csrf
                                                             @method('DELETE')
                                                             <button class="btn btn-sm btn-danger btn-icon confirm-delete">
@@ -82,7 +82,7 @@
                                     </table>
                                 </div>
                                 <div class="float-right">
-                                    {{ $presences->withQueryString()->links() }}
+                                    {{ $schedules->withQueryString()->links() }}
                                 </div>
                             </div>
                         </div>

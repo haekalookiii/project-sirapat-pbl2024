@@ -8,9 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Attendance extends Model
 {
     use HasFactory;
-    protected $guarded = [
-        'id'
-    ] ;
-    protected $table = 'attendances' ;
+    protected $table = 'attendances';
+    protected $guarded = ['id'];
     
 }
