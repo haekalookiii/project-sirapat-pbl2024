@@ -52,23 +52,30 @@
                                         <tr>
                                             <th>No.</th>
                                             <th>Agenda Rapat</th>
-                                            <th>Created At</th>
+                                            <th>Tanggal</th>
                                             <th>Action</th>
                                         </tr>
-                                        @foreach ($schedules as $number => $schedule)
-                                        <tr>
-                                                <td>{{ $number+1 }}</td>
+                                        @php
+                                            $numberOfItems = $schedules->perPage() * ($schedules->currentPage() - 1);
+                                        @endphp
+                                        @foreach ($schedules as $schedule)
+                                            <tr>
+                                                <td>{{ $numberOfItems + $loop->iteration }}</td>
                                                 <td>{{ $schedule->title }}</td>
-                                                <td>{{ $schedule->created_at }}</td>
+                                                <td>{{ $schedule->start_date }}</td>
                                                 <td>
                                                     <div class="d-flex justify-content-center">
-                                                        <a href="{{ route('presence.show', $schedule->title) }}" class="btn btn-sm btn-secondary btn-icon">
-                                                            <i class="fas fa-edit"></i> Detail
-                                                        </a>
-                                                        <a href="{{ route('presence.edit', $schedule->id) }}" class="btn btn-sm btn-info btn-icon">
-                                                            <i class="fas fa-edit"></i> Edit
-                                                        </a>
-                                                        <form action="{{ route('presence.destroy', $schedule->id) }}" method="POST" class="ml-2">
+                                                        <form action="{{ route('presence.show', $schedule->title) }}" method="GET" class="mr-2">
+                                                            <button class="btn btn-sm btn-secondary btn-icon">
+                                                                <i class="fas fa-edit"></i> Detail
+                                                            </button>
+                                                        </form>
+                                                        <form action="{{ route('presence.edit', $schedule->id) }}" method="GET" class="mr-2">
+                                                            <button class="btn btn-sm btn-info btn-icon">
+                                                                <i class="fas fa-edit"></i> Edit
+                                                            </button>
+                                                        </form>
+                                                        <form action="{{ route('presence.destroy', $schedule->id) }}" method="POST" class="mr-2">
                                                             @csrf
                                                             @method('DELETE')
                                                             <button class="btn btn-sm btn-danger btn-icon confirm-delete">

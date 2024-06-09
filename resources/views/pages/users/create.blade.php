@@ -19,22 +19,39 @@
             </div>
 
             <div class="section-body">
-
                 <div class="card">
-                    <form action="{{ route('user.store') }}" method="POST">
+                    <form action="{{ route('user.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="card-header">
                             <h4>New User</h4>
                         </div>
                         <div class="card-body">
                             <div class="form-group">
+                                <label>Upload CSV</label>
+                                <input type="file" name="csv_file" class="form-control @error('csv_file') is-invalid @enderror" id="csv_file">
+                                @error('csv_file')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                            <div class="form-group">
                                 <label>Name</label>
                                 <input type="text"
-                                    class="form-control @error('name')
-                                    is-invalid
-                                @enderror"
-                                    name="name">
+                                    class="form-control @error('name') is-invalid @enderror"
+                                    name="name" id="name" value="{{ old('name') }}">
                                 @error('name')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                            <div class="form-group">
+                                <label>NIM</label>
+                                <input type="text"
+                                    class="form-control @error('nim') is-invalid @enderror"
+                                    name="nim" id="nim" value="{{ old('nim') }}">
+                                @error('nim')
                                     <div class="invalid-feedback">
                                         {{ $message }}
                                     </div>
@@ -43,10 +60,8 @@
                             <div class="form-group">
                                 <label>Email</label>
                                 <input type="email"
-                                    class="form-control @error('email')
-                                    is-invalid
-                                @enderror"
-                                    name="email">
+                                    class="form-control @error('email') is-invalid @enderror"
+                                    name="email" id="email" value="{{ old('email') }}">
                                 @error('email')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -56,10 +71,8 @@
                             <div class="form-group">
                                 <label>Password</label>
                                 <input type="password"
-                                    class="form-control @error('password')
-                                    is-invalid
-                                @enderror"
-                                    name="password">
+                                    class="form-control @error('password') is-invalid @enderror"
+                                    name="password" id="password">
                                 @error('password')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -68,17 +81,16 @@
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Roles</label>
-                                <div class="selectgroup w-100">
-                                    <label class="selectgroup-item">
-                                        <input type="radio" name="roles" value="admin" class="selectgroup-input"
-                                            checked="">
-                                        <span class="selectgroup-button">Admin</span>
-                                    </label>
-                                    <label class="selectgroup-item">
-                                        <input type="radio" name="roles" value="user" class="selectgroup-input">
-                                        <span class="selectgroup-button">User</span>
-                                    </label>
-                                </div>
+                                <select class="form-control @error('roles') is-invalid @enderror" name="roles" id="roles">
+                                    <option value="">Select Role</option>
+                                    <option value="admin" {{ old('roles') == 'admin' ? 'selected' : '' }}>Admin</option>
+                                    <option value="user" {{ old('roles') == 'user' ? 'selected' : '' }}>User</option>
+                                </select>
+                                @error('roles')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
                             </div>
                         </div>
                         <div class="card-footer text-right">
@@ -86,14 +98,19 @@
                         </div>
                     </form>
                 </div>
-
             </div>
         </section>
     </div>
+
+    <script>
+        document.getElementById('csv_file').addEventListener('change', function() {
+            let isCsvSelected = this.files.length > 0;
+
+            document.getElementById('name').required = !isCsvSelected;
+            document.getElementById('nim').required = !isCsvSelected;
+            document.getElementById('email').required = !isCsvSelected;
+            document.getElementById('password').required = !isCsvSelected;
+            document.getElementById('roles').required = !isCsvSelected;
+        });
+    </script>
 @endsection
-
-@push('scripts')
-    <!-- JS Libraies -->
-
-    <!-- Page Specific JS File -->
-@endpush

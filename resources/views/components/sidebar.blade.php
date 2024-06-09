@@ -17,7 +17,7 @@
             </li>
         @endcan
             <li class="nav-item">
-                    <a href="{{ route('presence.index') }}" class="nav-link"><i class="fas fa-fire"></i><span>Dashboard</span></a>
+                    <a href="{{ route('presence.index') }}" class="nav-link"><i class="fas fa-fire"></i><span>Presensi</span></a>
             </li>
         @can('admin')
             <li class="nav-item">

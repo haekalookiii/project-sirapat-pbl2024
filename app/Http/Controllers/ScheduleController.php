@@ -28,7 +28,7 @@ class ScheduleController extends Controller
             'id' => $item->id,
             'title' => $item->title,
             'start' => $item->start_date,
-            'end' => $item->end_date,
+            'end' => date('Y-m-d',strtotime($item->end_date. '+1 days')),
             'category' => $item->category
         ]);
         return response()->json($schedules);
@@ -56,7 +56,10 @@ class ScheduleController extends Controller
 
     public function edit(Schedule $schedule)
     {
-        return view('pages.schedules.edit')->with('schedule', $schedule);
+        return view('pages.schedules.schedule-form', [
+        'data' => $schedule,
+        'action' => route('schedule.update', $schedule->id)
+    ]);
     }
     /**
      * Display the specified resource.
@@ -69,11 +72,17 @@ class ScheduleController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateScheduleRequest $request, Schedule $schedule)
+    public function update(Request $request, $id)
     {
-        $validate = $request->validated();
-        $schedule->update($validate);
-        return redirect()->route('schedule.index')->with('success', 'Edit Schedule Successfully');
+    // Update the schedule item with the provided data
+    $scheduleItem = Schedule::find($id);
+    $scheduleItem->start_date = $request->input('start_date');
+    $scheduleItem->end_date = $request->input('end_date');
+    $scheduleItem->title = $request->input('title');
+    $scheduleItem->category = $request->input('category');
+    $scheduleItem->save();
+
+    return response()->json(['message' => 'Schedule item updated successfully']);
     }
 
     /**

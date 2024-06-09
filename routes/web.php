@@ -35,6 +35,7 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware('role:admin')->resource('user', UserController::class);
     Route::get('schedule/list', [ScheduleController::class, 'listSchedule'])->name('schedule.list');
     Route::resource('schedule', ScheduleController::class);
+    // Route::put('schedule/{schedule}', [ScheduleController::class, 'update'])->name('schedule.update');
     // Route::middleware('role:admin')->resource('student', StudentController::class);
     Route::resource('student', StudentController::class);
     Route::resource('presence', PresenceController::class)->except('show');

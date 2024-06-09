@@ -44,46 +44,6 @@
 @endsection
 
 @push('scripts')
-    <script>
-        const modal = $('#modal-action')
-    document.addEventListener('DOMContentLoaded', function() {
-        var calendarEl = document.getElementById('calendar');
-        var calendar = new FullCalendar.Calendar(calendarEl, {
-        initialView: 'dayGridMonth',
-        themeSystem: 'bootstrap5',
-        events: '{{ route('schedule.list') }}',
-        dateClick: function(info) {
-                console.log(info);
-                $.ajax({
-                    url: '{{ route('schedule.create') }}',
-                    data: {
-                        start_date: info.dateStr,
-                        end_date: info.dateStr
-                    },
-                    success: function (res) {
-                        modal.html(res).modal('show')
+    
 
-                        $('#form-action').on('submit', function(e) {
-                            e.preventDefault()
-                            const form = this
-                            const formData = new FormData(form)
-                            $.ajax({
-                                url: form-action,
-                                method: form-action,
-                                data: formData,
-                                processData: false,
-                                contentType: false,
-                                success: function (res) {
-                                    modal.modal('hide')
-                                    calendar.refetchEvents()
-                                }
-                            })
-                        })
-                    }
-                })
-            }
-        });
-        calendar.render();
-    });
-    </script>
 @endpush

@@ -17,7 +17,7 @@
                 </div>
                 <div class="card">
                     <div class="card-body">
-                        @if($student->nim)
+                        @if($student->jenis_kelamin)
                             <div class="row">
                                 <div class="col-md-9">
                                     <img src="{{ $student->foto_profil ? URL::asset('storage/'.$student->foto_profil) : asset('img/avatar/avatar-5.png') }}" alt="{{ $student->nama_lengkap }}" class="rounded-circle" style="max-width: 100px; height: auto; margin-bottom: 10px;">

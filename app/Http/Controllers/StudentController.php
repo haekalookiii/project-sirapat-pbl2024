@@ -18,7 +18,7 @@ class StudentController extends Controller
     public function index()
     {
         // ->withQueryString()
-        $student = Student::paginate(5);
+        $student = Student::paginate(10);
         return view('pages.students.index', ['students' => $student]);
     }
     public function create()

@@ -31,7 +31,11 @@
                             <div class="card-header">
                                 <h4>All Presences</h4>
                                 <div class="section-header-button">
-                                    <a href="{{ route('presence.create') }}" class="btn btn-primary">New Presence</a>
+                                    <form action="{{ route('presence.store') }}" method="POST">
+                                        @csrf
+                                            <input type="hidden" name="schedule_id" value="{{ $id_jadwal }}">
+                                        <button type="submit" class="btn btn-primary">Buat Presensi</button>
+                                    </form>
                                 </div>
                             </div>
                             <div class="card-body">
@@ -61,10 +65,10 @@
                                         @foreach ($presences as $number => $presence)
                                         <tr>
                                                 <td>{{ $number+1 }}</td>
-                                                <td>{{ $presence->title }}</td>
+                                                <td>{{ $presence->schedule->title }}</td>
                                                 <td>{{ $presence->student->nim }}</td>
                                                 <td>{{ $presence->student->nama_lengkap }}</td>
-                                                <td>{{ $presence->status_kehadiran }}</td>
+                                                <td>{{ $presence->attendance->status_kehadiran }}</td>
                                                 <td>{{ $presence->created_at }}</td>
                                                 <td>
                                                     <div class="d-flex justify-content-center">
@@ -84,9 +88,9 @@
                                         @endforeach
                                     </table>
                                 </div>
-                                {{-- <div class="float-right">
-                                    {{ $presences->links() }}
-                                </div> --}}
+                                <div class="float-right">
+                                    {{ $presences->withQueryString()->links() }}
+                                </div>
                             </div>
                         </div>
                     </div>

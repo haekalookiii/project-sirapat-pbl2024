@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no"
         name="viewport">
+    <meta name="csrf_token" content="{{ csrf_token() }}">
     <title>@yield('title') &mdash; SIRAPAT-Sistem Informasi Rapat</title>
 
     <!-- General CSS Files -->
@@ -28,6 +29,14 @@
     <link rel="stylesheet"
         href="{{ asset('css/components.css') }}">
 
+    <!-- Custom CSS -->
+    <style>
+        .fc .fc-col-header-cell-cushion {
+            color: black !important; /* Mengubah warna teks menjadi merah */
+            font-weight: bold !important; /* Mengubah gaya teks */
+        }
+    </style>
+
     <!-- Start GA -->
     <script async
         src="https://www.googletagmanager.com/gtag/js?id=UA-94034622-3"></script>
@@ -42,7 +51,6 @@
         gtag('config', 'UA-94034622-3');
     </script>
     <!-- END GA -->
-</head>
 </head>
 
 <body>
@@ -82,6 +90,101 @@
     
     @stack('scripts')
     
+    <script>
+    const modal = $('#modal-action');
+    const csrfToken = $('meta[name=csrf_token]').attr('content')
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            themeSystem: 'bootstrap5',
+            events: '{{ route('schedule.list') }}',
+            editable: true,
+            dateClick: function(info) {
+                console.log(info);
+                $.ajax({
+                    url: '{{ route('schedule.create') }}',
+                    data: {
+                        start_date: info.dateStr,
+                        end_date: info.dateStr
+                    },
+                    success: function(res) {
+                        modal.html(res).modal('show');
+
+                        $('#form-action').on('submit', function(e) {
+                            e.preventDefault();
+                            const form = this;
+                            const formData = new FormData(form);
+                            $.ajax({
+                                url: form.action,
+                                method: form.method,
+                                data: formData,
+                                processData: false,
+                                contentType: false,
+                                success: function(res) {
+                                    modal.modal('hide');
+                                    calendar.refetchEvents();
+                                }
+                            });
+                        });
+                    }
+                });
+            },
+            eventClick: function({ event }) {
+                console.log(event.id);  // Debugging
+                $.ajax({
+                    url: `{{ url('schedule') }}/${event.id}/edit`,
+                    success: function(res) {
+                        modal.html(res).modal('show');
+
+                        $('#form-action').on('submit', function(e) {
+                            e.preventDefault();
+                            const form = this;
+                            const formData = new FormData(form);
+                            $.ajax({
+                                url: form.action,
+                                method: form.method,
+                                data: formData,
+                                processData: false,
+                                contentType: false,
+                                success: function(res) {
+                                    modal.modal('hide');
+                                    calendar.refetchEvents();
+                                }
+                            });
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('AJAX Error:', status, error);
+                    }
+                });
+            },
+            eventDrop:function ({event}) {
+                $.ajax({
+                    url: `{{ url('schedule') }}/${event.id}`,
+                    method: 'put',
+                    data: {
+                        id: event.id,
+                        start_date: event.startStr,
+                        end_date: event.end.toISOString().substring(0, 10),
+                        title: event.title,
+                        category: event.extendedProps.category
+                    },
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken,
+                        accept: 'application/json'
+                    },
+                    success: function (res) {
+                        modal.modal('hide')
+                    }
+                })
+            }
+        });
+        calendar.render();
+    });
+</script>
+
     <script src="{{ asset('library/selectric/public/jquery.selectric.min.js') }}"></script>
     <!-- Page Specific JS File -->
     <script src="{{ asset('js/page/features-posts.js') }}"></script>
