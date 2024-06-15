@@ -65,6 +65,8 @@
             <!-- Content -->
             @yield('main')
 
+            @include('components.modal')
+
             <!-- Footer -->
             @include('components.footer')
         </div>
@@ -90,7 +92,7 @@
     
     @stack('scripts')
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>// message with sweetalert
         @if(session('success'))
             Swal.fire({
@@ -109,9 +111,97 @@
                 timer: 2000
             });
         @endif
+    </script> -->
+
+    <!-- JS Hari & Tanggal -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const dayElement = document.getElementById('day');
+        const dateElement = document.getElementById('date');
+        
+        const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+        const now = new Date();
+        const day = days[now.getDay()];
+        const date = now.toLocaleDateString('id-ID', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric'
+        });
+
+        dayElement.textContent = day;
+        dateElement.textContent = date;
+    });
     </script>
 
-    
+    <!-- JS Modal Presensi -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const confirmationModal = document.getElementById('confirmationModalPresence');
+        const statusText = document.getElementById('presenceStatusText');
+        const confirmButton = document.getElementById('confirmPresenceButton');
+
+        document.querySelectorAll('.show-confirmation-modal').forEach(button => {
+            button.addEventListener('click', function () {
+                const status = this.getAttribute('data-status');
+                const url = this.getAttribute('data-url');
+                const attendanceId = this.getAttribute('data-attendance-id');
+
+                statusText.textContent = status;
+
+                // Mengatur action pada tombol konfirmasi modal
+                confirmButton.onclick = function () {
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = url;
+
+                    const hiddenMethod = document.createElement('input');
+                    hiddenMethod.type = 'hidden';
+                    hiddenMethod.name = '_method';
+                    hiddenMethod.value = 'PUT';
+
+                    const hiddenToken = document.createElement('input');
+                    hiddenToken.type = 'hidden';
+                    hiddenToken.name = '_token';
+                    hiddenToken.value = '{{ csrf_token() }}';
+
+                    const hiddenAttendanceId = document.createElement('input');
+                    hiddenAttendanceId.type = 'hidden';
+                    hiddenAttendanceId.name = 'attendance_id';
+                    hiddenAttendanceId.value = attendanceId;
+
+                    form.appendChild(hiddenMethod);
+                    form.appendChild(hiddenToken);
+                    form.appendChild(hiddenAttendanceId);
+
+                    document.body.appendChild(form);
+                    form.submit();
+                };
+
+                $(confirmationModal).modal('show');
+            });
+        });
+    });
+</script>
+
+    <!-- JS Confirmation Profile -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const confirmationModalProfile = document.getElementById('confirmationModalProfile');
+        const confirmUpdateButton = document.getElementById('confirmUpdateButton');
+        const openConfirmationModalProfile = document.getElementById('openConfirmationModalProfile');
+
+        openConfirmationModalProfile.addEventListener('click', function () {
+            $('#confirmationModalProfile').modal('show');
+        });
+
+        confirmUpdateButton.addEventListener('click', function () {
+            document.getElementById('updateProfileForm').submit();
+        });
+    });
+</script>
+
+
+    <!-- JS FullCalendar -->
     <script>
     const modal = $('#modal-action');
     const csrfToken = $('meta[name=csrf_token]').attr('content')

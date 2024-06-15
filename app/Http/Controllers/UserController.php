@@ -35,27 +35,26 @@ class UserController extends Controller
     public function store(Request $request)
     {
         if ($request->hasFile('csv_file')) {
-        $file = $request->file('csv_file');
+            $file = $request->file('csv_file');
 
-        // Validate the CSV file
-        $validator = Validator::make([
-            'file' => $file,
-            'file' => 'required|mimes:csv,txt|max:2048'
-        ]);
+            // Validate the CSV file
+            $validator = Validator::make($request->all(), [
+                'csv_file' => 'required|mimes:csv,txt|max:2048'
+            ]);
 
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
+            if ($validator->fails()) {
+                return redirect()->back()->withErrors($validator)->withInput();
+            }
 
-        // Process the CSV file
-        $this->processCsv($file);
+            // Process the CSV file
+            $this->processCsv($file);
 
-        return redirect()->route('user.index')->with('success', 'Users created successfully from CSV.');
+            return redirect()->route('user.index')->with('success', 'Users created successfully from CSV.');
     } else {
+
         // Validate individual form fields only when CSV is not present
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'username' => '',
             'nim' => 'required|string|max:255|unique:students,nim',
             'email' => 'required|string|email|max:255|unique:users,email',
             'password' => 'required|string|min:2',
@@ -66,12 +65,12 @@ class UserController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        $username = Str::slug($request->name, '_');
+        //$username = Str::slug($request->name, '_');
 
         // Create a new user
         $user = User::create([
             'name' => $request['name'],
-            'username' => $username,
+            'username' => $request['nim'],
             'email' => $request['email'],
             'password' => Hash::make($request['password']),
         ]);
@@ -123,6 +122,7 @@ class UserController extends Controller
             // Buat user baru
             $user = User::create([
                 'name' => $name,
+                'username' => $nim,
                 'email' => $email,
                 'password' => Hash::make($password),
             ]);

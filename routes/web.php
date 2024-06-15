@@ -40,7 +40,7 @@ Route::middleware(['auth'])->group(function () {
     // Route::put('schedule/{schedule}', [ScheduleController::class, 'update'])->name('schedule.update');
     // Route::middleware('role:admin')->resource('student', StudentController::class);
     Route::middleware('role:admin')->resource('student', StudentController::class);
-    Route::resource('presence', PresenceController::class)->except('show');
+    Route::middleware('role:admin')->resource('presence', PresenceController::class)->except('show');
     // Route::get('/create-presence', [PresenceController::class, 'create'])->name('create-presence');
     Route::middleware('role:admin')->get('/presence/{schedule:title}', [PresenceController::class, 'show'])->name('presence.show');
 });

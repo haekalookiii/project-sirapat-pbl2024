@@ -123,11 +123,11 @@
                                             <th>Status Kehadiran</th>
                                         </tr>
                                         @php
-                                            // $numberOfItems = $presences->perPage() * ($presences->currentPage() - 1);
+                                            $numberOfItems = $presences->perPage() * ($presences->currentPage() - 1);
                                         @endphp
-                                        @foreach ($presences as $key => $presence)
+                                        @foreach ($presences as $presence)
                                             <tr>
-                                                <td>{{ $key+1 }}</td>
+                                                <td>{{ $numberOfItems + $loop->iteration }}</td>
                                                 <td>{{ $presence->schedule->title }}</td>
                                                 <td>{{ $presence->schedule->start_date }}</td>
                                                 <td>{{ $presence->schedule->end_date }}</td>
@@ -136,33 +136,17 @@
                                                         {{ $presence->attendance->status_kehadiran }}
                                                     @else
                                                         <div class="dropdown d-inline">
-                                                            <form action="{{ route('update.presence', $presence->id) }}" method="POST" style="display:inline;">
-                                                                @csrf
-                                                                @method('PUT')
-                                                                <input type="hidden" name="attendance_id" value="2"> <!-- ID status Hadir -->
-                                                                <button type="submit" class="btn btn-sm btn-success btn-icon">
-                                                                    <i class="fas fa-edit"></i> Hadir
-                                                                </button>
-                                                            </form>
+                                                            <button type="button" class="btn btn-sm btn-success btn-icon show-confirmation-modal" data-status="Hadir" data-url="{{ route('update.presence', $presence->id) }}" data-attendance-id="2">
+                                                                <i class="fas fa-edit"></i> Hadir
+                                                            </button>
 
-                                                            <form action="{{ route('update.presence', $presence->id) }}" method="POST" style="display:inline;">
-                                                                @csrf
-                                                                @method('PUT')
-                                                                <input type="hidden" name="attendance_id" value="3"> <!-- ID status Izin -->
-                                                                <button type="submit" class="btn btn-sm btn-info btn-icon">
-                                                                    <i class="fas fa-edit"></i> Izin
-                                                                </button>
-                                                            </form>
+                                                            <button type="button" class="btn btn-sm btn-info btn-icon show-confirmation-modal" data-status="Izin" data-url="{{ route('update.presence', $presence->id) }}" data-attendance-id="3">
+                                                                <i class="fas fa-edit"></i> Izin
+                                                            </button>
 
-                                                            <form action="{{ route('update.presence', $presence->id) }}" method="POST" style="display:inline;">
-                                                                @csrf
-                                                                @method('PUT')
-                                                                <input type="hidden" name="attendance_id" value="4"> <!-- ID status Sakit -->
-                                                                <button type="submit" class="btn btn-sm btn-warning btn-icon">
-                                                                    <i class="fas fa-edit"></i> Sakit
-                                                                </button>
-                                                            </form>
-                                                            </div>
+                                                            <button type="button" class="btn btn-sm btn-warning btn-icon show-confirmation-modal" data-status="Sakit" data-url="{{ route('update.presence', $presence->id) }}" data-attendance-id="4">
+                                                                <i class="fas fa-edit"></i> Sakit
+                                                            </button>
                                                         </div>
                                                     @endif
                                                 </td>
@@ -225,51 +209,11 @@
             </section>
         </div>
     </div> 
+
 @endsection
 
 @push('scripts')
     <!-- JS Libraies -->
-    <script>
-    // Mendapatkan elemen untuk menampilkan hari dan tanggal
-    var dayElement = document.getElementById('day');
-    var dateElement = document.getElementById('date');
-
-    // Mendapatkan tanggal dan waktu saat ini
-    var currentDate = new Date();
-
-    // Mendapatkan nama hari dari tanggal saat ini
-    var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    var dayName = days[currentDate.getDay()];
-
-    // Format tanggal
-    var dateFormatOptions = { month: '2-digit', day: '2-digit' };
-    var formattedDate = currentDate.toLocaleDateString(undefined, dateFormatOptions);
-
-    // Menampilkan hari dan tanggal real-time
-    dayElement.textContent = dayName;
-    dateElement.textContent = formattedDate;
-</script>
-<script>
-document.getElementById('presensi').addEventListener('click', function() {
-    var tablePresensi = document.getElementById('tabelPresensi');
-    var tableKehadiran = document.getElementById('tabelKehadiran');
-    
-    // Tampilkan tabel presensi dan sembunyikan tabel kehadiran
-    tablePresensi.style.display = 'block';
-    tableKehadiran.style.display = 'none';
-});
-
-document.getElementById('rekapKehadiran').addEventListener('click', function() {
-    var tablePresensi = document.getElementById('tabelPresensi');
-    var tableKehadiran = document.getElementById('tabelKehadiran');
-    
-    // Tampilkan tabel kehadiran dan sembunyikan tabel presensi
-    tablePresensi.style.display = 'none';
-    tableKehadiran.style.display = 'block';
-});
-
-</script>
-
 
     <!-- Page Specific JS File -->
     <script src="{{ asset('js/page/index-0.js') }}"></script>

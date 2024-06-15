@@ -15,15 +15,21 @@
                 </div>
             </div>
             <div class="section-body">
-
+                <div class="row">
+                    <div class="col-12">
+                        @include('layouts.alert')
+                    </div>
+                </div>
                 <div class="row mt-4">
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
                                 <h4>All Schedules</h4>
+                                @can('admin')
                                 <div class="section-header-button">
                                     <a href="{{ route('presence.index') }}" class="btn btn-primary">Detail</a>
                                 </div>
+                                @endcan
                             </div>
                             <div class="card-body">
                                 <div id='calendar'></div>

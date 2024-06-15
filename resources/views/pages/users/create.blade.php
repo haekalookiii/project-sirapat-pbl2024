@@ -19,6 +19,11 @@
             </div>
 
             <div class="section-body">
+                <div class="row">
+                    <div class="col-12">
+                        @include('layouts.alert')
+                    </div>
+                </div>
                 <div class="card">
                     <form action="{{ route('user.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
