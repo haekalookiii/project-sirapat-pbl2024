@@ -17,12 +17,9 @@
             </li>
         @endcan
             <li class="nav-item">
-                    <a href="{{ route('presence.index') }}" class="nav-link"><i class="fas fa-fire"></i><span>Presensi</span></a>
-            </li>
-        @can('admin')
-            <li class="nav-item">
                     <a href="{{ route('schedule.index') }}" class="nav-link"><i class="fas fa-fire"></i><span>Jadwal Rapat</span></a>
             </li>
+        @can('admin')
             <li class="nav-item">
                     <a href="{{ route('user.index') }}" class="nav-link"><i class="fas fa-fire"></i><span>User</span></a>
             </li>

@@ -23,4 +23,10 @@ class Student extends Model
     {
         return $this->belongsTo(Subject::class);
     }
+
+    // Tambahkan relasi presences
+    public function presences()
+    {
+        return $this->hasMany(Presence::class, 'student_id', 'id');
+    }
 }

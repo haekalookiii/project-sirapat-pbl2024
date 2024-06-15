@@ -69,7 +69,7 @@
                                                 <td>
                                                     {{ $user->email }}
                                                 </td>
-                                               
+
                                                 <td>
                                                     @if ($user->hasRole('admin'))
                                                         Admin

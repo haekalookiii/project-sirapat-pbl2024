@@ -19,11 +19,6 @@
                 </div>
             </div>
             <div class="section-body">
-                <div class="row">
-                    <div class="col-12">
-                        @include('layouts.alert')
-                    </div>
-                </div>
 
                 <div class="row mt-4">
                     <div class="col-12">
@@ -62,9 +57,12 @@
                                             <th>Created At</th>
                                             <th>Action</th>
                                         </tr>
-                                        @foreach ($presences as $number => $presence)
-                                        <tr>
-                                                <td>{{ $number+1 }}</td>
+                                        @php
+                                            $numberOfItems = $presences->perPage() * ($presences->currentPage() - 1);
+                                        @endphp
+                                        @foreach ($presences as $presence)
+                                            <tr>
+                                                <td>{{ $numberOfItems + $loop->iteration }}</td>
                                                 <td>{{ $presence->schedule->title }}</td>
                                                 <td>{{ $presence->student->nim }}</td>
                                                 <td>{{ $presence->student->nama_lengkap }}</td>

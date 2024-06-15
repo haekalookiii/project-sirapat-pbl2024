@@ -11,7 +11,7 @@
     <div class="main-content">
         <section class="section">
             <div class="section-header">
-                <h1>All Presences</h1>
+                <h1>All Schedules</h1>
                 <div class="section-header-breadcrumb">
                     <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
                     <div class="breadcrumb-item"><a href="#">Presences</a></div>
@@ -19,20 +19,12 @@
                 </div>
             </div>
             <div class="section-body">
-                <div class="row">
-                    <div class="col-12">
-                        @include('layouts.alert')
-                    </div>
-                </div>
 
                 <div class="row mt-4">
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <h4>All Presences</h4>
-                                <div class="section-header-button">
-                                    <a href="{{ route('presence.create') }}" class="btn btn-primary">New Presence</a>
-                                </div>
+                                <h4>All Schedules</h4>
                             </div>
                             <div class="card-body">
                                 <div class="float-right">
@@ -53,7 +45,9 @@
                                             <th>No.</th>
                                             <th>Agenda Rapat</th>
                                             <th>Tanggal</th>
+                                            @can('admin')
                                             <th>Action</th>
+                                            @endcan
                                         </tr>
                                         @php
                                             $numberOfItems = $schedules->perPage() * ($schedules->currentPage() - 1);
@@ -63,6 +57,7 @@
                                                 <td>{{ $numberOfItems + $loop->iteration }}</td>
                                                 <td>{{ $schedule->title }}</td>
                                                 <td>{{ $schedule->start_date }}</td>
+                                                @can('admin')
                                                 <td>
                                                     <div class="d-flex justify-content-center">
                                                         <form action="{{ route('presence.show', $schedule->title) }}" method="GET" class="mr-2">
@@ -84,6 +79,7 @@
                                                         </form>
                                                     </div>
                                                 </td>
+                                                @endcan
                                             </tr>
                                         @endforeach
                                     </table>

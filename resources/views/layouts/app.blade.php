@@ -89,6 +89,28 @@
     
     
     @stack('scripts')
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>// message with sweetalert
+        @if(session('success'))
+            Swal.fire({
+                icon: "success",
+                title: "BERHASIL",
+                text: "{{ session('success') }}",
+                showConfirmButton: false,
+                timer: 2000
+            });
+            @elseif(session('error'))
+            Swal.fire({
+                icon: "error",
+                title: "GAGAL!",
+                text: "{{ session('error') }}",
+                showConfirmButton: false,
+                timer: 2000
+            });
+        @endif
+    </script>
+
     
     <script>
     const modal = $('#modal-action');
@@ -100,6 +122,7 @@
             initialView: 'dayGridMonth',
             themeSystem: 'bootstrap5',
             events: '{{ route('schedule.list') }}',
+            @can('admin')
             editable: true,
             dateClick: function(info) {
                 console.log(info);
@@ -180,6 +203,7 @@
                     }
                 })
             }
+            @endcan
         });
         calendar.render();
     });

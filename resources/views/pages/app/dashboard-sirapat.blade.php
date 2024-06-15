@@ -92,50 +92,93 @@
         </section>
 @can('user')
         <section class="section">
-        <div class="section-body"></div>
-            <div class="row mt-4" id="tabelPresensi">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4>Tabel Presensi</h4>
-                            <!-- <div class="section-header-button">
-                                <a href="{{ route('student.create') }}" class="btn btn-primary">Tambah</a>
-                            </div> -->
-                        </div>
-                        <div class="card-body">
-                            <!-- <div class="float-right">
-                                <form method="GET" action="{{ route('student.index') }}">
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" placeholder="Search" name="nama_lengkap">
-                                        <div class="input-group-append">
-                                            <button class="btn btn-primary"><i class="fas fa-search"></i></button>
+            <div class="section-body">
+
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>All Presences</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="float-right">
+                                    <form method="GET" action="{{ route('presence.index') }}">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" placeholder="Search" name="query">
+                                            <div class="input-group-append">
+                                                <button class="btn btn-primary"><i class="fas fa-search"></i></button>
+                                            </div>
                                         </div>
-                                    </div>
-                                </form>
-                            </div> -->
-                            <div class="clearfix mb-3"></div>
-                            <div class="table-responsive">
-                                <table class="table-striped table">
-                                    <thead>
+                                    </form>
+                                </div>
+                                <div class="clearfix mb-3"></div>
+
+                                <div class="table-responsive">
+                                    <table class="table-striped table">
                                         <tr>
                                             <th>No.</th>
-                                            <th>Nama Lengkap</th>
-                                            <th>NIM</th>
-                                            <th>Prodi</th>
+                                            <th>Agenda Rapat</th>
+                                            <th>Tanggal Mulai</th>
+                                            <th>Tanggal Selesai</th>
                                             <th>Status Kehadiran</th>
-                                            <th>Catatan Kehadiran</th>
-                                            <th>Action</th>
                                         </tr>
-                                    </thead>
-                                    <tbody>
-                                        <!-- Table data goes here -->
-                                    </tbody>
-                                </table>
+                                        @php
+                                            $numberOfItems = $presences->perPage() * ($presences->currentPage() - 1);
+                                        @endphp
+                                        @foreach ($presences as $presence)
+                                            <tr>
+                                                <td>{{ $numberOfItems + $loop->iteration }}</td>
+                                                <td>{{ $presence->schedule->title }}</td>
+                                                <td>{{ $presence->schedule->start_date }}</td>
+                                                <td>{{ $presence->schedule->end_date }}</td>
+                                                <td>
+                                                    @if ($presence->attendance->status_kehadiran !== 'Alpa')
+                                                        {{ $presence->attendance->status_kehadiran }}
+                                                    @else
+                                                        <div class="dropdown d-inline">
+                                                            <form action="{{ route('update.presence', $presence->id) }}" method="POST" style="display:inline;">
+                                                                @csrf
+                                                                @method('PUT')
+                                                                <input type="hidden" name="attendance_status" value="2"> <!-- ID status Hadir -->
+                                                                <button type="submit" class="btn btn-sm btn-success btn-icon">
+                                                                    <i class="fas fa-edit"></i> Hadir
+                                                                </button>
+                                                            </form>
+
+                                                            <form action="{{ route('presence.update', $presence->id) }}" method="POST" style="display:inline;">
+                                                                @csrf
+                                                                @method('PUT')
+                                                                <input type="hidden" name="attendance_status" value="3"> <!-- ID status Izin -->
+                                                                <button type="submit" class="btn btn-sm btn-info btn-icon">
+                                                                    <i class="fas fa-edit"></i> Izin
+                                                                </button>
+                                                            </form>
+
+                                                            <form action="{{ route('presence.update', $presence->id) }}" method="POST" style="display:inline;">
+                                                                @csrf
+                                                                @method('PUT')
+                                                                <input type="hidden" name="attendance_status" value="4"> <!-- ID status Sakit -->
+                                                                <button type="submit" class="btn btn-sm btn-warning btn-icon">
+                                                                    <i class="fas fa-edit"></i> Sakit
+                                                                </button>
+                                                            </form>
+                                                            </div>
+                                                        </div>
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </table>
+                                </div>
+                                <div class="float-right">
+                                    {{ $presences->withQueryString()->links() }}
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </section>
 @endcan
 @can('admin')
             <div class="row mt-4" id="tabelKehadiran">

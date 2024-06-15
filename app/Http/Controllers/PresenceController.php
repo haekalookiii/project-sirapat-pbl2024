@@ -58,12 +58,40 @@ class PresenceController extends Controller
         }
 
         // Redirect kembali dengan pesan sukses
-        return redirect()->route('presence.show', ['schedule' => $schedule->title])->with('success', 'Presensi berhasil dibuat.');
+        return back()
+        ->with('success', 'Presensi berhasil dibuat.');
     }
 
 
     public function edit(string $id)
     {
         //
+    }
+
+    public function update(Request $request, Presence $presence)
+    {
+        
+        // Validasi input
+        $request->validate([
+            'attendance_status' => 'required|integer',
+        ]);
+
+        try {
+            // Update presence dengan status baru
+            $presence->attendance_id = $request->input('attendance_status');
+            $presence->schedule_id;
+        //  dd($presence);
+            // Save the presence instance to the database
+            $presence->save();
+
+            // Redirect kembali dengan pesan sukses
+            return back()
+            ->with('success', 'Status kehadiran berhasil diupdate.');
+        } catch (\Exception $e) {
+            // Jika ada kesalahan, tangani dengan menampilkan pesan error
+            return back()
+            ->with('error', 'Gagal mengupdate status kehadiran: ' . $e->getMessage());
+        }
+
     }
 }

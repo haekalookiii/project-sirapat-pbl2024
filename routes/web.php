@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PresenceController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ScheduleController;
@@ -28,19 +29,20 @@ Route::get('/forget', function(){
 
 Route::middleware(['auth'])->group(function () {
 
-    Route::get('home', function () {
-        return view('pages.app.dashboard-sirapat', ['type_menu' => '']);
-    })->name('home');
+    Route::resource('home', DashboardController::class);
+    Route::get('home', [DashboardController::class, 'index'])->name('home');
+    Route::resource('dashboard', DashboardController::class)->except('update');
+    Route::put('dashboard', [DashboardController::class, 'update'])->name('update.presence');
     Route::resource('profile', ProfileController::class);
     Route::middleware('role:admin')->resource('user', UserController::class);
     Route::get('schedule/list', [ScheduleController::class, 'listSchedule'])->name('schedule.list');
     Route::resource('schedule', ScheduleController::class);
     // Route::put('schedule/{schedule}', [ScheduleController::class, 'update'])->name('schedule.update');
     // Route::middleware('role:admin')->resource('student', StudentController::class);
-    Route::resource('student', StudentController::class);
+    Route::middleware('role:admin')->resource('student', StudentController::class);
     Route::resource('presence', PresenceController::class)->except('show');
     // Route::get('/create-presence', [PresenceController::class, 'create'])->name('create-presence');
-    Route::get('/presence/{schedule:title}', [PresenceController::class, 'show'])->name('presence.show');
+    Route::middleware('role:admin')->get('/presence/{schedule:title}', [PresenceController::class, 'show'])->name('presence.show');
 });
 
 

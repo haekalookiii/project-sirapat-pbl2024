@@ -74,15 +74,16 @@ class ScheduleController extends Controller
      */
     public function update(Request $request, $id)
     {
-    // Update the schedule item with the provided data
-    $scheduleItem = Schedule::find($id);
-    $scheduleItem->start_date = $request->input('start_date');
-    $scheduleItem->end_date = $request->input('end_date');
-    $scheduleItem->title = $request->input('title');
-    $scheduleItem->category = $request->input('category');
-    $scheduleItem->save();
+        // Update the schedule item with the provided data
+        $scheduleItem = Schedule::find($id);
+        $scheduleItem->start_date = $request->input('start_date');
+        $scheduleItem->end_date = $request->input('end_date');
+        $scheduleItem->title = $request->input('title');
+        $scheduleItem->category = $request->input('category');
+        $scheduleItem->save();
 
-    return response()->json(['message' => 'Schedule item updated successfully']);
+        return back()
+        ->with('success', 'Schedule update successfully.');
     }
 
     /**
