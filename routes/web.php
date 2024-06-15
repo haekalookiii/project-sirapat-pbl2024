@@ -32,7 +32,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('home', DashboardController::class);
     Route::get('home', [DashboardController::class, 'index'])->name('home');
     Route::resource('dashboard', DashboardController::class)->except('update');
-    Route::put('dashboard', [DashboardController::class, 'update'])->name('update.presence');
+    Route::put('dashboard/{presence:id}', [DashboardController::class, 'update'])->name('update.presence');
     Route::resource('profile', ProfileController::class);
     Route::middleware('role:admin')->resource('user', UserController::class);
     Route::get('schedule/list', [ScheduleController::class, 'listSchedule'])->name('schedule.list');

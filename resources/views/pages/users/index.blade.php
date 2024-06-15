@@ -56,15 +56,19 @@
                                         <tr>
 
                                             <th>Name</th>
+                                            <th>Username</th>
                                             <th>Email</th>
                                             <th>Role</th>
                                             <th>Created At</th>
                                             <th>Action</th>
                                         </tr>
-                                        @foreach ($users as $user)
+                                        @foreach ($users->skip(1) as $user)
                                             <tr>
                                                 <td>
                                                     {{ $user->name }}
+                                                </td>
+                                                <td>
+                                                    {{ $user->username }}
                                                 </td>
                                                 <td>
                                                     {{ $user->email }}

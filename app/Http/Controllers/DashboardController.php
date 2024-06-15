@@ -79,15 +79,17 @@ class DashboardController extends Controller
         
         // Validasi input
         $validasiData = $request->validate([
-            'attendance_status' => 'required|integer',
+            'attendance_id' => 'required|integer',
         ]);
 
         try {
             // Update presence dengan status baru
-            $validasiData['attendance_status'] = $request->attendance_status;
-            dd($presence);
+            $validasiData['attendance_id'] = $request->attendance_id;
+            // dd($validasiData['attendance_id']);
             // Save the presence instance to the database
-            Presence::findOrFail($presence->schedule_id)->update($validasiData);
+            Presence::findOrFail($presence->id)->update([
+                'attendance_id' => $validasiData['attendance_id']
+            ]);
             // Redirect kembali dengan pesan sukses
             return redirect()->route('home')->with('success', 'Status kehadiran berhasil diupdate.');
         } catch (\Exception $e) {

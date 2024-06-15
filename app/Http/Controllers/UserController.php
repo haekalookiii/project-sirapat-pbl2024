@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreUserRequest;
-use App\Http\Requests\UpdateUserRequest;
-use App\Models\Student;
 use App\Models\User;
+use App\Models\Student;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\UpdateUserRequest;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
@@ -37,10 +38,10 @@ class UserController extends Controller
         $file = $request->file('csv_file');
 
         // Validate the CSV file
-        $validator = Validator::make(
-            ['file' => $file],
-            ['file' => 'required|mimes:csv,txt|max:2048']
-        );
+        $validator = Validator::make([
+            'file' => $file,
+            'file' => 'required|mimes:csv,txt|max:2048'
+        ]);
 
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
@@ -54,6 +55,7 @@ class UserController extends Controller
         // Validate individual form fields only when CSV is not present
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
+            'username' => '',
             'nim' => 'required|string|max:255|unique:students,nim',
             'email' => 'required|string|email|max:255|unique:users,email',
             'password' => 'required|string|min:2',
@@ -64,9 +66,12 @@ class UserController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
+        $username = Str::slug($request->name, '_');
+
         // Create a new user
         $user = User::create([
             'name' => $request['name'],
+            'username' => $username,
             'email' => $request['email'],
             'password' => Hash::make($request['password']),
         ]);

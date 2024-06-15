@@ -123,11 +123,11 @@
                                             <th>Status Kehadiran</th>
                                         </tr>
                                         @php
-                                            $numberOfItems = $presences->perPage() * ($presences->currentPage() - 1);
+                                            // $numberOfItems = $presences->perPage() * ($presences->currentPage() - 1);
                                         @endphp
-                                        @foreach ($presences as $presence)
+                                        @foreach ($presences as $key => $presence)
                                             <tr>
-                                                <td>{{ $numberOfItems + $loop->iteration }}</td>
+                                                <td>{{ $key+1 }}</td>
                                                 <td>{{ $presence->schedule->title }}</td>
                                                 <td>{{ $presence->schedule->start_date }}</td>
                                                 <td>{{ $presence->schedule->end_date }}</td>
@@ -139,25 +139,25 @@
                                                             <form action="{{ route('update.presence', $presence->id) }}" method="POST" style="display:inline;">
                                                                 @csrf
                                                                 @method('PUT')
-                                                                <input type="hidden" name="attendance_status" value="2"> <!-- ID status Hadir -->
+                                                                <input type="hidden" name="attendance_id" value="2"> <!-- ID status Hadir -->
                                                                 <button type="submit" class="btn btn-sm btn-success btn-icon">
                                                                     <i class="fas fa-edit"></i> Hadir
                                                                 </button>
                                                             </form>
 
-                                                            <form action="{{ route('presence.update', $presence->id) }}" method="POST" style="display:inline;">
+                                                            <form action="{{ route('update.presence', $presence->id) }}" method="POST" style="display:inline;">
                                                                 @csrf
                                                                 @method('PUT')
-                                                                <input type="hidden" name="attendance_status" value="3"> <!-- ID status Izin -->
+                                                                <input type="hidden" name="attendance_id" value="3"> <!-- ID status Izin -->
                                                                 <button type="submit" class="btn btn-sm btn-info btn-icon">
                                                                     <i class="fas fa-edit"></i> Izin
                                                                 </button>
                                                             </form>
 
-                                                            <form action="{{ route('presence.update', $presence->id) }}" method="POST" style="display:inline;">
+                                                            <form action="{{ route('update.presence', $presence->id) }}" method="POST" style="display:inline;">
                                                                 @csrf
                                                                 @method('PUT')
-                                                                <input type="hidden" name="attendance_status" value="4"> <!-- ID status Sakit -->
+                                                                <input type="hidden" name="attendance_id" value="4"> <!-- ID status Sakit -->
                                                                 <button type="submit" class="btn btn-sm btn-warning btn-icon">
                                                                     <i class="fas fa-edit"></i> Sakit
                                                                 </button>
