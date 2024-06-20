@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Presence;
 use App\Models\Schedule;
+use App\Models\User;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,13 +18,17 @@ class DashboardController extends Controller
     {
         // Ambil pengguna yang sedang login
         $user = Auth::user();
-
+        $totalMeetings = Schedule::count();
         // Periksa peran pengguna
         if ($user->hasRole('admin')) {
-            // Jika peran pengguna adalah admin, langsung kembalikan tampilan dashboard admin
-            return view('pages.app.dashboard-sirapat',[
-            'schedules' => Schedule::with(['presence'])->latest()->paginate(10),
-        ]);
+            
+            // $totalUsers = User::count();
+
+            return view('pages.app.dashboard-sirapat', [
+                'schedules' => Schedule::with(['presence'])->latest()->paginate(10),
+                'totalMeetings' => $totalMeetings,
+                // 'totalUsers' => $totalUsers,
+            ]);
         }
 
         // Ambil data siswa yang terkait dengan pengguna yang login
@@ -33,12 +38,16 @@ class DashboardController extends Controller
         //     abort(404, 'Student not found');
         // }
 
-        // Ambil data presensi untuk siswa yang sedang login
-        $presences = $student->presences()->with(['schedule', 'student', 'attendance'])->paginate(10);
+        // Ambil data presensi untuk siswa yang sedang login dan urutkan berdasarkan created_at dari yang terbaru ke yang terlama
+        $presences = $student->presences()
+            ->with(['schedule', 'student', 'attendance'])
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
 
         return view('pages.app.dashboard-sirapat', [
             'type_menu' => '',
-            'presences' => $presences
+            'presences' => $presences,
+            'totalMeetings' => $totalMeetings
         ]);
     }
 

@@ -20,9 +20,8 @@
             <div class="section-header">
                 <h1>Selamat Datang, {{ auth()->user()->name }}</h1>
             </div>
-            @can('admin')
             <div class="row">
-                <div class="col-lg-4 col-md-6 col-sm-6 col-12">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-12">
                     <div class="card card-statistic-1">
                         <div class="card-icon bg-primary">
                             <i class="far fa-calendar-alt"></i>
@@ -37,57 +36,21 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4 col-md-6 col-sm-6 col-12">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-12">
                     <div class="card card-statistic-1">
                         <div class="card-icon bg-danger">
                             <i class="fas fa-cloud-upload-alt"></i>
                         </div>
                         <div class="card-wrap">
                             <div class="card-header">
-                                <h4>Total Tidak Hadir</h4>
+                                <h4>Total Riwayat Rapat</h4>
                             </div>
                             <div class="card-body">
-                                3
+                                {{ $totalMeetings }}
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4 col-md-6 col-sm-6 col-12">
-                    <div class="card card-statistic-1">
-                        <div class="card-icon bg-success">
-                            <i class="fas fa-check-circle"></i>
-                        </div>
-                        <div class="card-wrap">
-                            <div class="card-header">
-                                <h4>Total Hadir</h4>
-                            </div>
-                            <div class="card-body">
-                                47
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            @endcan
-            @can('user')
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="card card-statistic-1">
-                        <div class="card-icon bg-primary">
-                            <i class="far fa-calendar-alt"></i>
-                        </div>
-                        <div class="card-wrap">
-                            <div class="card-header">
-                                <h4 id="day"></h4> <!-- Tampilkan hari disini -->
-                            </div>
-                            <div class="card-body">
-                                <span id="date"></span> <!-- Tampilkan tanggal disini -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        @endcan
 
         </section>
 @can('user')
@@ -120,7 +83,7 @@
                                             <th>Agenda Rapat</th>
                                             <th>Tanggal Mulai</th>
                                             <th>Tanggal Selesai</th>
-                                            <th>Status Kehadiran</th>
+                                            <th>Status</th>
                                         </tr>
                                         @php
                                             $numberOfItems = $presences->perPage() * ($presences->currentPage() - 1);
@@ -132,11 +95,25 @@
                                                 <td>{{ $presence->schedule->start_date }}</td>
                                                 <td>{{ $presence->schedule->end_date }}</td>
                                                 <td>
+                                                    @php
+                                                        $now = \Carbon\Carbon::now();
+                                                        $openedAt = \Carbon\Carbon::parse($presence->opened_at);
+                                                        $closedAt = \Carbon\Carbon::parse($presence->closed_at);
+                                                    @endphp
+
                                                     @if ($presence->attendance->status_kehadiran == 'Hadir')
                                                         <button type="button" class="btn btn-sm btn-success btn-icon" disabled>
                                                             Hadir
                                                         </button>
-                                                    @else
+                                                    @elseif($presence->attendance->status_kehadiran == 'Izin')
+                                                        <button type="button" class="btn btn-sm btn-warning btn-icon" disabled>
+                                                            Izin
+                                                        </button>
+                                                    @elseif($presence->attendance->status_kehadiran == 'Sakit')
+                                                        <button type="button" class="btn btn-sm btn-warning btn-icon" disabled>
+                                                            Sakit
+                                                        </button>
+                                                    @elseif($now >= $openedAt && $now <= $closedAt)
                                                         <div class="dropdown d-inline">
                                                             <button type="button" class="btn btn-sm btn-info btn-icon show-confirmation-modal" data-status="Hadir" data-url="{{ route('update.presence', $presence->id) }}" data-attendance-id="2">
                                                                 <i class="fas fa-edit"></i> Hadir
@@ -150,6 +127,10 @@
                                                                 <i class="fas fa-edit"></i> Sakit
                                                             </button>
                                                         </div>
+                                                    @else
+                                                        <button type="button" class="btn btn-sm btn-danger btn-icon" disabled>
+                                                            Alpa
+                                                        </button>
                                                     @endif
                                                 </td>
                                             </tr>

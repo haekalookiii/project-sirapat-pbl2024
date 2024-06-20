@@ -7,6 +7,7 @@ use App\Models\Attendance;
 use App\Models\Presence;
 use App\Models\Schedule;
 use App\Models\Student;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class PresenceController extends Controller
@@ -36,30 +37,25 @@ class PresenceController extends Controller
 
     public function store(Request $request)
     {
-        // Ambil schedule_id dari request
         $schedule_id = $request->input('schedule_id');
-
-        // Ambil schedule berdasarkan schedule_id
         $schedule = Schedule::findOrFail($schedule_id);
-
-        // Ambil semua siswa
         $students = Student::all();
-
-        // Status kehadiran default (misal: Alpa dengan id 1)
         $defaultAttendanceStatus = 1;
 
-        // Buat presensi untuk setiap siswa dengan status kehadiran default
+        $openedAt = Carbon::now();
+        $closedAt = $openedAt->copy()->addMinutes(1);
+
         foreach ($students as $student) {
             Presence::create([
                 'schedule_id' => $schedule_id,
                 'student_id' => $student->id,
                 'attendance_id' => $defaultAttendanceStatus,
+                'opened_at' => $openedAt,
+                'closed_at' => $closedAt,
             ]);
         }
 
-        // Redirect kembali dengan pesan sukses
-        return back()
-        ->with('success', 'Presensi berhasil dibuat.');
+        return back()->with('success', 'Presensi berhasil dibuat.');
     }
 
 

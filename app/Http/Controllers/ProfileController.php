@@ -48,7 +48,7 @@ class ProfileController extends Controller
     public function update(UpdateStudentRequest $request, Student $student)
     {
         $validasiData = $request->validate([
-            'foto_profil' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'foto_profil' => 'required|image|mimes:jpeg,png,jpg|max:2048',
             'nama_lengkap' => 'required',
             'nim' => 'required',
             'tanggal_lahir' => 'nullable|date',
@@ -92,6 +92,45 @@ class ProfileController extends Controller
 
             // Jika terjadi kesalahan lain, Anda dapat menangani sesuai kebutuhan
             return redirect()->back()->with('error', 'Terjadi kesalahan saat menyimpan data.');
+        }
+    }
+
+    /**
+     * Menyimpan perubahan foto profil pengguna.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function updateProfilePicture(UpdateStudentRequest $request, Student $student)
+    {
+    try {
+        $validasiData = $request->validated();
+        // Ambil NIM mahasiswa yang sedang login
+        $nim = $request->user()->student->nim;
+        
+        // Periksa apakah ada file foto baru yang diunggah
+        if ($request->hasFile('foto_profil')) {
+            // Simpan foto baru dan atur path di kolom foto_profil
+                $validasiData['foto_profil'] = $request-> foto_profil ->getClientOriginalName();
+                $validasiData['foto_profil'] = $request-> foto_profil ->storeAs('mhs-img/'.$nim,$validasiData['foto_profil']);
+                
+                // Hapus foto lama jika ada
+                if ($student->foto_profil) {
+                    $validasiData['foto_profil'] = Storage::deleteDirectory('mhs-img/'.$nim);
+                    $validasiData['foto_profil'] = null;
+                }
+            } else {
+                // Jika tidak ada file baru, gunakan foto lama
+                $validasiData['foto_profil'] = $student->foto_profil;
+            }
+
+        $student = Student::findOrFail($request->user()->student->id);
+            $student->update($validasiData);
+
+            return redirect()->route('profile.index')->with('success', 'Ubah Foto Profil Berhasil');
+        } catch (QueryException $e) {
+            // Jika terjadi kesalahan lain, Anda dapat menangani sesuai kebutuhan
+            return redirect()->back()->with('error', 'Gagal, Silahkan Coba Lagi.');
         }
     }
 }

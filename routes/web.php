@@ -33,7 +33,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('home', [DashboardController::class, 'index'])->name('home');
     Route::resource('dashboard', DashboardController::class)->except('update');
     Route::put('dashboard/{presence:id}', [DashboardController::class, 'update'])->name('update.presence');
-    Route::resource('profile', ProfileController::class);
+    Route::resource('profile', ProfileController::class)->except('updateProfilePicture');
+    Route::post('/update-profile-picture', [ProfileController::class, 'updateProfilePicture'])->name('update.profile.picture');
+    Route::post('/update-password', [ProfileController::class, 'updatePassword'])->name('update.password');
     Route::middleware('role:admin')->resource('user', UserController::class);
     Route::get('schedule/list', [ScheduleController::class, 'listSchedule'])->name('schedule.list');
     Route::resource('schedule', ScheduleController::class);
