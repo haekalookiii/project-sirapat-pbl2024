@@ -25,7 +25,7 @@
                     </div>
                 </div>
                 <div class="card">
-                    <form action="{{ route('user.update', $user) }}" method="POST">
+                    <form action="{{ route('user.update', $user->id) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                         <div class="card-header">
@@ -35,11 +35,20 @@
                             <div class="form-group">
                                 <label>Name</label>
                                 <input type="text"
-                                    class="form-control @error('name')
-                                    is-invalid
-                                @enderror"
-                                    name="name" value="{{ $user->name }}">
+                                    class="form-control @error('name') is-invalid @enderror"
+                                    name="name" id="name" value="{{ old('name', $user->name) }}">
                                 @error('name')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                            <div class="form-group">
+                                <label>NIM</label>
+                                <input type="text"
+                                    class="form-control @error('nim') is-invalid @enderror"
+                                    name="nim" id="nim" value="{{ old('nim', $user->username) }}">
+                                @error('nim')
                                     <div class="invalid-feedback">
                                         {{ $message }}
                                     </div>
@@ -48,48 +57,38 @@
                             <div class="form-group">
                                 <label>Email</label>
                                 <input type="email"
-                                    class="form-control @error('email')
-                                    is-invalid
-                                @enderror"
-                                    name="email" value="{{ $user->email }}">
+                                    class="form-control @error('email') is-invalid @enderror"
+                                    name="email" id="email" value="{{ old('email', $user->email) }}">
                                 @error('email')
                                     <div class="invalid-feedback">
                                         {{ $message }}
                                     </div>
                                 @enderror
                             </div>
-
                             <div class="form-group">
-                                <label>Phone</label>
-                                <input type="text" class="form-control" name="handphone" value="{{ $user->handphone }}">
+                                <label>Password</label>
+                                <input type="password"
+                                    class="form-control @error('password') is-invalid @enderror"
+                                    name="password" id="password">
+                                <small class="text-muted">Leave blank if you don't want to change password</small>
+                                @error('password')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
                             </div>
-
                             <div class="form-group">
                                 <label class="form-label">Roles</label>
-                                <div class="selectgroup w-100">
-                                    <label class="selectgroup-item">
-                                        <input type="radio" name="roles" value="admin" class="selectgroup-input"
-                                            @if ($user->roles == 'admin') checked @endif>
-                                        <span class="selectgroup-button">Admin</span>
-                                    </label>
-                                    <label class="selectgroup-item">
-                                        <input type="radio" name="roles" value="dosen" class="selectgroup-input"
-                                            @if ($user->roles == 'dosen') checked @endif>
-                                        <span class="selectgroup-button">Dosen</span>
-                                    </label>
-                                    <label class="selectgroup-item">
-                                        <input type="radio" name="roles" value="mahasiswa" class="selectgroup-input"
-                                            @if ($user->roles == 'mahasiswa') checked @endif>
-                                        <span class="selectgroup-button">Mahasiswa</span>
-                                    </label>
-
-                                </div>
-                            </div>
-                            <div class="form-group mb-0">
-                                <label>Address</label>
-                                <textarea class="form-control" data-height="150" name="address">
-                                    {{ $user->address }}
-                                </textarea>
+                                <select class="form-control @error('roles') is-invalid @enderror" name="roles" id="roles">
+                                    <option value="">Select Role</option>
+                                    <option value="admin" {{ old('roles', $user->roles) == 'admin' ? 'selected' : '' }}>Admin</option>
+                                    <option value="user" {{ old('roles', $user->roles) == 'user' ? 'selected' : '' }}>User</option>
+                                </select>
+                                @error('roles')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
                             </div>
                         </div>
                         <div class="card-footer text-right">
@@ -97,14 +96,7 @@
                         </div>
                     </form>
                 </div>
-
             </div>
         </section>
     </div>
 @endsection
-
-@push('scripts')
-    <!-- JS Libraies -->
-
-    <!-- Page Specific JS File -->
-@endpush

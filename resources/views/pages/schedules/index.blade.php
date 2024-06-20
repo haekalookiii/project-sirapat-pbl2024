@@ -25,11 +25,11 @@
                         <div class="card">
                             <div class="card-header">
                                 <h4>All Schedules</h4>
-                                @can('admin')
+                                <!-- @can('admin')
                                 <div class="section-header-button">
                                     <a href="{{ route('presence.index') }}" class="btn btn-primary">Detail</a>
                                 </div>
-                                @endcan
+                                @endcan -->
                             </div>
                             <div class="card-body">
                                 <div id='calendar'></div>

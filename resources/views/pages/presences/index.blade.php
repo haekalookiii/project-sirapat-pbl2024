@@ -49,9 +49,7 @@
                                             <th>No.</th>
                                             <th>Agenda Rapat</th>
                                             <th>Tanggal</th>
-                                            @can('admin')
                                             <th>Action</th>
-                                            @endcan
                                         </tr>
                                         @php
                                             $numberOfItems = $schedules->perPage() * ($schedules->currentPage() - 1);
@@ -61,7 +59,6 @@
                                                 <td>{{ $numberOfItems + $loop->iteration }}</td>
                                                 <td>{{ $schedule->title }}</td>
                                                 <td>{{ $schedule->start_date }}</td>
-                                                @can('admin')
                                                 <td>
                                                     <div class="d-flex justify-content-center">
                                                         <form action="{{ route('presence.show', $schedule->title) }}" method="GET" class="mr-2">
@@ -83,7 +80,6 @@
                                                         </form>
                                                     </div>
                                                 </td>
-                                                @endcan
                                             </tr>
                                         @endforeach
                                     </table>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Presence;
+use App\Models\Schedule;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -20,7 +21,9 @@ class DashboardController extends Controller
         // Periksa peran pengguna
         if ($user->hasRole('admin')) {
             // Jika peran pengguna adalah admin, langsung kembalikan tampilan dashboard admin
-            return view('pages.app.dashboard-sirapat');
+            return view('pages.app.dashboard-sirapat',[
+            'schedules' => Schedule::with(['presence'])->latest()->paginate(10),
+        ]);
         }
 
         // Ambil data siswa yang terkait dengan pengguna yang login

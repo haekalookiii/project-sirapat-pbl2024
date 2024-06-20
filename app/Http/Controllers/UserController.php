@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
@@ -162,9 +163,55 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, User $user)
     {
-        $validate = $request->validated();
-        $user->update($validate);
-        return redirect()->route('user.index')->with('success', 'Edit User Successfully');
+        // Validasi input
+        $validator = Validator::make($request->all(), [
+            'name' => 'nullable|string|max:255',
+            'nim' => [
+                'nullable',
+                'string',
+                'max:255',
+                Rule::unique('users', 'username')->ignore($user->id), // ignore current user's nim
+            ],
+            'email' => [
+                'nullable',
+                'string',
+                'email',
+                'max:255',
+                Rule::unique('users', 'email')->ignore($user->id), // ignore current user's email
+            ],
+            'password' => 'nullable|string|min:2', // password is optional for update
+            'roles' => 'nullable|string|in:admin,user',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        // Update user data
+        $user->name = $request->name;
+        $user->username = $request->nim; // Assuming 'username' field in 'users' table
+        $user->email = $request->email;
+        if ($request->filled('password')) {
+            $user->password = Hash::make($request->password);
+        }
+        $user->save();
+
+        // Update student data (assuming user_id is stored in students table)
+        $student = Student::where('user_id', $user->id)->first();
+        if ($student) {
+            $student->nama_lengkap = $request->name;
+            $student->nim = $request->nim;
+            $student->save();
+        }
+
+        // Update user roles
+        if ($request->roles === 'admin') {
+            $user->assignRole('admin');
+        } else {
+            $user->assignRole('user');
+        }
+
+        return redirect(route('user.index'))->with('success', 'Data berhasil diperbarui');
     }
 
     /**

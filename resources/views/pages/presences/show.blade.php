@@ -30,10 +30,14 @@
                             <div class="card-header">
                                 <h4>All Presences</h4>
                                 <div class="section-header-button">
-                                    <form action="{{ route('presence.store') }}" method="POST">
+                                    <form action="{{ route('presence.store') }}" method="POST" style="display: inline-block;">
                                         @csrf
-                                            <input type="hidden" name="schedule_id" value="{{ $id_jadwal }}">
+                                        <input type="hidden" name="schedule_id" value="{{ $id_jadwal }}">
                                         <button type="submit" class="btn btn-primary">Buat Presensi</button>
+                                    </form>
+
+                                    <form action="{{ route('presence.store') }}" method="GET" style="display: inline-block;">
+                                        <button type="submit" class="btn btn-success ml-2">Export Excel</button>
                                     </form>
                                 </div>
                             </div>

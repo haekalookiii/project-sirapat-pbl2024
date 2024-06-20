@@ -132,19 +132,21 @@
                                                 <td>{{ $presence->schedule->start_date }}</td>
                                                 <td>{{ $presence->schedule->end_date }}</td>
                                                 <td>
-                                                    @if ($presence->attendance->status_kehadiran !== 'Alpa')
-                                                        {{ $presence->attendance->status_kehadiran }}
+                                                    @if ($presence->attendance->status_kehadiran == 'Hadir')
+                                                        <button type="button" class="btn btn-sm btn-success btn-icon" disabled>
+                                                            Hadir
+                                                        </button>
                                                     @else
                                                         <div class="dropdown d-inline">
-                                                            <button type="button" class="btn btn-sm btn-success btn-icon show-confirmation-modal" data-status="Hadir" data-url="{{ route('update.presence', $presence->id) }}" data-attendance-id="2">
+                                                            <button type="button" class="btn btn-sm btn-info btn-icon show-confirmation-modal" data-status="Hadir" data-url="{{ route('update.presence', $presence->id) }}" data-attendance-id="2">
                                                                 <i class="fas fa-edit"></i> Hadir
                                                             </button>
 
-                                                            <button type="button" class="btn btn-sm btn-info btn-icon show-confirmation-modal" data-status="Izin" data-url="{{ route('update.presence', $presence->id) }}" data-attendance-id="3">
+                                                            <button type="button" class="btn btn-sm btn-success btn-icon show-confirmation-modal" data-status="Izin" data-url="{{ route('update.presence', $presence->id) }}" data-attendance-id="3">
                                                                 <i class="fas fa-edit"></i> Izin
                                                             </button>
 
-                                                            <button type="button" class="btn btn-sm btn-warning btn-icon show-confirmation-modal" data-status="Sakit" data-url="{{ route('update.presence', $presence->id) }}" data-attendance-id="4">
+                                                            <button type="button" class="btn btn-sm btn-danger btn-icon show-confirmation-modal" data-status="Sakit" data-url="{{ route('update.presence', $presence->id) }}" data-attendance-id="4">
                                                                 <i class="fas fa-edit"></i> Sakit
                                                             </button>
                                                         </div>
@@ -165,48 +167,76 @@
         </section>
 @endcan
 @can('admin')
-            <div class="row mt-4" id="tabelKehadiran">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4>Tabel Kehadiran</h4>
-                            <div class="section-header-button">
-                                <a href="{{ route('student.create') }}" class="btn btn-primary">Tambah</a>
+            <section class="section">
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>All Schedules</h4>
                             </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="float-right">
-                                <form method="GET" action="{{ route('student.index') }}">
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" placeholder="Search" name="nama_lengkap">
-                                        <div class="input-group-append">
-                                            <button class="btn btn-primary"><i class="fas fa-search"></i></button>
+                            <div class="card-body">
+                                <div class="float-right">
+                                    <form method="GET" action="{{ route('presence.index') }}">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" placeholder="Search" name="query">
+                                            <div class="input-group-append">
+                                                <button class="btn btn-primary"><i class="fas fa-search"></i></button>
+                                            </div>
                                         </div>
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="clearfix mb-3"></div>
-                            <div class="table-responsive">
+                                    </form>
+                                </div>
+                                <div class="clearfix mb-3"></div>
+
+                                <div class="table-responsive">
                                     <table class="table-striped table">
                                         <tr>
-                                            <th>Foto Profil</th>
-                                            <th>Nama Lengkap</th>
-                                            <th>Nomor Induk Mahasiswa</th>
-                                            <th>Tanggal Lahir</th>
-                                            <th>Jenis Kelamin</th>
-                                            <th>Angkatan Mahasiswa</th>
-                                            <th>Hobby</th>
+                                            <th>No.</th>
+                                            <th>Agenda Rapat</th>
+                                            <th>Tanggal</th>
                                             <th>Action</th>
                                         </tr>
-                                              
+                                        @php
+                                            $numberOfItems = $schedules->perPage() * ($schedules->currentPage() - 1);
+                                        @endphp
+                                        @foreach ($schedules as $schedule)
+                                            <tr>
+                                                <td>{{ $numberOfItems + $loop->iteration }}</td>
+                                                <td>{{ $schedule->title }}</td>
+                                                <td>{{ $schedule->start_date }}</td>
+                                                <td>
+                                                    <div class="d-flex justify-content-center">
+                                                        <form action="{{ route('presence.show', $schedule->title) }}" method="GET" class="mr-2">
+                                                            <button class="btn btn-sm btn-warning btn-icon">
+                                                                <i class="fas fa-edit"></i> Detail
+                                                            </button>
+                                                        </form>
+                                                        <form action="{{ route('presence.edit', $schedule->id) }}" method="GET" class="mr-2">
+                                                            <button class="btn btn-sm btn-info btn-icon">
+                                                                <i class="fas fa-edit"></i> Edit
+                                                            </button>
+                                                        </form>
+                                                        <form action="{{ route('presence.destroy', $schedule->id) }}" method="POST" class="mr-2">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button class="btn btn-sm btn-danger btn-icon confirm-delete">
+                                                                <i class="fas fa-times"></i> Delete
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
                                     </table>
+                                </div>
+                                <div class="float-right">
+                                    {{ $schedules->withQueryString()->links() }}
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                @endcan
             </section>
+@endcan
         </div>
     </div> 
 
