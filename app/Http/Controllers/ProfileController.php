@@ -83,15 +83,15 @@ class ProfileController extends Controller
             $student = Student::findOrFail($request->user()->student->id);
             $student->update($validasiData);
 
-            return redirect()->route('profile.index')->with('success', 'Edit Student Successfully');
+            return redirect()->route('profile.index')->with('success');
         } catch (QueryException $e) {
             // Menangani kesalahan duplikat pada nim
             if ($e->errorInfo[1] == 1062) {
-                return redirect()->back()->with('error', 'Nomor Induk Mahasiswa sudah terdaftar.');
+                return redirect()->back()->with('error', 'Nomor Induk Mahasiswa Salah.');
             }
 
             // Jika terjadi kesalahan lain, Anda dapat menangani sesuai kebutuhan
-            return redirect()->back()->with('error', 'Terjadi kesalahan saat menyimpan data.');
+            return redirect()->back()->with('error', 'Gagal, Silahkan Coba Lagi.');
         }
     }
 

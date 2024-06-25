@@ -29,7 +29,8 @@ class ScheduleController extends Controller
             'title' => $item->title,
             'start' => $item->start_date,
             'end' => date('Y-m-d',strtotime($item->end_date. '+1 days')),
-            'category' => $item->category
+            'category' => $item->category,
+            'className' => ['bg-'. $item->category]
         ]);
         return response()->json($schedules);
     }
@@ -72,19 +73,22 @@ class ScheduleController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
-    {
-        // Update the schedule item with the provided data
-        $scheduleItem = Schedule::find($id);
-        $scheduleItem->start_date = $request->input('start_date');
-        $scheduleItem->end_date = $request->input('end_date');
-        $scheduleItem->title = $request->input('title');
-        $scheduleItem->category = $request->input('category');
-        $scheduleItem->save();
-
-        return back()
-        ->with('success', 'Schedule update successfully.');
+    public function update(StoreSchedulRequest $request, Schedule $schedule)
+{   
+    if ($request->has('delete')) {
+            return $this->destroy($schedule);
     }
+    // Update the schedule item with the provided data
+    $schedule->start_date = $request->start_date;
+    $schedule->end_date = $request->end_date;
+    $schedule->title = $request->title;
+    $schedule->category = $request->category;
+    $schedule->save();
+
+    return back()
+        ->with('success', 'Schedule created successfully.');
+}
+
 
     /**
      * Remove the specified resource from storage.
@@ -92,6 +96,7 @@ class ScheduleController extends Controller
     public function destroy(Schedule $schedule)
     {
         $schedule->delete();
-        return redirect()->route('schedule.index')->with('success', 'Delete Schedule Successfully');
+        return back()
+        ->with('success', 'Schedule deleted successfully.');
     }
 }

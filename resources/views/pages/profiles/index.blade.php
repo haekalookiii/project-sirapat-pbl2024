@@ -163,8 +163,7 @@
                                                 </div>
                                             </div>
                                             <div class="card-footer text-right">
-                                                <a class="btn btn-danger" href="{{ route('student.index') }}">Batal</a>
-                                                <button type="button" class="btn btn-primary" id="openConfirmationModalProfile">Submit</button>
+                                                <button type="button" class="btn btn-primary update-profile-btn" id="openConfirmationModalProfile">Submit</button>
                                             </div>
                                         </form>
                                     </div>

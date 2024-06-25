@@ -780,7 +780,8 @@ select.form-control:not([size]):not([multiple]) {
     margin-bottom: 30px;
 }
 .card .card-header h3 {
-    font-size: 20px;
+    font-size: 15px;
+    /* font-size: 20px; */
 }
 .card .card-header,
 .card .card-body,
@@ -796,7 +797,10 @@ select.form-control:not([size]):not([multiple]) {
     padding-bottom: 20px;
 }
 .card .card-body h7 {
-    font-size: 14px;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .card .card-body .section-title {
     margin: 30px 0 10px 0;

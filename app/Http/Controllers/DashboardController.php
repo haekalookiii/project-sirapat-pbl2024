@@ -14,42 +14,48 @@ class DashboardController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        // Ambil pengguna yang sedang login
-        $user = Auth::user();
-        $totalMeetings = Schedule::count();
-        // Periksa peran pengguna
-        if ($user->hasRole('admin')) {
-            
-            // $totalUsers = User::count();
+    public function index(Request $request)
+{
+    // Ambil pengguna yang sedang login
+    $user = Auth::user();
+    
+    // Ambil parameter pencarian dan filter bulan
+    $query = $request->input('query');
+    $month = $request->input('month');
 
-            return view('pages.app.dashboard-sirapat', [
-                'schedules' => Schedule::with(['presence'])->latest()->paginate(10),
-                'totalMeetings' => $totalMeetings,
-                // 'totalUsers' => $totalUsers,
-            ]);
-        }
-
-        // Ambil data siswa yang terkait dengan pengguna yang login
-        $student = $user->student;
-
-        // if (!$student) {
-        //     abort(404, 'Student not found');
-        // }
-
-        // Ambil data presensi untuk siswa yang sedang login dan urutkan berdasarkan created_at dari yang terbaru ke yang terlama
-        $presences = $student->presences()
-            ->with(['schedule', 'student', 'attendance'])
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
+    // Periksa peran pengguna
+    if ($user->hasRole('admin')) {
+        // Query untuk mendapatkan jadwal dengan pencarian dan filter bulan
+        $schedules = Schedule::with(['presence'])
+            ->when($query, function($queryBuilder) use ($query) {
+                $queryBuilder->where('title', 'like', '%' . $query . '%');
+            })
+            ->when($month, function($queryBuilder) use ($month) {
+                $queryBuilder->whereMonth('start_date', $month);
+            })
+            ->latest()
+            ->paginate(5);
 
         return view('pages.app.dashboard-sirapat', [
-            'type_menu' => '',
-            'presences' => $presences,
-            'totalMeetings' => $totalMeetings
+            'schedules' => $schedules,
         ]);
     }
+
+    // Ambil data siswa yang terkait dengan pengguna yang login
+    $student = $user->student;
+
+    // Ambil data presensi untuk siswa yang sedang login dan urutkan berdasarkan created_at dari yang terbaru ke yang terlama
+    $presences = $student->presences()
+        ->with(['schedule', 'student', 'attendance'])
+        ->orderBy('created_at', 'desc')
+        ->paginate(5);
+
+    return view('pages.app.dashboard-sirapat', [
+        'type_menu' => '',
+        'presences' => $presences,
+    ]);
+}
+
 
     /**
      * Show the form for creating a new resource.
@@ -87,29 +93,26 @@ class DashboardController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, Presence $presence)
-    {
-        
-        // Validasi input
-        $validasiData = $request->validate([
-            'attendance_id' => 'required|integer',
+{
+    // Validasi input
+    $validasiData = $request->validate([
+        'attendance_id' => 'required|integer',
+    ]);
+
+    try {
+        // Update presence dengan status baru
+        $presence->update([
+            'attendance_id' => $validasiData['attendance_id']
         ]);
 
-        try {
-            // Update presence dengan status baru
-            $validasiData['attendance_id'] = $request->attendance_id;
-            // dd($validasiData['attendance_id']);
-            // Save the presence instance to the database
-            Presence::findOrFail($presence->id)->update([
-                'attendance_id' => $validasiData['attendance_id']
-            ]);
-            // Redirect kembali dengan pesan sukses
-            return redirect()->route('home')->with('success', 'Status kehadiran berhasil diupdate.');
-        } catch (\Exception $e) {
-            // Jika ada kesalahan, tangani dengan menampilkan pesan error
-            return redirect()->route('home')->with('error', 'Gagal mengupdate status kehadiran: ' . $e->getMessage());
-        }
-
+        // Return a JSON response with a success message
+        return response()->json(['success' => 'Status kehadiran berhasil diupdate.'], 200);
+    } catch (\Exception $e) {
+        // Return a JSON response with an error message
+        return response()->json(['error' => 'Gagal mengupdate status kehadiran: ' . $e->getMessage()], 500);
     }
+}
+
 
     /**
      * Remove the specified resource from storage.

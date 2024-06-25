@@ -18,20 +18,23 @@
         
         <section class="section">
             <div class="section-header">
-                <h1>Selamat Datang, {{ auth()->user()->name }}</h1>
+                <h1>Dashbord</h1>
             </div>
             <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-6 col-12">
                     <div class="card card-statistic-1">
                         <div class="card-icon bg-primary">
-                            <i class="far fa-calendar-alt"></i>
+                            <i class="far fa-hand-paper"></i>
                         </div>
                         <div class="card-wrap">
                             <div class="card-header">
-                                <h4 id="day"></h4> <!-- Tampilkan hari disini -->
+                                <h3>Selamat Datang</h>
                             </div>
                             <div class="card-body">
-                                <span id="date"></span> <!-- Tampilkan tanggal disini -->
+                                {{ auth()->user()->name }}
+                                @can('user')
+                                {{ auth()->user()->username }}
+                                @endcan
                             </div>
                         </div>
                     </div>
@@ -39,14 +42,14 @@
                 <div class="col-lg-6 col-md-6 col-sm-6 col-12">
                     <div class="card card-statistic-1">
                         <div class="card-icon bg-danger">
-                            <i class="fas fa-cloud-upload-alt"></i>
+                            <i class="fas fa-calendar-alt"></i>
                         </div>
                         <div class="card-wrap">
                             <div class="card-header">
-                                <h4>Total Riwayat Rapat</h4>
+                                <h3>Tanggal Hari Ini</h3> <!-- Tampilkan hari disini -->
                             </div>
                             <div class="card-body">
-                                {{ $totalMeetings }}
+                                <span id="date"></span> <!-- Tampilkan tanggal disini -->
                             </div>
                         </div>
                     </div>
@@ -81,8 +84,8 @@
                                         <tr>
                                             <th>No.</th>
                                             <th>Agenda Rapat</th>
-                                            <th>Tanggal Mulai</th>
-                                            <th>Tanggal Selesai</th>
+                                            <th>Tanggal</th>
+                                            <th>Jam</th>
                                             <th>Status</th>
                                         </tr>
                                         @php
@@ -92,8 +95,8 @@
                                             <tr>
                                                 <td>{{ $numberOfItems + $loop->iteration }}</td>
                                                 <td>{{ $presence->schedule->title }}</td>
-                                                <td>{{ $presence->schedule->start_date }}</td>
-                                                <td>{{ $presence->schedule->end_date }}</td>
+                                                <td>{{ $presence->schedule->start_date }} - {{ $presence->schedule->end_date }}</td>
+                                                <td>{{ $presence->schedule->start_time }} - {{ $presence->schedule->end_time }}</td>
                                                 <td>
                                                     @php
                                                         $now = \Carbon\Carbon::now();
@@ -115,15 +118,15 @@
                                                         </button>
                                                     @elseif($now >= $openedAt && $now <= $closedAt)
                                                         <div class="dropdown d-inline">
-                                                            <button type="button" class="btn btn-sm btn-info btn-icon show-confirmation-modal" data-status="Hadir" data-url="{{ route('update.presence', $presence->id) }}" data-attendance-id="2">
+                                                            <button type="button" class="btn btn-sm btn-info btn-icon update-status-btn" data-status="Hadir" data-url="{{ route('update.presence', $presence->id) }}" data-attendance-id="2">
                                                                 <i class="fas fa-edit"></i> Hadir
                                                             </button>
 
-                                                            <button type="button" class="btn btn-sm btn-success btn-icon show-confirmation-modal" data-status="Izin" data-url="{{ route('update.presence', $presence->id) }}" data-attendance-id="3">
+                                                            <button type="button" class="btn btn-sm btn-success btn-icon update-status-btn" data-status="Izin" data-url="{{ route('update.presence', $presence->id) }}" data-attendance-id="3">
                                                                 <i class="fas fa-edit"></i> Izin
                                                             </button>
 
-                                                            <button type="button" class="btn btn-sm btn-danger btn-icon show-confirmation-modal" data-status="Sakit" data-url="{{ route('update.presence', $presence->id) }}" data-attendance-id="4">
+                                                            <button type="button" class="btn btn-sm btn-danger btn-icon update-status-btn" data-status="Sakit" data-url="{{ route('update.presence', $presence->id) }}" data-attendance-id="4">
                                                                 <i class="fas fa-edit"></i> Sakit
                                                             </button>
                                                         </div>
@@ -149,74 +152,99 @@
 @endcan
 @can('admin')
             <section class="section">
-                <div class="row mt-4">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <h4>All Schedules</h4>
-                            </div>
-                            <div class="card-body">
-                                <div class="float-right">
-                                    <form method="GET" action="{{ route('presence.index') }}">
-                                        <div class="input-group">
-                                            <input type="text" class="form-control" placeholder="Search" name="query">
-                                            <div class="input-group-append">
-                                                <button class="btn btn-primary"><i class="fas fa-search"></i></button>
-                                            </div>
-                                        </div>
-                                    </form>
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4>All Schedules</h4>
+                </div>
+                <div class="card-body">
+                    <div class="float-right mb-3">
+                        <form method="GET" action="{{ route('home') }}">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Search" name="query">
+                                <select name="month" class="form-control ml-2">
+                                    <option value="">All Months</option>
+                                    @foreach (range(1, 12) as $month)
+                                        <option value="{{ $month }}" {{ request('month') == $month ? 'selected' : '' }}>
+                                            {{ date('F', mktime(0, 0, 0, $month, 1)) }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <select name="year" class="form-control ml-2">
+                                    <option value="">All Years</option>
+                                    @foreach (range(2020, date('Y')) as $year)
+                                        <option value="{{ $year }}" {{ request('year') == $year ? 'selected' : '' }}>
+                                            {{ $year }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary" type="submit"><i class="fas fa-search"></i></button>
                                 </div>
-                                <div class="clearfix mb-3"></div>
+                            </div>
+                        </form>
+                    </div>
 
-                                <div class="table-responsive">
-                                    <table class="table-striped table">
-                                        <tr>
-                                            <th>No.</th>
-                                            <th>Agenda Rapat</th>
-                                            <th>Tanggal</th>
-                                            <th>Action</th>
-                                        </tr>
-                                        @php
-                                            $numberOfItems = $schedules->perPage() * ($schedules->currentPage() - 1);
-                                        @endphp
-                                        @foreach ($schedules as $schedule)
-                                            <tr>
-                                                <td>{{ $numberOfItems + $loop->iteration }}</td>
-                                                <td>{{ $schedule->title }}</td>
-                                                <td>{{ $schedule->start_date }}</td>
-                                                <td>
-                                                    <div class="d-flex justify-content-center">
-                                                        <form action="{{ route('presence.show', $schedule->title) }}" method="GET" class="mr-2">
-                                                            <button class="btn btn-sm btn-warning btn-icon">
-                                                                <i class="fas fa-edit"></i> Detail
-                                                            </button>
-                                                        </form>
-                                                        <form action="{{ route('presence.edit', $schedule->id) }}" method="GET" class="mr-2">
-                                                            <button class="btn btn-sm btn-info btn-icon">
-                                                                <i class="fas fa-edit"></i> Edit
-                                                            </button>
-                                                        </form>
-                                                        <form action="{{ route('presence.destroy', $schedule->id) }}" method="POST" class="mr-2">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button class="btn btn-sm btn-danger btn-icon confirm-delete">
-                                                                <i class="fas fa-times"></i> Delete
-                                                            </button>
-                                                        </form>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    </table>
-                                </div>
-                                <div class="float-right">
-                                    {{ $schedules->withQueryString()->links() }}
-                                </div>
-                            </div>
-                        </div>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>No.</th>
+                                    <th>Agenda Rapat</th>
+                                    <th>Tanggal</th>
+                                    <th>Lokasi</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @php
+                                    $numberOfItems = $schedules->perPage() * ($schedules->currentPage() - 1);
+                                @endphp
+                                @foreach ($schedules as $schedule)
+                                    <tr>
+                                        <td>{{ $numberOfItems + $loop->iteration }}</td>
+                                        <td>{{ $schedule->title }}</td>
+                                        <td>{{ $schedule->start_date }} - {{ $schedule->end_date }}</td>
+                                        <td>-</td>
+                                        <td>
+                                            <div class="btn-group" role="group">
+                                                <form action="{{ route('presence.show', $schedule->title) }}" method="GET" class="mr-2">
+                                                    <button type="submit" class="btn btn-warning btn-sm">
+                                                        <i class="fas fa-eye"></i> Detail
+                                                    </button>
+                                                </form>
+                                                <form action="{{ route('presence.edit', $schedule->id) }}" method="GET" class="mr-2">
+                                                    <button type="submit" class="btn btn-info btn-sm">
+                                                        <i class="fas fa-edit"></i> Edit
+                                                    </button>
+                                                </form>
+                                                <form action="{{ route('presence.destroy', $schedule->id) }}" method="POST" class="mr-2">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-danger btn-sm confirm-delete">
+                                                        <i class="fas fa-trash"></i> Delete
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="float-right">
+                        {{ $schedules->withQueryString()->links() }}
                     </div>
                 </div>
-            </section>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
 @endcan
         </div>
     </div> 
