@@ -139,6 +139,27 @@
         dateElement.textContent = date;
     });
     </script>
+    <!-- JS Modal Buat Presensi -->
+    <script>
+        // Ambil semua tombol "Buat Presensi"
+        var buttons = document.querySelectorAll('.btn-create-presensi');
+
+        // Tambahkan event click pada setiap tombol
+        buttons.forEach(function(button) {
+            button.addEventListener('click', function(event) {
+                event.preventDefault(); // Mencegah pengiriman form
+                var scheduleTitle = this.getAttribute('data-schedule-title');
+                var confirmation = confirm('Apakah Anda yakin ingin membuat presensi untuk agenda rapat ' + scheduleTitle + '?');
+                if (confirmation) {
+                    // Lanjutkan pengiriman form jika dikonfirmasi
+                    this.closest('form').submit();
+                } else {
+                    // Tindakan lain jika tidak dikonfirmasi
+                    // Misalnya, tidak melakukan apa pun
+                }
+            });
+        });
+    </script>
 
     <!-- JS Modal Presensi -->
     <script>
@@ -149,17 +170,16 @@
             button.addEventListener('click', function () {
                 const status = this.getAttribute('data-status');
                 const url = this.getAttribute('data-url');
-                const attendanceId = this.getAttribute('data-attendance-id');
-
-                if (confirm(`Are you sure you want to mark this status as ${status}?`)) {
+                
+                if (confirm(`Anda yakin ingin menandai status ini sebagai ${status}?`)) {
                     $.ajax({
                         url: url,
-                        method: 'put',
+                        method: 'PUT',
                         data: {
-                            attendance_id: attendanceId,
+                            status: status, // send the status instead of attendance_id
                         },
                         headers: {
-                            'X-CSRF-TOKEN': csrfToken,
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}', // include the CSRF token
                             accept: 'application/json'
                         },
                         success: function (res) {
@@ -173,7 +193,34 @@
             });
         });
     });
-    </script>
+</script>
+
+    <!-- JS Modal Edit Presensi -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+    var editButtons = document.querySelectorAll('.edit-button');
+    editButtons.forEach(function (button) {
+        button.addEventListener('click', function () {
+            var id = this.dataset.id;
+            var attendanceId = this.dataset.attendance;
+            var form = document.getElementById('presenceForm');
+            
+            // Set the form action URL
+            form.action = '/presence/' + id;
+            
+            // Set the radio buttons based on the attendance ID
+            var radios = form.querySelectorAll('input[name="attendance_id"]');
+            radios.forEach(function (radio) {
+                radio.checked = radio.value == attendanceId;
+            });
+            
+            // Show the modal
+            var presenceModal = new bootstrap.Modal(document.getElementById('presenceModal'));
+            presenceModal.show();
+        });
+    });
+});
+</script>
 
 
     <!-- JS Confirmation Profile -->
@@ -208,6 +255,7 @@
             initialView: 'dayGridMonth',
             themeSystem: 'bootstrap5',
             events: `{{ route('schedule.list') }}`,
+            @can('admin')
             editable: true,
             dateClick: function (info) {
                 $.ajax({
@@ -245,6 +293,7 @@
                     }
                 })
             },
+            @endcan
             eventClick: function ({event}) {
                 $.ajax({
                     url: `{{ url('schedule') }}/${event.id}/edit`,
@@ -270,34 +319,36 @@
                     }
                 })
             },
+            @can('admin')
             eventDrop: function (info) {
-                const event = info.event
+                const event = info.event;
                 $.ajax({
                     url: `{{ url('schedule') }}/${event.id}`,
                     method: 'put',
                     data: {
                         id: event.id,
                         start_date: event.startStr,
-                        end_date: event.end.toISOString().substring(0, 10),
+                        end_date: event.end ? event.end.toISOString().substring(0, 10) : null, // Check if end date is available
                         title: event.title,
-                        category: event.extendedProps.category
+                        category: event.extendedProps.category,
+                        locate: event.extendedProps.locate // Adding locate to data
                     },
                     headers: {
                         'X-CSRF-TOKEN': csrfToken,
                         accept: 'application/json'
                     },
                     success: function (res) {
-                        calendar.refetchEvents()
+                        calendar.refetchEvents();
                     },
                     error: function (res) {
-                        const message = res.responseJSON.message
-                        calendar.refetchEvents()
-                        info.revert()
+                        const message = res.responseJSON.message;
+                        calendar.refetchEvents();
+                        info.revert();
                     }
-                })
+                });
             },
             eventResize: function (info) {
-                const {event} = info
+                const {event} = info;
                 $.ajax({
                     url: `{{ url('schedule') }}/${event.id}`,
                     method: 'put',
@@ -306,22 +357,25 @@
                         start_date: event.startStr,
                         end_date: event.end.toISOString().substring(0, 10),
                         title: event.title,
-                        category: event.extendedProps.category
+                        category: event.extendedProps.category,
+                        locate: event.extendedProps.locate // Adding locate to data
                     },
                     headers: {
                         'X-CSRF-TOKEN': csrfToken,
                         accept: 'application/json'
                     },
                     success: function (res) {
-                        calendar.refetchEvents()
+                        calendar.refetchEvents();
                     },
                     error: function (res) {
-                        const message = res.responseJSON.message
-                        calendar.refetchEvents()
-                        info.revert()
+                        const message = res.responseJSON.message;
+                        calendar.refetchEvents();
+                        info.revert();
                     }
-                })
+                });
             }
+
+            @endcan
             });
             calendar.render();
         });

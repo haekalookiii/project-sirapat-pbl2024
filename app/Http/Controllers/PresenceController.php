@@ -43,7 +43,7 @@ class PresenceController extends Controller
         $defaultAttendanceStatus = 1;
 
         $openedAt = Carbon::now();
-        $closedAt = $openedAt->copy()->addMinutes(1);
+        $closedAt = $openedAt->copy()->addMinutes(30);
 
         foreach ($students as $student) {
             Presence::create([
@@ -59,35 +59,45 @@ class PresenceController extends Controller
     }
 
 
-    public function edit(string $id)
+    public function edit(Presence $presence)
     {
-        //
+        return view('pages.presences.presence-edit-form',['data' => $presence, 'action' => route('presence.store')]);
     }
 
     public function update(Request $request, Presence $presence)
     {
-        
         // Validasi input
         $request->validate([
-            'attendance_status' => 'required|integer',
+            'attendance_id' => 'required|integer',
         ]);
 
         try {
             // Update presence dengan status baru
-            $presence->attendance_id = $request->input('attendance_status');
-            $presence->schedule_id;
-        //  dd($presence);
+            $presence->attendance_id = $request->input('attendance_id');
+            
             // Save the presence instance to the database
             $presence->save();
 
             // Redirect kembali dengan pesan sukses
-            return back()
-            ->with('success', 'Status kehadiran berhasil diupdate.');
+            return back()->with('success', 'Status kehadiran berhasil diupdate.');
         } catch (\Exception $e) {
             // Jika ada kesalahan, tangani dengan menampilkan pesan error
-            return back()
-            ->with('error', 'Gagal mengupdate status kehadiran: ' . $e->getMessage());
+            return back()->with('error', 'Gagal mengupdate status kehadiran: ' . $e->getMessage());
         }
-
     }
+
+    public function destroy(Presence $presence)
+{
+    try {
+        // Hapus presence dari database
+        $presence->delete();
+
+        // Redirect kembali dengan pesan sukses
+        return back()->with('success', 'Data presensi berhasil dihapus.');
+    } catch (\Exception $e) {
+        // Jika ada kesalahan, tangani dengan menampilkan pesan error
+        return back()->with('error', 'Gagal menghapus data presensi: ' . $e->getMessage());
+    }
+}
+
 }

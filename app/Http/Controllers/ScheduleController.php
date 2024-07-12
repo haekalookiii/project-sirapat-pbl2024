@@ -23,22 +23,24 @@ class ScheduleController extends Controller
         $end = date('Y-m-d', strtotime($request->end));
 
         $schedules = Schedule::where('start_date', '>=', $start)
-        ->where('end_date', '<=', $end)->get()
-        ->map( fn ($item) => [
-            'id' => $item->id,
-            'title' => $item->title,
-            'start' => $item->start_date,
-            'end' => date('Y-m-d',strtotime($item->end_date. '+1 days')),
-            'category' => $item->category,
-            'className' => ['bg-'. $item->category]
-        ]);
+            ->where('end_date', '<=', $end)->get()
+            ->map(fn ($item) => [
+                'id' => $item->id,
+                'title' => $item->title,
+                'start' => $item->start_date,
+                'end' => date('Y-m-d', strtotime($item->end_date . '+1 days')),
+                'category' => $item->category,
+                'locate' => $item->locate, // Adding locate to the response
+                'className' => ['bg-' . $item->category]
+            ]);
         return response()->json($schedules);
     }
 
     public function create(Schedule $schedule)
     {
-        return view('pages.schedules.schedule-form',['data' => $schedule, 'action' => route('schedule.store')]);
+        return view('pages.schedules.schedule-form', ['data' => $schedule, 'action' => route('schedule.store')]);
     }
+
     /**
      * Store a newly created resource in storage.
      */
@@ -48,20 +50,22 @@ class ScheduleController extends Controller
         $schedule->end_date = $request->end_date;
         $schedule->title = $request->title;
         $schedule->category = $request->category;
+        $schedule->locate = $request->locate; // Adding locate to store method
 
         $schedule->save();
 
         return back()
-        ->with('success', 'Schedule created successfully.');
+            ->with('success', 'Schedule created successfully.');
     }
 
     public function edit(Schedule $schedule)
     {
         return view('pages.schedules.schedule-form', [
-        'data' => $schedule,
-        'action' => route('schedule.update', $schedule->id)
-    ]);
+            'data' => $schedule,
+            'action' => route('schedule.update', $schedule->id)
+        ]);
     }
+
     /**
      * Display the specified resource.
      */
@@ -74,21 +78,21 @@ class ScheduleController extends Controller
      * Update the specified resource in storage.
      */
     public function update(StoreSchedulRequest $request, Schedule $schedule)
-{   
-    if ($request->has('delete')) {
+    {
+        if ($request->has('delete')) {
             return $this->destroy($schedule);
+        }
+        // Update the schedule item with the provided data
+        $schedule->start_date = $request->start_date;
+        $schedule->end_date = $request->end_date;
+        $schedule->title = $request->title;
+        $schedule->category = $request->category;
+        $schedule->locate = $request->locate; // Adding locate to update method
+        $schedule->save();
+
+        return back()
+            ->with('success', 'Schedule updated successfully.');
     }
-    // Update the schedule item with the provided data
-    $schedule->start_date = $request->start_date;
-    $schedule->end_date = $request->end_date;
-    $schedule->title = $request->title;
-    $schedule->category = $request->category;
-    $schedule->save();
-
-    return back()
-        ->with('success', 'Schedule created successfully.');
-}
-
 
     /**
      * Remove the specified resource from storage.
@@ -97,6 +101,6 @@ class ScheduleController extends Controller
     {
         $schedule->delete();
         return back()
-        ->with('success', 'Schedule deleted successfully.');
+            ->with('success', 'Schedule deleted successfully.');
     }
 }

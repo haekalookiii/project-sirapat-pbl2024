@@ -59,7 +59,6 @@
                                             <th>Username</th>
                                             <th>Email</th>
                                             <th>Role</th>
-                                            <th>Created At</th>
                                             <th>Action</th>
                                         </tr>
                                         @foreach ($users->skip(1) as $user)
@@ -83,23 +82,19 @@
                                                         No Role Assigned
                                                     @endif
                                                 </td>
-
-                                                <td>
-                                                    {{ $user->created_at }}
-                                                </td>
                                                 <td>
                                                     <div class="d-flex justify-content-center">
-                                                        <a href='{{ route('user.edit', $user->id) }}'
-                                                            class="btn btn-sm btn-info btn-icon">
-                                                            <i class="fas fa-edit"></i>
-                                                            Edit
+                                                        <form action="{{ route('user.show', $user->name) }}" method="GET" class="mr-2">
+                                                            <button class="btn btn-sm btn-secondary btn-icon">
+                                                                <i class="fas fa-info-circle"></i> Detail
+                                                            </button>
+                                                        </form>
+                                                        <a href="{{ route('user.edit', $user->id) }}" class="btn btn-sm btn-info btn-icon mr-2">
+                                                            <i class="fas fa-edit"></i> Edit
                                                         </a>
-
-                                                        <form action="{{ route('user.destroy', $user->id) }}" method="POST"
-                                                            class="ml-2">
+                                                        <form action="{{ route('user.destroy', $user->id) }}" method="POST">
                                                             <input type="hidden" name="_method" value="DELETE" />
-                                                            <input type="hidden" name="_token"
-                                                                value="{{ csrf_token() }}" />
+                                                            <input type="hidden" name="_token" value="{{ csrf_token() }}" />
                                                             <button class="btn btn-sm btn-danger btn-icon confirm-delete">
                                                                 <i class="fas fa-times"></i> Delete
                                                             </button>

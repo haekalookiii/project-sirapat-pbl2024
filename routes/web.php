@@ -36,7 +36,8 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('profile', ProfileController::class)->except('updateProfilePicture');
     Route::post('/update-profile-picture', [ProfileController::class, 'updateProfilePicture'])->name('update.profile.picture');
     Route::post('/update-password', [ProfileController::class, 'updatePassword'])->name('update.password');
-    Route::middleware('role:admin')->resource('user', UserController::class);
+    Route::middleware('role:admin')->resource('user', UserController::class)->except('show');
+    Route::middleware('role:admin')->get('/user/{user:name}', [UserController::class, 'show'])->name('user.show');
     Route::get('schedule/list', [ScheduleController::class, 'listSchedule'])->name('schedule.list');
     Route::resource('schedule', ScheduleController::class);
     // Route::put('schedule/{schedule}', [ScheduleController::class, 'update'])->name('schedule.update');

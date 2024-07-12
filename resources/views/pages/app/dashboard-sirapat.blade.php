@@ -118,15 +118,15 @@
                                                         </button>
                                                     @elseif($now >= $openedAt && $now <= $closedAt)
                                                         <div class="dropdown d-inline">
-                                                            <button type="button" class="btn btn-sm btn-info btn-icon update-status-btn" data-status="Hadir" data-url="{{ route('update.presence', $presence->id) }}" data-attendance-id="2">
+                                                            <button type="button" class="btn btn-sm btn-info btn-icon update-status-btn" data-status="Hadir" data-url="{{ route('update.presence', $presence->id) }}">
                                                                 <i class="fas fa-edit"></i> Hadir
                                                             </button>
 
-                                                            <button type="button" class="btn btn-sm btn-success btn-icon update-status-btn" data-status="Izin" data-url="{{ route('update.presence', $presence->id) }}" data-attendance-id="3">
+                                                            <button type="button" class="btn btn-sm btn-success btn-icon update-status-btn" data-status="Izin" data-url="{{ route('update.presence', $presence->id) }}">
                                                                 <i class="fas fa-edit"></i> Izin
                                                             </button>
 
-                                                            <button type="button" class="btn btn-sm btn-danger btn-icon update-status-btn" data-status="Sakit" data-url="{{ route('update.presence', $presence->id) }}" data-attendance-id="4">
+                                                            <button type="button" class="btn btn-sm btn-danger btn-icon update-status-btn" data-status="Sakit" data-url="{{ route('update.presence', $presence->id) }}">
                                                                 <i class="fas fa-edit"></i> Sakit
                                                             </button>
                                                         </div>
@@ -206,7 +206,7 @@
                                         <td>{{ $numberOfItems + $loop->iteration }}</td>
                                         <td>{{ $schedule->title }}</td>
                                         <td>{{ $schedule->start_date }} - {{ $schedule->end_date }}</td>
-                                        <td>-</td>
+                                        <td>{{ $schedule->locate }}</td>
                                         <td>
                                             <div class="btn-group" role="group">
                                                 <form action="{{ route('presence.show', $schedule->title) }}" method="GET" class="mr-2">
@@ -214,16 +214,11 @@
                                                         <i class="fas fa-eye"></i> Detail
                                                     </button>
                                                 </form>
-                                                <form action="{{ route('presence.edit', $schedule->id) }}" method="GET" class="mr-2">
-                                                    <button type="submit" class="btn btn-info btn-sm">
-                                                        <i class="fas fa-edit"></i> Edit
-                                                    </button>
-                                                </form>
-                                                <form action="{{ route('presence.destroy', $schedule->id) }}" method="POST" class="mr-2">
+                                                <form action="{{ route('presence.store') }}" method="POST" style="display: inline-block;">
                                                     @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger btn-sm confirm-delete">
-                                                        <i class="fas fa-trash"></i> Delete
+                                                    <input type="hidden" name="schedule_id" value="{{ $schedule->id }}">
+                                                    <button type="button" class="btn btn-primary btn-sm btn-create-presensi" data-schedule-title="{{ $schedule->title }}">
+                                                        Buat Presensi
                                                     </button>
                                                 </form>
                                             </div>

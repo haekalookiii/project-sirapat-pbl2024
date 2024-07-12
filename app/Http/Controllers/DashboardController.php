@@ -96,13 +96,22 @@ class DashboardController extends Controller
 {
     // Validasi input
     $validasiData = $request->validate([
-        'attendance_id' => 'required|integer',
+        'status' => 'required|string|in:Hadir,Izin,Sakit',
     ]);
 
     try {
+        // Map the status to attendance_id
+        $attendanceIdMap = [
+            'Hadir' => 2,
+            'Izin' => 3,
+            'Sakit' => 4,
+        ];
+
+        $attendanceId = $attendanceIdMap[$validasiData['status']];
+
         // Update presence dengan status baru
         $presence->update([
-            'attendance_id' => $validasiData['attendance_id']
+            'attendance_id' => $attendanceId
         ]);
 
         // Return a JSON response with a success message

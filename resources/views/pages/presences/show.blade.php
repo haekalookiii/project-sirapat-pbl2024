@@ -29,17 +29,11 @@
                         <div class="card">
                             <div class="card-header">
                                 <h4>All Presences</h4>
-                                <div class="section-header-button">
-                                    <form action="{{ route('presence.store') }}" method="POST" style="display: inline-block;">
-                                        @csrf
-                                        <input type="hidden" name="schedule_id" value="{{ $id_jadwal }}">
-                                        <button type="submit" class="btn btn-primary">Buat Presensi</button>
-                                    </form>
-
+                                <!-- <div class="section-header-button">
                                     <form action="{{ route('presence.store') }}" method="GET" style="display: inline-block;">
-                                        <button type="submit" class="btn btn-success ml-2">Export Excel</button>
+                                        <button type="submit" class="btn btn-success">Export Excel</button>
                                     </form>
-                                </div>
+                                </div> -->
                             </div>
                             <div class="card-body">
                                 <div class="float-right">
@@ -62,7 +56,6 @@
                                             <th>NIM</th>
                                             <th>Nama Lengkap</th>
                                             <th>Status Kehadiran</th>
-                                            <th>Created At</th>
                                             <th>Action</th>
                                         </tr>
                                         @php
@@ -75,12 +68,11 @@
                                                 <td>{{ $presence->student->nim }}</td>
                                                 <td>{{ $presence->student->nama_lengkap }}</td>
                                                 <td>{{ $presence->attendance->status_kehadiran }}</td>
-                                                <td>{{ $presence->created_at }}</td>
                                                 <td>
                                                     <div class="d-flex justify-content-center">
-                                                        <a href="{{ route('presence.edit', $presence->id) }}" class="btn btn-sm btn-info btn-icon">
+                                                        <button type="button" class="btn btn-sm btn-info btn-icon edit-button" data-id="{{ $presence->id }}" data-attendance="{{ $presence->attendance_id }}">
                                                             <i class="fas fa-edit"></i> Edit
-                                                        </a>
+                                                        </button>
                                                         <form action="{{ route('presence.destroy', $presence->id) }}" method="POST" class="ml-2">
                                                             @csrf
                                                             @method('DELETE')

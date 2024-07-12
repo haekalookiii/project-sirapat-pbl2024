@@ -153,10 +153,20 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
-    {
-        //
-    }
+    public function show(User $user)
+{
+    // Retrieve the student record based on the user_id
+    $student = Student::where('user_id', $user->id)->firstOrFail();
+
+    // Retrieve the presences related to the student and paginate them
+    $student->latest()->paginate(10)->withQueryString();
+
+    // Pass the data to the view
+    return view('pages.users.show', [
+        'student' => $student,
+    ]);
+}
+
 
     /**
      * Update the specified resource in storage.
