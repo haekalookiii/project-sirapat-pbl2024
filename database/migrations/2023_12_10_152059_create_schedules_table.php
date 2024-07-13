@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('schedules', function (Blueprint $table) {
             $table->id();
             $table->string('title');
+            $table->text('agenda');
             $table->date('start_date');
             $table->date('end_date');
             $table->string('locate');

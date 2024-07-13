@@ -19,14 +19,25 @@ class PresenceController extends Controller
         ]);
     }
 
-    public function show(Schedule $schedule)
+    public function show(Request $request, Schedule $schedule)
     {
-        // dd($schedule->presence());
+        $query = $schedule->presence()->with(['schedule', 'student', 'attendance'])->latest();
+
+        // Filter berdasarkan tanggal jika ada input tanggal dari form
+        if ($request->has('tanggal')) {
+            $tanggal = $request->input('tanggal');
+            $query->whereDate('created_at', '=', $tanggal);
+        }
+
+        $presences = $query->paginate(10)->withQueryString();
+
         return view('pages.presences.show', [
             'id_jadwal' => $schedule->id,
-            'presences' => $schedule->presence()->with(['schedule', 'student', 'attendance'])->latest()->paginate(10)->withQueryString()
+            'presences' => $presences,
+            'schedule' => $schedule, // Sertakan juga variabel $schedule untuk form filter
         ]);
     }
+
 
 
     public function create()

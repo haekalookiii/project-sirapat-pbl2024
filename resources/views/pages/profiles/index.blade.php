@@ -34,7 +34,7 @@
                                         <label>Ubah Foto Profil</label>
                                         <input type="file" class="form-control" name="foto_profil">
                                     </div>
-                                    <button type="submit" class="btn btn-primary">Simpan</button>
+                                    <button type="button" class="btn btn-primary btn-sm btn-update-profile">Simpan</button>
                                 </form>
                             </div>
                         </div>
@@ -161,9 +161,8 @@
                                                         </div>
                                                     @enderror
                                                 </div>
-                                            </div>
-                                            <div class="card-footer text-right">
-                                                <button type="button" class="btn btn-primary update-profile-btn" id="openConfirmationModalProfile">Submit</button>
+                                                <div class="card-footer text-right">
+                                                    <button type="button" class="btn btn-primary btn-sm btn-update-profile">Submit</button>
                                             </div>
                                         </form>
                                     </div>

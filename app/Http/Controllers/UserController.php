@@ -19,11 +19,15 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $pengguna = User::paginate(10);
-        return view('pages.users.index',[
-            'users' => $pengguna,
-        ]);
+        $search = $request->input('name');
         
+        $users = User::query()
+            ->when($search, function($query, $search) {
+                return $query->where('name', 'like', '%' . $search . '%');
+            })
+            ->paginate(10);
+
+        return view('pages.users.index', compact('users'));
     }
 
     public function create()

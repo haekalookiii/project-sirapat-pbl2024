@@ -36,16 +36,17 @@
                                 </div> -->
                             </div>
                             <div class="card-body">
-                                <div class="float-right">
-                                    <form method="GET" action="{{ route('presence.index') }}">
+                                <<div class="float-right mb-3">
+                                    <form method="GET" action="{{ route('presence.show', $schedule->title) }}">
                                         <div class="input-group">
-                                            <input type="text" class="form-control" placeholder="Search" name="query">
+                                            <input type="date" class="form-control" placeholder="Filter by date" name="tanggal">
                                             <div class="input-group-append">
-                                                <button class="btn btn-primary"><i class="fas fa-search"></i></button>
+                                                <button class="btn btn-primary"><i class="fas fa-filter"></i> Filter</button>
                                             </div>
                                         </div>
                                     </form>
                                 </div>
+
                                 <div class="clearfix mb-3"></div>
 
                                 <div class="table-responsive">
@@ -55,6 +56,7 @@
                                             <th>Agenda Rapat</th>
                                             <th>NIM</th>
                                             <th>Nama Lengkap</th>
+                                            <th>Tanggal</th>
                                             <th>Status Kehadiran</th>
                                             <th>Action</th>
                                         </tr>
@@ -67,6 +69,7 @@
                                                 <td>{{ $presence->schedule->title }}</td>
                                                 <td>{{ $presence->student->nim }}</td>
                                                 <td>{{ $presence->student->nama_lengkap }}</td>
+                                                <td>{{ date('d-m-Y', strtotime($presence->created_at)) }}</td>
                                                 <td>{{ $presence->attendance->status_kehadiran }}</td>
                                                 <td>
                                                     <div class="d-flex justify-content-center">

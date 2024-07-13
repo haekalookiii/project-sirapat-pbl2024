@@ -130,6 +130,7 @@
                                     <option value="2021">2021</option>
                                     <option value="2022">2022</option>
                                     <option value="2023">2023</option>
+                                    <option value="2024">2023</option>
                                     <!-- Tambahkan opsi lainnya sesuai kebutuhan -->
                                 </select>
                                 @error('angkatan_mahasiswa')

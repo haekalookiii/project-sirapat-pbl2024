@@ -62,12 +62,12 @@
                                                 <td>
                                                     <div class="d-flex justify-content-center">
                                                         <form action="{{ route('presence.show', $schedule->title) }}" method="GET" class="mr-2">
-                                                            <button class="btn btn-sm btn-secondary btn-icon">
+                                                            <button class="btn btn-sm btn-info btn-icon">
                                                                 <i class="fas fa-edit"></i> Detail
                                                             </button>
                                                         </form>
                                                         <form action="{{ route('presence.edit', $schedule->id) }}" method="GET" class="mr-2">
-                                                            <button class="btn btn-sm btn-info btn-icon">
+                                                            <button class="btn btn-sm btn-warning btn-icon">
                                                                 <i class="fas fa-edit"></i> Edit
                                                             </button>
                                                         </form>

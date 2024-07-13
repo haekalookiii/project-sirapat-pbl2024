@@ -90,8 +90,8 @@
                                     </div>
                                 @enderror
                             </div>
-                        </div>
                         <div class="card-footer text-right">
+                            <a class="btn btn-danger" href="{{ route('user.index') }}">Batal</a>
                             <button class="btn btn-primary">Submit</button>
                         </div>
                     </form>

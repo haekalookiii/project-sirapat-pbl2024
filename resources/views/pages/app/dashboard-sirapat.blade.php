@@ -67,25 +67,14 @@
                                 <h4>All Presences</h4>
                             </div>
                             <div class="card-body">
-                                <div class="float-right">
-                                    <form method="GET" action="{{ route('presence.index') }}">
-                                        <div class="input-group">
-                                            <input type="text" class="form-control" placeholder="Search" name="query">
-                                            <div class="input-group-append">
-                                                <button class="btn btn-primary"><i class="fas fa-search"></i></button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
                                 <div class="clearfix mb-3"></div>
 
                                 <div class="table-responsive">
                                     <table class="table-striped table">
                                         <tr>
                                             <th>No.</th>
-                                            <th>Agenda Rapat</th>
+                                            <th>Rapat</th>
                                             <th>Tanggal</th>
-                                            <th>Jam</th>
                                             <th>Status</th>
                                         </tr>
                                         @php
@@ -95,8 +84,7 @@
                                             <tr>
                                                 <td>{{ $numberOfItems + $loop->iteration }}</td>
                                                 <td>{{ $presence->schedule->title }}</td>
-                                                <td>{{ $presence->schedule->start_date }} - {{ $presence->schedule->end_date }}</td>
-                                                <td>{{ $presence->schedule->start_time }} - {{ $presence->schedule->end_time }}</td>
+                                                <td>{{ date('d-m-Y', strtotime($presence->schedule->start_date)) }} - {{ date('d-m-Y', strtotime($presence->schedule->end_date)) }}</td>
                                                 <td>
                                                     @php
                                                         $now = \Carbon\Carbon::now();
@@ -118,18 +106,19 @@
                                                         </button>
                                                     @elseif($now >= $openedAt && $now <= $closedAt)
                                                         <div class="dropdown d-inline">
-                                                            <button type="button" class="btn btn-sm btn-info btn-icon update-status-btn" data-status="Hadir" data-url="{{ route('update.presence', $presence->id) }}">
+                                                            <button type="button" class="btn btn-sm btn-info btn-icon update-status-btn" data-status="Hadir" data-url="{{ route('update.presence', $presence->id) }}" data-schedule-title="{{ $presence->schedule->title }}">
                                                                 <i class="fas fa-edit"></i> Hadir
                                                             </button>
 
-                                                            <button type="button" class="btn btn-sm btn-success btn-icon update-status-btn" data-status="Izin" data-url="{{ route('update.presence', $presence->id) }}">
+                                                            <button type="button" class="btn btn-sm btn-success btn-icon update-status-btn" data-status="Izin" data-url="{{ route('update.presence', $presence->id) }}" data-schedule-title="{{ $presence->schedule->title }}">
                                                                 <i class="fas fa-edit"></i> Izin
                                                             </button>
 
-                                                            <button type="button" class="btn btn-sm btn-danger btn-icon update-status-btn" data-status="Sakit" data-url="{{ route('update.presence', $presence->id) }}">
+                                                            <button type="button" class="btn btn-sm btn-danger btn-icon update-status-btn" data-status="Sakit" data-url="{{ route('update.presence', $presence->id) }}" data-schedule-title="{{ $presence->schedule->title }}">
                                                                 <i class="fas fa-edit"></i> Sakit
                                                             </button>
                                                         </div>
+
                                                     @else
                                                         <button type="button" class="btn btn-sm btn-danger btn-icon" disabled>
                                                             Alpa
@@ -191,7 +180,7 @@
                             <thead>
                                 <tr>
                                     <th>No.</th>
-                                    <th>Agenda Rapat</th>
+                                    <th>Rapat</th>
                                     <th>Tanggal</th>
                                     <th>Lokasi</th>
                                     <th>Action</th>
@@ -205,7 +194,7 @@
                                     <tr>
                                         <td>{{ $numberOfItems + $loop->iteration }}</td>
                                         <td>{{ $schedule->title }}</td>
-                                        <td>{{ $schedule->start_date }} - {{ $schedule->end_date }}</td>
+                                        <td>{{ date('d-m-Y', strtotime($schedule->start_date)) }} - {{ date('d-m-Y', strtotime($schedule->end_date)) }}</td>
                                         <td>{{ $schedule->locate }}</td>
                                         <td>
                                             <div class="btn-group" role="group">

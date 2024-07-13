@@ -149,7 +149,27 @@
             button.addEventListener('click', function(event) {
                 event.preventDefault(); // Mencegah pengiriman form
                 var scheduleTitle = this.getAttribute('data-schedule-title');
-                var confirmation = confirm('Apakah Anda yakin ingin membuat presensi untuk agenda rapat ' + scheduleTitle + '?');
+                var confirmation = confirm('Ingin membuka presensi untuk rapat ' + scheduleTitle + '?');
+                if (confirmation) {
+                    // Lanjutkan pengiriman form jika dikonfirmasi
+                    this.closest('form').submit();
+                } else {
+                    // Tindakan lain jika tidak dikonfirmasi
+                    // Misalnya, tidak melakukan apa pun
+                }
+            });
+        });
+    </script>
+
+    <!-- JS Confirmation Profile -->
+    <script>
+        var buttons = document.querySelectorAll('.btn-update-profile');
+
+        // Tambahkan event click pada setiap tombol
+        buttons.forEach(function(button) {
+            button.addEventListener('click', function(event) {
+                event.preventDefault(); // Mencegah pengiriman form
+                var confirmation = confirm('Apakah data yang anda masukan sudah benar?');
                 if (confirmation) {
                     // Lanjutkan pengiriman form jika dikonfirmasi
                     this.closest('form').submit();
@@ -170,23 +190,24 @@
             button.addEventListener('click', function () {
                 const status = this.getAttribute('data-status');
                 const url = this.getAttribute('data-url');
+                const scheduleTitle = this.getAttribute('data-schedule-title'); // Ambil schedule title
                 
-                if (confirm(`Anda yakin ingin menandai status ini sebagai ${status}?`)) {
+                if (confirm(`${status} di Rapat ${scheduleTitle}?`)) {
                     $.ajax({
                         url: url,
                         method: 'PUT',
                         data: {
-                            status: status, // send the status instead of attendance_id
+                            status: status,
                         },
                         headers: {
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}', // include the CSRF token
-                            accept: 'application/json'
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'accept': 'application/json'
                         },
                         success: function (res) {
                             location.reload();
                         },
                         error: function (xhr, status, error) {
-                            alert('An error occurred while updating the status: ' + xhr.responseText);
+                            alert('Terjadi kesalahan saat memperbarui status: ' + xhr.responseText);
                         }
                     });
                 }
@@ -194,6 +215,7 @@
         });
     });
 </script>
+
 
     <!-- JS Modal Edit Presensi -->
     <script>
@@ -221,28 +243,6 @@
     });
 });
 </script>
-
-
-    <!-- JS Confirmation Profile -->
-    <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const confirmationModalProfile = document.getElementById('confirmationModalProfile');
-        const confirmUpdateButton = document.getElementById('confirmUpdateButton');
-        const openConfirmationModalProfile = document.getElementById('openConfirmationModalProfile');
-
-        openConfirmationModalProfile.addEventListener('click', function () {
-            $('#confirmationModalProfile').modal('show');
-        });
-
-        confirmUpdateButton.addEventListener('click', function () {
-            document.getElementById('updateProfileForm').submit();
-        });
-    });
-    </script>
-    
-    
-
-
 
     <!-- JS FullCalendar -->
     <script>
@@ -299,7 +299,10 @@
                     url: `{{ url('schedule') }}/${event.id}/edit`,
                     success: function (res) {
                         modal.html(res).modal('show')
-
+                        $('.datepicker').datepicker({
+                            todayHighlight: true,
+                            format: 'yyyy-mm-dd'
+                        });
                         $('#form-action').on('submit', function(e) {
                             e.preventDefault()
                             const form = this
@@ -330,6 +333,7 @@
                         start_date: event.startStr,
                         end_date: event.end ? event.end.toISOString().substring(0, 10) : null, // Check if end date is available
                         title: event.title,
+                        agenda: event.extendedProps.agenda,
                         category: event.extendedProps.category,
                         locate: event.extendedProps.locate // Adding locate to data
                     },
@@ -357,6 +361,7 @@
                         start_date: event.startStr,
                         end_date: event.end.toISOString().substring(0, 10),
                         title: event.title,
+                        agenda: event.extendedProps.agenda,
                         category: event.extendedProps.category,
                         locate: event.extendedProps.locate // Adding locate to data
                     },
@@ -381,9 +386,6 @@
         });
 
     </script>
-
-
-
 
     <script src="{{ asset('library/selectric/public/jquery.selectric.min.js') }}"></script>
     <!-- Page Specific JS File -->

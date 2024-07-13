@@ -45,11 +45,14 @@
                                         <label>Angkatan Mahasiswa</label>
                                         <input type="text" class="form-control" name="angkatan_mahasiswa" value="{{ $student->angkatan_mahasiswa }}" disabled>
                                     </div>
+                                    <div class="card-footer text-right">
+                                        <a class="btn btn-danger" href="{{ route('user.index') }}">Kembali</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
                 </div>
-            </div>
-        </section>
-    </div>
+            </section>
+        </div>
 @endsection

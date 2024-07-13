@@ -39,11 +39,11 @@
                             <div class="card-body">
 
                                 <div class="float-right">
-                                    <form method="GET", action="{{ route('user.index') }}">
+                                    <form method="GET" action="{{ route('user.index') }}">
                                         <div class="input-group">
-                                            <input type="text" class="form-control" placeholder="Search" name="name">
+                                            <input type="text" class="form-control" placeholder="Search" name="name" value="{{ request()->input('name') }}">
                                             <div class="input-group-append">
-                                                <button class="btn btn-primary"><i class="fas fa-search"></i></button>
+                                                <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>
                                             </div>
                                         </div>
                                     </form>
@@ -52,59 +52,52 @@
                                 <div class="clearfix mb-3"></div>
 
                                 <div class="table-responsive">
-                                    <table class="table-striped table">
-                                        <tr>
-
-                                            <th>Name</th>
-                                            <th>Username</th>
-                                            <th>Email</th>
-                                            <th>Role</th>
-                                            <th>Action</th>
-                                        </tr>
-                                        @foreach ($users->skip(1) as $user)
+                                    <table class="table table-striped">
+                                        <thead>
                                             <tr>
-                                                <td>
-                                                    {{ $user->name }}
-                                                </td>
-                                                <td>
-                                                    {{ $user->username }}
-                                                </td>
-                                                <td>
-                                                    {{ $user->email }}
-                                                </td>
-
-                                                <td>
-                                                    @if ($user->hasRole('admin'))
-                                                        Admin
-                                                    @elseif ($user->hasRole('user'))
-                                                        User
-                                                    @else
-                                                        No Role Assigned
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex justify-content-center">
-                                                        <form action="{{ route('user.show', $user->name) }}" method="GET" class="mr-2">
-                                                            <button class="btn btn-sm btn-secondary btn-icon">
-                                                                <i class="fas fa-info-circle"></i> Detail
-                                                            </button>
-                                                        </form>
-                                                        <a href="{{ route('user.edit', $user->id) }}" class="btn btn-sm btn-info btn-icon mr-2">
-                                                            <i class="fas fa-edit"></i> Edit
-                                                        </a>
-                                                        <form action="{{ route('user.destroy', $user->id) }}" method="POST">
-                                                            <input type="hidden" name="_method" value="DELETE" />
-                                                            <input type="hidden" name="_token" value="{{ csrf_token() }}" />
-                                                            <button class="btn btn-sm btn-danger btn-icon confirm-delete">
-                                                                <i class="fas fa-times"></i> Delete
-                                                            </button>
-                                                        </form>
-                                                    </div>
-                                                </td>
+                                                <th>Name</th>
+                                                <th>Username</th>
+                                                <th>Email</th>
+                                                <th>Role</th>
+                                                <th>Action</th>
                                             </tr>
-                                        @endforeach
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($users as $user)
+                                                @if ($user->id != 1 || !$user->hasRole('admin'))
+                                                    <tr>
+                                                        <td>{{ $user->name }}</td>
+                                                        <td>{{ $user->username }}</td>
+                                                        <td>{{ $user->email }}</td>
+                                                        <td>
+                                                            @if ($user->hasRole('admin'))
+                                                                Admin
+                                                            @elseif ($user->hasRole('user'))
+                                                                User
+                                                            @else
+                                                                No Role Assigned
+                                                            @endif
+                                                        </td>
+                                                        <td>
+                                                            <div class="d-flex justify-content-center">
+                                                                <form action="{{ route('user.show', $user->name) }}" method="GET" class="mr-2">
+                                                                    <button type="submit" class="btn btn-info btn-sm btn-icon"><i class="fas fa-eye"></i> Detail</button>
+                                                                </form>
+                                                                <a href="{{ route('user.edit', $user->id) }}" class="btn btn-warning btn-sm btn-icon mr-2"><i class="fas fa-edit"></i> Edit</a>
+                                                                <form action="{{ route('user.destroy', $user->id) }}" method="POST">
+                                                                    @method('DELETE')
+                                                                    @csrf
+                                                                    <button type="submit" class="btn btn-danger btn-sm btn-icon confirm-delete"><i class="fas fa-times"></i> Delete</button>
+                                                                </form>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                @endif
+                                            @endforeach
+                                        </tbody>
                                     </table>
                                 </div>
+
                                 <div class="float-right">
                                     {{ $users->withQueryString()->links() }}
                                 </div>
@@ -116,8 +109,9 @@
         </section>
     </div>
 @endsection
+
 @push('scripts')
-    <!-- JS Libraies -->
+    <!-- JS Libraries -->
     <script src="{{ asset('library/selectric/public/jquery.selectric.min.js') }}"></script>
     <!-- Page Specific JS File -->
     <script src="{{ asset('js/page/features-posts.js') }}"></script>

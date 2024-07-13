@@ -27,6 +27,7 @@ class ScheduleController extends Controller
             ->map(fn ($item) => [
                 'id' => $item->id,
                 'title' => $item->title,
+                'agenda' => $item->agenda,
                 'start' => $item->start_date,
                 'end' => date('Y-m-d', strtotime($item->end_date . '+1 days')),
                 'category' => $item->category,
@@ -49,6 +50,7 @@ class ScheduleController extends Controller
         $schedule->start_date = $request->start_date;
         $schedule->end_date = $request->end_date;
         $schedule->title = $request->title;
+        $schedule->agenda = $request->agenda;
         $schedule->category = $request->category;
         $schedule->locate = $request->locate; // Adding locate to store method
 
@@ -86,6 +88,7 @@ class ScheduleController extends Controller
         $schedule->start_date = $request->start_date;
         $schedule->end_date = $request->end_date;
         $schedule->title = $request->title;
+        $schedule->agenda = $request->agenda;
         $schedule->category = $request->category;
         $schedule->locate = $request->locate; // Adding locate to update method
         $schedule->save();
