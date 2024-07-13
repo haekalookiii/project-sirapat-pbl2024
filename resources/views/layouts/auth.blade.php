@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no"
         name="viewport">
-    <title>@yield('title') &mdash; SIRAPAT - Sistem Informasi Rapat</title>
+    <!-- <title>@yield('title') &mdash; SIRAPAT - Sistem Informasi Rapat</title> -->
+    <title>SIRAPAT - Sistem Informasi Rapat</title>
 
     <!-- General CSS Files -->
     <link rel="stylesheet"
@@ -38,7 +39,7 @@
     </script>
     <!-- END GA -->
     {{-- logo --}}
-    
+    <link rel="icon" href="{{ asset('/img/FIX.png') }}" type="Logo-Sirapat">
 </head>
 
 <body>

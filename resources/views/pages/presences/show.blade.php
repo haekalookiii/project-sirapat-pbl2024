@@ -53,7 +53,7 @@
                                     <table class="table-striped table">
                                         <tr>
                                             <th>No.</th>
-                                            <th>Agenda Rapat</th>
+                                            <th>Rapat</th>
                                             <th>NIM</th>
                                             <th>Nama Lengkap</th>
                                             <th>Tanggal</th>

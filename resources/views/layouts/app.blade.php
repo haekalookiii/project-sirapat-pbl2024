@@ -6,7 +6,7 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no"
         name="viewport">
     <meta name="csrf_token" content="{{ csrf_token() }}">
-    <title>@yield('title') &mdash; SIRAPAT-Sistem Informasi Rapat</title>
+    <title>SIRAPAT - Sistem Informasi Rapat</title>
 
     <!-- General CSS Files -->
     <link rel="stylesheet"
@@ -61,6 +61,8 @@
         gtag('config', 'UA-94034622-3');
     </script>
     <!-- END GA -->
+    <!-- Logo -->
+    <link rel="icon" href="{{ asset('/img/FIX.png') }}" type="Logo-Sirapat">
 </head>
 
 <body>

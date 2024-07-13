@@ -194,7 +194,6 @@ class UserController extends Controller
                 Rule::unique('users', 'email')->ignore($user->id), // ignore current user's email
             ],
             'password' => 'nullable|string|min:2', // password is optional for update
-            'roles' => 'nullable|string|in:admin,user',
         ]);
 
         if ($validator->fails()) {
@@ -216,13 +215,6 @@ class UserController extends Controller
             $student->nama_lengkap = $request->name;
             $student->nim = $request->nim;
             $student->save();
-        }
-
-        // Update user roles
-        if ($request->roles === 'admin') {
-            $user->assignRole('admin');
-        } else {
-            $user->assignRole('user');
         }
 
         return redirect(route('user.index'))->with('success', 'Data berhasil diperbarui');

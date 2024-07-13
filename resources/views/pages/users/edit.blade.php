@@ -77,19 +77,6 @@
                                     </div>
                                 @enderror
                             </div>
-                            <div class="form-group">
-                                <label class="form-label">Roles</label>
-                                <select class="form-control @error('roles') is-invalid @enderror" name="roles" id="roles">
-                                    <option value="">Select Role</option>
-                                    <option value="admin" {{ old('roles', $user->roles) == 'admin' ? 'selected' : '' }}>Admin</option>
-                                    <option value="user" {{ old('roles', $user->roles) == 'user' ? 'selected' : '' }}>User</option>
-                                </select>
-                                @error('roles')
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
-                            </div>
                         <div class="card-footer text-right">
                             <a class="btn btn-danger" href="{{ route('user.index') }}">Batal</a>
                             <button class="btn btn-primary">Submit</button>
