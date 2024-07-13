@@ -31,7 +31,7 @@ class ScheduleController extends Controller
                 'start' => $item->start_date,
                 'end' => date('Y-m-d', strtotime($item->end_date . '+1 days')),
                 'category' => $item->category,
-                'locate' => $item->locate, // Adding locate to the response
+                'location' => $item->location, // Adding locate to the response
                 'className' => ['bg-' . $item->category]
             ]);
         return response()->json($schedules);
@@ -47,17 +47,22 @@ class ScheduleController extends Controller
      */
     public function store(StoreSchedulRequest $request, Schedule $schedule)
     {
-        $schedule->start_date = $request->start_date;
-        $schedule->end_date = $request->end_date;
-        $schedule->title = $request->title;
-        $schedule->agenda = $request->agenda;
-        $schedule->category = $request->category;
-        $schedule->locate = $request->locate; // Adding locate to store method
+        try {
+            $schedule->start_date = $request->start_date;
+            $schedule->end_date = $request->end_date;
+            $schedule->title = $request->title;
+            $schedule->agenda = $request->agenda;
+            $schedule->category = $request->category;
+            $schedule->location = $request->location; // Adding locate to store method
 
-        $schedule->save();
+            $schedule->save();
 
-        return back()
-            ->with('success', 'Schedule created successfully.');
+            return back()
+                ->with('success', 'Jadwal berhasil dibuat.');
+        } catch (\Exception $e) {
+            return back()
+                ->with('error', 'Jadwal gagal dibuat.');
+        }
     }
 
     public function edit(Schedule $schedule)
@@ -81,20 +86,25 @@ class ScheduleController extends Controller
      */
     public function update(StoreSchedulRequest $request, Schedule $schedule)
     {
-        if ($request->has('delete')) {
-            return $this->destroy($schedule);
-        }
-        // Update the schedule item with the provided data
-        $schedule->start_date = $request->start_date;
-        $schedule->end_date = $request->end_date;
-        $schedule->title = $request->title;
-        $schedule->agenda = $request->agenda;
-        $schedule->category = $request->category;
-        $schedule->locate = $request->locate; // Adding locate to update method
-        $schedule->save();
+        try {
+            if ($request->has('delete')) {
+                return $this->destroy($schedule);
+            }
+            // Update the schedule item with the provided data
+            $schedule->start_date = $request->start_date;
+            $schedule->end_date = $request->end_date;
+            $schedule->title = $request->title;
+            $schedule->agenda = $request->agenda;
+            $schedule->category = $request->category;
+            $schedule->location = $request->location; // Adding locate to update method
+            $schedule->save();
 
-        return back()
-            ->with('success', 'Schedule updated successfully.');
+            return back()
+                ->with('success', 'Jadwal berhasil diperbarui.');
+            } catch (\Exception $e) {
+            return back()
+                ->with('error', 'Jadwal gagal diperbarui.');
+        }
     }
 
     /**
@@ -102,8 +112,13 @@ class ScheduleController extends Controller
      */
     public function destroy(Schedule $schedule)
     {
-        $schedule->delete();
-        return back()
-            ->with('success', 'Schedule deleted successfully.');
+        try {
+            $schedule->delete();
+            return back()
+                ->with('success', 'Jadwal berhasil dihapus.');
+            } catch (\Exception $e) {
+                return back()
+                ->with('error', 'Jadwal gagal dihapus.');
+        }
     }
 }

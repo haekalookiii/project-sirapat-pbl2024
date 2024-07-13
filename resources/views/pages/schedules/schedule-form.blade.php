@@ -31,8 +31,8 @@
             </div>
         <div class="col-12">
             <div class="mb-3">
-                <label for="locate" class="form-label">Lokasi:</label>
-                <input type="text" name="locate" class="form-control" value="{{ $data->locate }}">
+                <label for="location" class="form-label">Lokasi:</label>
+                <input type="text" name="location" class="form-control" value="{{ $data->location }}">
             </div>
         </div>
         <div class="col-12">
@@ -95,7 +95,7 @@
         <div class="col-12">
             <div class="mb-3">
                 <label for="locate" class="form-label">Lokasi:</label>
-                <input type="text" name="locate" disabled class="form-control" value="{{ $data->locate }}">
+                <input type="text" name="locate" disabled class="form-control" value="{{ $data->location }}">
             </div>
         </div>
     </div>

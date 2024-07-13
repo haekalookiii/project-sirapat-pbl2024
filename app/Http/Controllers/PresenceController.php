@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StorePresenceRequest;
-use App\Models\Attendance;
 use App\Models\Presence;
 use App\Models\Schedule;
 use App\Models\Student;
@@ -14,9 +12,9 @@ class PresenceController extends Controller
 {
     public function index()
     {
-        return view('pages.presences.index', [
-            'schedules' => Schedule::with(['presence'])->latest()->paginate(10),
-        ]);
+        // return view('pages.presences.index', [
+        //     'schedules' => Schedule::with(['presence'])->latest()->paginate(10),
+        // ]);
     }
 
     public function show(Request $request, Schedule $schedule)
@@ -48,25 +46,28 @@ class PresenceController extends Controller
 
     public function store(Request $request)
     {
-        $schedule_id = $request->input('schedule_id');
-        $schedule = Schedule::findOrFail($schedule_id);
-        $students = Student::all();
-        $defaultAttendanceStatus = 1;
+        try {
+            $schedule_id = $request->input('schedule_id');
+            $schedule = Schedule::findOrFail($schedule_id);
+            $students = Student::all();
+            $defaultAttendanceStatus = 1;
 
-        $openedAt = Carbon::now();
-        $closedAt = $openedAt->copy()->addMinutes(30);
+            $openedAt = Carbon::now();
+            $closedAt = $openedAt->copy()->addMinutes(30);
 
-        foreach ($students as $student) {
-            Presence::create([
-                'schedule_id' => $schedule_id,
-                'student_id' => $student->id,
-                'attendance_id' => $defaultAttendanceStatus,
-                'opened_at' => $openedAt,
-                'closed_at' => $closedAt,
-            ]);
+            foreach ($students as $student) {
+                Presence::create([
+                    'schedule_id' => $schedule_id,
+                    'student_id' => $student->id,
+                    'attendance_id' => $defaultAttendanceStatus,
+                    'opened_at' => $openedAt,
+                    'closed_at' => $closedAt,
+                ]);
+            }
+            return back()->with('success', 'Presensi berhasil dibuat.');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Presensi gagal dibuat.');
         }
-
-        return back()->with('success', 'Presensi berhasil dibuat.');
     }
 
 
@@ -93,22 +94,21 @@ class PresenceController extends Controller
             return back()->with('success', 'Status kehadiran berhasil diupdate.');
         } catch (\Exception $e) {
             // Jika ada kesalahan, tangani dengan menampilkan pesan error
-            return back()->with('error', 'Gagal mengupdate status kehadiran: ' . $e->getMessage());
+            return back()->with('error', 'Gagal mengupdate status kehadiran.');
         }
     }
 
     public function destroy(Presence $presence)
-{
-    try {
-        // Hapus presence dari database
-        $presence->delete();
+    {
+        try {
+            // Hapus presence dari database
+            $presence->delete();
 
-        // Redirect kembali dengan pesan sukses
-        return back()->with('success', 'Data presensi berhasil dihapus.');
-    } catch (\Exception $e) {
-        // Jika ada kesalahan, tangani dengan menampilkan pesan error
-        return back()->with('error', 'Gagal menghapus data presensi: ' . $e->getMessage());
+            // Redirect kembali dengan pesan sukses
+            return back()->with('success', 'Data presensi berhasil dihapus.');
+        } catch (\Exception $e) {
+            // Jika ada kesalahan, tangani dengan menampilkan pesan error
+            return back()->with('error', 'Gagal menghapus data presensi.');
+        }
     }
-}
-
 }

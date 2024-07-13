@@ -36,16 +36,13 @@
             color: black !important; /* Mengubah warna teks menjadi merah */
             font-weight: bold !important; /* Mengubah gaya teks */
         }
+        .profile-picture {
+            max-width: 100px;
+            max-height: 100px; /* Sesuaikan dengan kebutuhan Anda */
+            width: auto;
+            height: auto;
+        }
     </style>
-
-    <style>
-    .profile-picture {
-        max-width: 100px;
-        max-height: 100px; /* Sesuaikan dengan kebutuhan Anda */
-        width: auto;
-        height: auto;
-    }
-</style>
 
     <!-- Start GA -->
     <script async
@@ -105,42 +102,22 @@
     
     @stack('scripts')
 
-    <!-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>// message with sweetalert
-        @if(session('success'))
-            Swal.fire({
-                icon: "success",
-                title: "BERHASIL",
-                text: "{{ session('success') }}",
-                showConfirmButton: false,
-                timer: 2000
-            });
-            @elseif(session('error'))
-            Swal.fire({
-                icon: "error",
-                title: "GAGAL!",
-                text: "{{ session('error') }}",
-                showConfirmButton: false,
-                timer: 2000
-            });
-        @endif
-    </script> -->
-
     <!-- JS Hari & Tanggal -->
     <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const dateElement = document.getElementById('date');
-        
-        const now = new Date();
-        const date = now.toLocaleDateString('id-ID', {
-            day: 'numeric',
-            month: 'numeric',
-            year: 'numeric'
-        });
+        document.addEventListener('DOMContentLoaded', function () {
+            const dateElement = document.getElementById('date');
+            
+            const now = new Date();
+            const date = now.toLocaleDateString('id-ID', {
+                day: 'numeric',
+                month: 'numeric',
+                year: 'numeric'
+            });
 
-        dateElement.textContent = date;
-    });
+            dateElement.textContent = date;
+        });
     </script>
+
     <!-- JS Modal Buat Presensi -->
     <script>
         // Ambil semua tombol "Buat Presensi"
@@ -151,7 +128,7 @@
             button.addEventListener('click', function(event) {
                 event.preventDefault(); // Mencegah pengiriman form
                 var scheduleTitle = this.getAttribute('data-schedule-title');
-                var confirmation = confirm('Ingin membuka presensi untuk rapat ' + scheduleTitle + '?');
+                var confirmation = confirm('Yakin ingin membuka presensi untuk rapat ' + scheduleTitle + '?');
                 if (confirmation) {
                     // Lanjutkan pengiriman form jika dikonfirmasi
                     this.closest('form').submit();
@@ -171,7 +148,27 @@
         buttons.forEach(function(button) {
             button.addEventListener('click', function(event) {
                 event.preventDefault(); // Mencegah pengiriman form
-                var confirmation = confirm('Apakah data yang anda masukan sudah benar?');
+                var confirmation = confirm('Yakin data yang anda masukan sudah benar?');
+                if (confirmation) {
+                    // Lanjutkan pengiriman form jika dikonfirmasi
+                    this.closest('form').submit();
+                } else {
+                    // Tindakan lain jika tidak dikonfirmasi
+                    // Misalnya, tidak melakukan apa pun
+                }
+            });
+        });
+    </script>
+
+    <!-- JS Confirmation Delete -->
+    <script>
+        var buttons = document.querySelectorAll('.confirm-delete');
+
+        // Tambahkan event click pada setiap tombol
+        buttons.forEach(function(button) {
+            button.addEventListener('click', function(event) {
+                event.preventDefault(); // Mencegah pengiriman form
+                var confirmation = confirm('Yakin ingin hapus data?');
                 if (confirmation) {
                     // Lanjutkan pengiriman form jika dikonfirmasi
                     this.closest('form').submit();
@@ -185,66 +182,66 @@
 
     <!-- JS Modal Presensi -->
     <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const buttons = document.querySelectorAll('.update-status-btn');
+        document.addEventListener('DOMContentLoaded', function () {
+            const buttons = document.querySelectorAll('.update-status-btn');
 
-        buttons.forEach(button => {
-            button.addEventListener('click', function () {
-                const status = this.getAttribute('data-status');
-                const url = this.getAttribute('data-url');
-                const scheduleTitle = this.getAttribute('data-schedule-title'); // Ambil schedule title
-                
-                if (confirm(`${status} di Rapat ${scheduleTitle}?`)) {
-                    $.ajax({
-                        url: url,
-                        method: 'PUT',
-                        data: {
-                            status: status,
-                        },
-                        headers: {
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                            'accept': 'application/json'
-                        },
-                        success: function (res) {
-                            location.reload();
-                        },
-                        error: function (xhr, status, error) {
-                            alert('Terjadi kesalahan saat memperbarui status: ' + xhr.responseText);
-                        }
-                    });
-                }
+            buttons.forEach(button => {
+                button.addEventListener('click', function () {
+                    const status = this.getAttribute('data-status');
+                    const url = this.getAttribute('data-url');
+                    const scheduleTitle = this.getAttribute('data-schedule-title'); // Ambil schedule title
+                    
+                    if (confirm(`${status} di Rapat ${scheduleTitle}?`)) {
+                        $.ajax({
+                            url: url,
+                            method: 'PUT',
+                            data: {
+                                status: status,
+                            },
+                            headers: {
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                'accept': 'application/json'
+                            },
+                            success: function (res) {
+                                location.reload();
+                            },
+                            error: function (xhr, status, error) {
+                                alert('Terjadi kesalahan saat memperbarui status: ' + xhr.responseText);
+                            }
+                        });
+                    }
+                });
             });
         });
-    });
-</script>
+    </script>
 
 
     <!-- JS Modal Edit Presensi -->
     <script>
-    document.addEventListener('DOMContentLoaded', function () {
-    var editButtons = document.querySelectorAll('.edit-button');
-    editButtons.forEach(function (button) {
-        button.addEventListener('click', function () {
-            var id = this.dataset.id;
-            var attendanceId = this.dataset.attendance;
-            var form = document.getElementById('presenceForm');
-            
-            // Set the form action URL
-            form.action = '/presence/' + id;
-            
-            // Set the radio buttons based on the attendance ID
-            var radios = form.querySelectorAll('input[name="attendance_id"]');
-            radios.forEach(function (radio) {
-                radio.checked = radio.value == attendanceId;
+        document.addEventListener('DOMContentLoaded', function () {
+        var editButtons = document.querySelectorAll('.edit-button');
+        editButtons.forEach(function (button) {
+            button.addEventListener('click', function () {
+                var id = this.dataset.id;
+                var attendanceId = this.dataset.attendance;
+                var form = document.getElementById('presenceForm');
+                
+                // Set the form action URL
+                form.action = '/presence/' + id;
+                
+                // Set the radio buttons based on the attendance ID
+                var radios = form.querySelectorAll('input[name="attendance_id"]');
+                radios.forEach(function (radio) {
+                    radio.checked = radio.value == attendanceId;
+                });
+                
+                // Show the modal
+                var presenceModal = new bootstrap.Modal(document.getElementById('presenceModal'));
+                presenceModal.show();
             });
-            
-            // Show the modal
-            var presenceModal = new bootstrap.Modal(document.getElementById('presenceModal'));
-            presenceModal.show();
         });
     });
-});
-</script>
+    </script>
 
     <!-- JS FullCalendar -->
     <script>
@@ -337,7 +334,7 @@
                         title: event.title,
                         agenda: event.extendedProps.agenda,
                         category: event.extendedProps.category,
-                        locate: event.extendedProps.locate // Adding locate to data
+                        location: event.extendedProps.location // Adding locate to data
                     },
                     headers: {
                         'X-CSRF-TOKEN': csrfToken,
@@ -365,7 +362,7 @@
                         title: event.title,
                         agenda: event.extendedProps.agenda,
                         category: event.extendedProps.category,
-                        locate: event.extendedProps.locate // Adding locate to data
+                        location: event.extendedProps.location // Adding locate to data
                     },
                     headers: {
                         'X-CSRF-TOKEN': csrfToken,
@@ -386,7 +383,6 @@
             });
             calendar.render();
         });
-
     </script>
 
     <script src="{{ asset('library/selectric/public/jquery.selectric.min.js') }}"></script>

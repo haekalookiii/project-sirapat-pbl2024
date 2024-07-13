@@ -31,7 +31,11 @@
                                     <h5>Informasi Profil</h5>
                                     <div class="form-group">
                                         <label>Tanggal Lahir</label>
+                                        @if($student->tanggal_lahir)
                                         <input type="text" class="form-control" name="tanggal_lahir" value="{{ date('d-m-Y', strtotime($student->tanggal_lahir )) }}" disabled>
+                                        @else
+                                        <input type="text" class="form-control" name="tanggal_lahir" value="{{ $student->tanggal_lahir }}" disabled>
+                                        @endif
                                     </div>
                                     <div class="form-group">
                                         <label>Jenis Kelamin</label>

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->text('agenda');
             $table->date('start_date');
             $table->date('end_date');
-            $table->string('locate');
+            $table->string('location');
             $table->string('category');
             $table->timestamps();
         });

@@ -19,11 +19,6 @@ class Student extends Model
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
-    public function subject()
-    {
-        return $this->belongsTo(Subject::class);
-    }
-
     // Tambahkan relasi presences
     public function presences()
     {

@@ -8,7 +8,7 @@
             <div class="section-header">
                 <h1>Profil</h1>
             </div>
-
+            
             <div class="section-body">
                 <div class="row">
                     <div class="col-12">
@@ -153,6 +153,8 @@
                                                         <option value="2021" {{ old('angkatan_mahasiswa', $student->angkatan_mahasiswa) == '2021' ? 'selected' : '' }}>2021</option>
                                                         <option value="2022" {{ old('angkatan_mahasiswa', $student->angkatan_mahasiswa) == '2022' ? 'selected' : '' }}>2022</option>
                                                         <option value="2023" {{ old('angkatan_mahasiswa', $student->angkatan_mahasiswa) == '2023' ? 'selected' : '' }}>2023</option>
+                                                        <option value="2024" {{ old('angkatan_mahasiswa', $student->angkatan_mahasiswa) == '2024' ? 'selected' : '' }}>2024</option>
+                                                        <option value="2025" {{ old('angkatan_mahasiswa', $student->angkatan_mahasiswa) == '2025' ? 'selected' : '' }}>2025</option>
                                                         <!-- Add other options as needed -->
                                                     </select>
                                                     @error('angkatan_mahasiswa')

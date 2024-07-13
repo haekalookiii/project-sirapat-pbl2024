@@ -21,6 +21,11 @@
                 <h1>Dashbord</h1>
             </div>
             <div class="row">
+                    <div class="col-12">
+                        @include('layouts.alert')
+                    </div>
+                </div>
+            <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-6 col-12">
                     <div class="card card-statistic-1">
                         <div class="card-icon bg-primary">
@@ -75,6 +80,7 @@
                                             <th>No.</th>
                                             <th>Rapat</th>
                                             <th>Tanggal</th>
+                                            <th>Lokasi</th>
                                             <th>Status</th>
                                         </tr>
                                         @php
@@ -85,6 +91,7 @@
                                                 <td>{{ $numberOfItems + $loop->iteration }}</td>
                                                 <td>{{ $presence->schedule->title }}</td>
                                                 <td>{{ date('d-m-Y', strtotime($presence->schedule->start_date)) }} - {{ date('d-m-Y', strtotime($presence->schedule->end_date)) }}</td>
+                                                <td>{{ $presence->schedule->location }}</td>
                                                 <td>
                                                     @php
                                                         $now = \Carbon\Carbon::now();
@@ -195,7 +202,7 @@
                                         <td>{{ $numberOfItems + $loop->iteration }}</td>
                                         <td>{{ $schedule->title }}</td>
                                         <td>{{ date('d-m-Y', strtotime($schedule->start_date)) }} - {{ date('d-m-Y', strtotime($schedule->end_date)) }}</td>
-                                        <td>{{ $schedule->locate }}</td>
+                                        <td>{{ $schedule->location }}</td>
                                         <td>
                                             <div class="btn-group" role="group">
                                                 <form action="{{ route('presence.show', $schedule->title) }}" method="GET" class="mr-2">

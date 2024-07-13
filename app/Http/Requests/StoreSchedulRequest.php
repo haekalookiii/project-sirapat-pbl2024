@@ -25,6 +25,8 @@ class StoreSchedulRequest extends FormRequest
             'start_date' => 'required|date_format:Y-m-d',
             'end_date' => 'required|date_format:Y-m-d',
             'title' => 'required',
+            'agenda' => 'required',
+            'location' => 'required',
             'category' => 'required',
         ];
     }

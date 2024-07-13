@@ -15,16 +15,12 @@ class ProfileController extends Controller
     {
         // Mendapatkan pengguna yang saat ini login
         $user = Auth::user();
-        // dd($user);
-
-        // Mengambil data mahasiswa terkait dengan pengguna
-        // $student = Student::find($user->id);
-        // dd($student);
-        // return view('pages.profiles.index', compact('student'));
-        $student = Student::where('user_id', $user->id)->first();
-        
-        return view('pages.profiles.index', compact('student'));
-        
+        if ($user->hasRole('user')) {
+            // Mendapatkan data siswa berdasarkan id pengguna
+            $student = Student::where('user_id', $user->id)->first();
+            
+            return view('pages.profiles.index', compact('student'));
+        }
     }
 
     public function showProfile()
@@ -104,7 +100,9 @@ class ProfileController extends Controller
     public function updateProfilePicture(UpdateStudentRequest $request, Student $student)
     {
     try {
-        $validasiData = $request->validated();
+        $validasiData = $request->validated([
+            'foto_profil' => 'required|image|mimes:jpeg,png,jpg|max:2048'
+        ]);
         // Ambil NIM mahasiswa yang sedang login
         $nim = $request->user()->student->nim;
         
@@ -127,10 +125,10 @@ class ProfileController extends Controller
         $student = Student::findOrFail($request->user()->student->id);
             $student->update($validasiData);
 
-            return redirect()->route('profile.index')->with('success', 'Ubah Foto Profil Berhasil');
+            return redirect()->route('profile.index')->with('success', 'Foto profil berhasil diperbarui');
         } catch (QueryException $e) {
             // Jika terjadi kesalahan lain, Anda dapat menangani sesuai kebutuhan
-            return redirect()->back()->with('error', 'Gagal, Silahkan Coba Lagi.');
+            return redirect()->back()->with('error', 'Foto profil gagal diperbarui.');
         }
     }
 }

@@ -11,11 +11,6 @@ class Schedule extends Model
     protected $table = 'schedules';
     protected $guarded = ['id'];
 
-    public function subject()
-    {
-        return $this->belongsTo(Subject::class);
-    }
-
     public function student()
     {
         return $this->belongsTo(User::class);

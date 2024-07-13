@@ -54,46 +54,46 @@ class UserController extends Controller
             // Process the CSV file
             $this->processCsv($file);
 
-            return redirect()->route('user.index')->with('success', 'Users created successfully from CSV.');
-    } else {
-
-        // Validate individual form fields only when CSV is not present
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'nim' => 'required|string|max:255|unique:students,nim',
-            'email' => 'required|string|email|max:255|unique:users,email',
-            'password' => 'required|string|min:2',
-            'roles' => 'required|string|in:admin,user',
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
-
-        //$username = Str::slug($request->name, '_');
-
-        // Create a new user
-        $user = User::create([
-            'name' => $request['name'],
-            'username' => $request['nim'],
-            'email' => $request['email'],
-            'password' => Hash::make($request['password']),
-        ]);
-
-        // Create a new student
-        Student::create([
-            'user_id' => $user->id,
-            'nama_lengkap' => $request['name'],
-            'nim' => $request['nim'],
-        ]);
-
-        if ($request->roles === 'admin') {
-            $user->assignRole('admin');
+            return redirect()->route('user.index')->with('success', 'Pengguna berhasil dibuat.');
         } else {
-            $user->assignRole('user');
-        }
 
-            return redirect(route('user.index'))->with('success', 'Data berhasil disimpan');
+            // Validate individual form fields only when CSV is not present
+            $validator = Validator::make($request->all(), [
+                'name' => 'required|string|max:255',
+                'nim' => 'required|string|max:255|unique:students,nim',
+                'email' => 'required|string|email|max:255|unique:users,email',
+                'password' => 'required|string|min:2',
+                'roles' => 'required|string|in:admin,user',
+            ]);
+
+            if ($validator->fails()) {
+                return redirect()->back()->withErrors($validator)->withInput();
+            }
+
+            //$username = Str::slug($request->name, '_');
+
+            // Create a new user
+            $user = User::create([
+                'name' => $request['name'],
+                'username' => $request['nim'],
+                'email' => $request['email'],
+                'password' => Hash::make($request['password']),
+            ]);
+
+            // Create a new student
+            Student::create([
+                'user_id' => $user->id,
+                'nama_lengkap' => $request['name'],
+                'nim' => $request['nim'],
+            ]);
+
+            if ($request->roles === 'admin') {
+                $user->assignRole('admin');
+            } else {
+                $user->assignRole('user');
+            }
+
+            return redirect(route('user.index'))->with('success', 'Pengguna berhasil dibuat.');
         }
     }
 
@@ -158,18 +158,18 @@ class UserController extends Controller
      * Display the specified resource.
      */
     public function show(User $user)
-{
-    // Retrieve the student record based on the user_id
-    $student = Student::where('user_id', $user->id)->firstOrFail();
+    {
+        // Retrieve the student record based on the user_id
+        $student = Student::where('user_id', $user->id)->firstOrFail();
 
-    // Retrieve the presences related to the student and paginate them
-    $student->latest()->paginate(10)->withQueryString();
+        // Retrieve the presences related to the student and paginate them
+        $student->latest()->paginate(10)->withQueryString();
 
-    // Pass the data to the view
-    return view('pages.users.show', [
-        'student' => $student,
-    ]);
-}
+        // Pass the data to the view
+        return view('pages.users.show', [
+            'student' => $student,
+        ]);
+    }
 
 
     /**
@@ -200,24 +200,28 @@ class UserController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        // Update user data
-        $user->name = $request->name;
-        $user->username = $request->nim; // Assuming 'username' field in 'users' table
-        $user->email = $request->email;
-        if ($request->filled('password')) {
-            $user->password = Hash::make($request->password);
-        }
-        $user->save();
+        try {
+            // Update user data
+            $user->name = $request->name;
+            $user->username = $request->nim; // Assuming 'username' field in 'users' table
+            $user->email = $request->email;
+            if ($request->filled('password')) {
+                $user->password = Hash::make($request->password);
+            }
+            $user->save();
 
-        // Update student data (assuming user_id is stored in students table)
-        $student = Student::where('user_id', $user->id)->first();
-        if ($student) {
-            $student->nama_lengkap = $request->name;
-            $student->nim = $request->nim;
-            $student->save();
-        }
+            // Update student data (assuming user_id is stored in students table)
+            $student = Student::where('user_id', $user->id)->first();
+            if ($student) {
+                $student->nama_lengkap = $request->name;
+                $student->nim = $request->nim;
+                $student->save();
+            }
 
-        return redirect(route('user.index'))->with('success', 'Data berhasil diperbarui');
+            return redirect(route('user.index'))->with('success', 'Data pengguna berhasil diperbarui');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Data pengguna gagal diperbarui');
+        }   
     }
 
     /**
@@ -225,8 +229,12 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        $user->delete();
-        return redirect()->route('user.index')->with('success', 'Delete User Successfully');
+        try {
+            $user->delete();
+            return redirect()->route('user.index')->with('success', 'Pengguna berhasil dihapus');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Pengguna gagal dihapus');
+        }
     }
 }
 
