@@ -1,7 +1,7 @@
 <div class="main-sidebar sidebar-style-2">
     <aside id="sidebar-wrapper">
         <div class="sidebar-brand">
-            <a href="{{ route('home') }}">SIRAPAT</a>
+            <a href="{{ route('home') }}"><img src="{{ asset('img/SirapatHME.png') }}" alt="SRP Logo" style="width: 150px; height: auto;"></a>
         </div>
         <div class="sidebar-brand sidebar-brand-sm">
             <a href="{{ route('home') }}"><img src="{{ asset('img/FIX.png') }}" alt="SRP Logo" style="width: 30px; height: auto;"></a>

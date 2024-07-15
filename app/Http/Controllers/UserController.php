@@ -74,17 +74,17 @@ class UserController extends Controller
 
             // Create a new user
             $user = User::create([
-                'name' => $request['name'],
-                'username' => $request['nim'],
-                'email' => $request['email'],
+                'name' => ucwords(strtolower($request['name'])),
+                'username' => ucwords(strtolower($request['nim'])),
+                'email' => strtolower($request['email']),
                 'password' => Hash::make($request['password']),
             ]);
 
             // Create a new student
             Student::create([
                 'user_id' => $user->id,
-                'nama_lengkap' => $request['name'],
-                'nim' => $request['nim'],
+                'nama_lengkap' => ucwords(strtolower($request['name'])),
+                'nim' => ucwords(strtolower($request['nim'])),
             ]);
 
             if ($request->roles === 'admin') {
@@ -126,17 +126,17 @@ class UserController extends Controller
 
             // Buat user baru
             $user = User::create([
-                'name' => $name,
-                'username' => $nim,
-                'email' => $email,
+                'name' => ucwords(strtolower($name)),  // Merubah menjadi kapital huruf depan
+                'username' => ucwords(strtolower($nim)),
+                'email' => strtolower($email),
                 'password' => Hash::make($password),
             ]);
 
             // Simpan NIM ke tabel students
             Student::create([
                 'user_id' => $user->id,
-                'nama_lengkap' => $name,
-                'nim' => $nim,
+                'nama_lengkap' => ucwords(strtolower($name)),  // Merubah menjadi kapital huruf depan
+                'nim' => ucwords(strtolower($nim)),
             ]);
 
             if ($roles === 'admin') {
@@ -202,9 +202,9 @@ class UserController extends Controller
 
         try {
             // Update user data
-            $user->name = $request->name;
-            $user->username = $request->nim; // Assuming 'username' field in 'users' table
-            $user->email = $request->email;
+            $user->name = ucwords(strtolower($request->name));
+            $user->username = ucwords(strtolower($request->nim));
+            $user->email = strtolower($request->email);
             if ($request->filled('password')) {
                 $user->password = Hash::make($request->password);
             }
@@ -213,8 +213,8 @@ class UserController extends Controller
             // Update student data (assuming user_id is stored in students table)
             $student = Student::where('user_id', $user->id)->first();
             if ($student) {
-                $student->nama_lengkap = $request->name;
-                $student->nim = $request->nim;
+                $student->nama_lengkap = ucwords(strtolower($request->name));
+                $student->nim = ucwords(strtolower($request->nim));
                 $student->save();
             }
 

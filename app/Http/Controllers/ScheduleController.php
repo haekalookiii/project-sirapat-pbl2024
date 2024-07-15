@@ -50,7 +50,7 @@ class ScheduleController extends Controller
         try {
             $schedule->start_date = $request->start_date;
             $schedule->end_date = $request->end_date;
-            $schedule->title = $request->title;
+            $schedule->title = ucwords($request->title);
             $schedule->agenda = $request->agenda;
             $schedule->category = $request->category;
             $schedule->location = $request->location; // Adding locate to store method
@@ -93,7 +93,7 @@ class ScheduleController extends Controller
             // Update the schedule item with the provided data
             $schedule->start_date = $request->start_date;
             $schedule->end_date = $request->end_date;
-            $schedule->title = $request->title;
+            $schedule->title = ucwords($request->title);
             $schedule->agenda = $request->agenda;
             $schedule->category = $request->category;
             $schedule->location = $request->location; // Adding locate to update method
@@ -101,7 +101,7 @@ class ScheduleController extends Controller
 
             return back()
                 ->with('success', 'Jadwal berhasil diperbarui.');
-            } catch (\Exception $e) {
+        } catch (\Exception $e) {
             return back()
                 ->with('error', 'Jadwal gagal diperbarui.');
         }
@@ -116,7 +116,7 @@ class ScheduleController extends Controller
             $schedule->delete();
             return back()
                 ->with('success', 'Jadwal berhasil dihapus.');
-            } catch (\Exception $e) {
+        } catch (\Exception $e) {
                 return back()
                 ->with('error', 'Jadwal gagal dihapus.');
         }

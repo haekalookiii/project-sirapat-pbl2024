@@ -6,29 +6,31 @@
             @method('PUT')
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="presenceModalLabel">Edit Presence</h5>
+                    <h4 class="modal-title" id="presenceModalLabel">Edit Presensi</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-12">
-                            <div class="mb-3">
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="attendance_id" id="attendance_id_1" value="1">
-                                    <label class="form-check-label" for="attendance_id_1">ALPA</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="attendance_id" id="attendance_id_2" value="2">
-                                    <label class="form-check-label" for="attendance_id_2">HADIR</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="attendance_id" id="attendance_id_3" value="3">
-                                    <label class="form-check-label" for="attendance_id_3">IZIN</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="attendance_id" id="attendance_id_4" value="4">
-                                    <label class="form-check-label" for="attendance_id_4">SAKIT</label>
-                                </div>
+                            <label class="form-label">Status Kehadiran:</label>
+                            <div class="selectgroup w-100">
+                                <label class="selectgroup-item">
+                                    <input type="radio" name="attendance_id" id="attendance_id_1" value="1" class="selectgroup-input"
+                                    checked="">
+                                    <span class="selectgroup-button">ALPA</span>
+                                </label>
+                                <label class="selectgroup-item">
+                                    <input type="radio" name="attendance_id" id="attendance_id_2" value="2" class="selectgroup-input">
+                                    <span class="selectgroup-button">HADIR</span>
+                                </label>
+                                <label class="selectgroup-item">
+                                    <input type="radio" name="attendance_id" id="attendance_id_3" value="3" class="selectgroup-input">
+                                    <span class="selectgroup-button">IZIN</span>
+                                </label>
+                                <label class="selectgroup-item">
+                                    <input type="radio" name="attendance_id" id="attendance_id_4" value="4" class="selectgroup-input">
+                                    <span class="selectgroup-button">SAKIT</span>
+                                </label>
                             </div>
                         </div>
                     </div>

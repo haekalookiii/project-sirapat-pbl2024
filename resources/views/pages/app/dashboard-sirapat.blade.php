@@ -69,7 +69,7 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <h4>All Presences</h4>
+                                <h4>Presences</h4>
                             </div>
                             <div class="card-body">
                                 <div class="clearfix mb-3"></div>
@@ -114,15 +114,15 @@
                                                     @elseif($now >= $openedAt && $now <= $closedAt)
                                                         <div class="dropdown d-inline">
                                                             <button type="button" class="btn btn-sm btn-info btn-icon update-status-btn" data-status="Hadir" data-url="{{ route('update.presence', $presence->id) }}" data-schedule-title="{{ $presence->schedule->title }}">
-                                                                <i class="fas fa-edit"></i> Hadir
+                                                                Hadir
                                                             </button>
 
-                                                            <button type="button" class="btn btn-sm btn-success btn-icon update-status-btn" data-status="Izin" data-url="{{ route('update.presence', $presence->id) }}" data-schedule-title="{{ $presence->schedule->title }}">
-                                                                <i class="fas fa-edit"></i> Izin
+                                                            <button type="button" class="btn btn-sm btn-success btn-icon update-status-btn" data-status="Sakit" data-url="{{ route('update.presence', $presence->id) }}" data-schedule-title="{{ $presence->schedule->title }}">
+                                                                Sakit
                                                             </button>
 
-                                                            <button type="button" class="btn btn-sm btn-danger btn-icon update-status-btn" data-status="Sakit" data-url="{{ route('update.presence', $presence->id) }}" data-schedule-title="{{ $presence->schedule->title }}">
-                                                                <i class="fas fa-edit"></i> Sakit
+                                                            <button type="button" class="btn btn-sm btn-danger btn-icon update-status-btn" data-status="Izin" data-url="{{ route('update.presence', $presence->id) }}" data-schedule-title="{{ $presence->schedule->title }}">
+                                                                Izin
                                                             </button>
                                                         </div>
 
@@ -167,14 +167,6 @@
                                         </option>
                                     @endforeach
                                 </select>
-                                <select name="year" class="form-control ml-2">
-                                    <option value="">All Years</option>
-                                    @foreach (range(2020, date('Y')) as $year)
-                                        <option value="{{ $year }}" {{ request('year') == $year ? 'selected' : '' }}>
-                                            {{ $year }}
-                                        </option>
-                                    @endforeach
-                                </select>
                                 <div class="input-group-append">
                                     <button class="btn btn-primary" type="submit"><i class="fas fa-search"></i></button>
                                 </div>
@@ -206,7 +198,7 @@
                                         <td>
                                             <div class="btn-group" role="group">
                                                 <form action="{{ route('presence.show', $schedule->title) }}" method="GET" class="mr-2">
-                                                    <button type="submit" class="btn btn-warning btn-sm">
+                                                    <button type="submit" class="btn btn-info btn-sm">
                                                         <i class="fas fa-eye"></i> Detail
                                                     </button>
                                                 </form>

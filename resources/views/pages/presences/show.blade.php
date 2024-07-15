@@ -73,7 +73,7 @@
                                                 <td>{{ $presence->attendance->status_kehadiran }}</td>
                                                 <td>
                                                     <div class="d-flex justify-content-center">
-                                                        <button type="button" class="btn btn-sm btn-info btn-icon edit-button" data-id="{{ $presence->id }}" data-attendance="{{ $presence->attendance_id }}">
+                                                        <button type="button" class="btn btn-sm btn-warning btn-icon edit-button" data-id="{{ $presence->id }}" data-attendance="{{ $presence->attendance_id }}">
                                                             <i class="fas fa-edit"></i> Edit
                                                         </button>
                                                         <form action="{{ route('presence.destroy', $presence->id) }}" method="POST" class="ml-2">

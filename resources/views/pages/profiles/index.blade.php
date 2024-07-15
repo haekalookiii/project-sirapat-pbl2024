@@ -6,7 +6,7 @@
     <div class="main-content">
         <section class="section">
             <div class="section-header">
-                <h1>Profil</h1>
+                <h1>Profile</h1>
             </div>
             
             <div class="section-body">
@@ -71,12 +71,12 @@
                                             @csrf
                                             @method('PUT')
                                             <div class="card-header">
-                                                <h4>Edit Profil</h4>
+                                                <h4>Edit Profile</h4>
                                             </div>
                                             <div class="card-body">
                                                 <div class="form-group">
                                                     <label>Foto Profil</label>
-                                                    <input type="file" class="form-control @error('foto_profil') is-invalid @enderror" name="foto_profil">
+                                                    <input type="file" class="form-control @error('foto_profil') is-invalid @enderror" name="foto_profil" accept=".png, .jpg">
                                                     @if($student->foto_profil)
                                                         <div class="current-profile-picture">
                                                             <p><span>{{ basename($student->foto_profil) }}</span></p>
@@ -90,7 +90,7 @@
                                                 </div>
                                                 <div class="form-group">
                                                     <label>Nama Lengkap</label>
-                                                    <input type="text" class="form-control @error('nama_lengkap') is-invalid @enderror" name="nama_lengkap" value="{{ $student->nama_lengkap }}">
+                                                    <input type="text" class="form-control @error('nama_lengkap') is-invalid @enderror" name="nama_lengkap" value="{{ $student->nama_lengkap }}" readonly>
                                                     @error('nama_lengkap')
                                                         <div class="invalid-feedback">
                                                             {{ $message }}
@@ -99,7 +99,7 @@
                                                 </div>
                                                 <div class="form-group">
                                                     <label>Nomor Induk Mahasiswa</label>
-                                                    <input type="text" class="form-control @error('nim') is-invalid @enderror" name="nim" value="{{ $student->nim }}">
+                                                    <input type="text" class="form-control @error('nim') is-invalid @enderror" name="nim" value="{{ $student->nim }}" readonly>
                                                     @error('nim')
                                                         <div class="invalid-feedback">
                                                             {{ $message }}

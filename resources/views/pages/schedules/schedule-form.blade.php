@@ -4,6 +4,11 @@
     @endif
 
     @can('admin')
+    @if($data->title)
+        <h5 class="modal-title">Update Schedule</h5>
+        @else
+        <h5 class="modal-title">Create Schedule</h5>
+        @endif
     <div class="row">
         <div class="col-6">
             <div class="mb-3">
@@ -20,41 +25,59 @@
         <div class="col-12">
             <div class="mb-3">
                 <label for="title" class="form-label">Judul:</label>
-                <input type="text" name="title" class="form-control" value="{{ $data->title }}">
+                <input type="text" name="title" class="form-control @error('title') is-invalid @enderror" value="{{ $data->title }}">
+                @error('title')
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>
+                @enderror
             </div>
         </div>
         <div class="col-12">
             <div class="mb-3">
                 <label for="agenda" class="form-label">Agenda:</label>
-                    <textarea id="agenda" name="agenda" class="form-control">{{ $data->agenda }}</textarea>
-                </div>
+                <textarea id="agenda" name="agenda" class="form-control @error('agenda') is-invalid @enderror">{{ $data->agenda }}</textarea>
+                @error('agenda')
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>
+                @enderror
             </div>
+        </div>
         <div class="col-12">
             <div class="mb-3">
                 <label for="location" class="form-label">Lokasi:</label>
-                <input type="text" name="location" class="form-control" value="{{ $data->location }}">
+                <input type="text" name="location" class="form-control @error('location') is-invalid @enderror" value="{{ $data->location }}">
+                @error('location')
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>
+                @enderror
             </div>
         </div>
         <div class="col-12">
-            <div class="mb-3">
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" {{ $data->category == 'success' ? 'checked' : null }} type="radio" name="category" id="category-success" value="success">
-                    <label class="form-check-label" for="category-success">Tindak Lanjut</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" {{ $data->category == 'danger' ? 'checked' : null }} type="radio" name="category" id="category-danger" value="danger">
-                    <label class="form-check-label" for="category-danger">Penting</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" {{ $data->category == 'warning' ? 'checked' : null }} type="radio" name="category" id="category-warning" value="warning">
-                    <label class="form-check-label" for="category-warning">Perlu Diskusi</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" {{ $data->category == 'info' ? 'checked' : null }} type="radio" name="category" id="category-info" value="info">
-                    <label class="form-check-label" for="category-info">Informasi</label>
-                </div>
+            <label class="form-label">Kategori:</label>
+            <div class="selectgroup w-100">
+                <label class="selectgroup-item">
+                    <input {{ $data->category == 'success' ? 'checked' : null }} type="radio" name="category" id="category-success" value="success" class="selectgroup-input"
+                    checked="">
+                    <span class="selectgroup-button">Hijau</span>
+                </label>
+                <label class="selectgroup-item">
+                    <input {{ $data->category == 'danger' ? 'checked' : null }} type="radio" name="category" id="category-danger" value="danger" class="selectgroup-input">
+                    <span class="selectgroup-button">Merah</span>
+                </label>
+                <label class="selectgroup-item">
+                    <input {{ $data->category == 'warning' ? 'checked' : null }} type="radio" name="category" id="category-warning" value="warning" class="selectgroup-input">
+                    <span class="selectgroup-button">Orange</span>
+                </label>
+                <label class="selectgroup-item">
+                    <input {{ $data->category == 'info' ? 'checked' : null }} type="radio" name="category" id="category-info" value="info" class="selectgroup-input">
+                    <span class="selectgroup-button">Biru</span>
+                </label>
             </div>
         </div>
+        @if($data->title)
         <div class="col-12">
             <div class="mb-3">
                 <div class="form-check form-switch">
@@ -63,6 +86,7 @@
                 </div>
             </div>
         </div>
+        @endif
     </div>
     @endcan
 

@@ -12,7 +12,7 @@
                 @if($foto_profil)
                     <img src="{{ URL::asset('storage/'.$foto_profil) }}" alt="Foto Profil" class="rounded-circle">
                 @else
-                    <img src="{{ asset('img/avatar/avatar-5.png') }}"class="rounded-circle">
+                    <img src="{{ asset('img/avatar/avatar-1.png') }}"class="rounded-circle">
                 @endif
                     <div class="d-sm-none d-lg-inline-block">{{ auth()->user()->name }}</div>
             </a>

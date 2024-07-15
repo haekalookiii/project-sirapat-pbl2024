@@ -1,11 +1,11 @@
 @props(['action','data'])
 
 <div class="modal-dialog">
-    <form action="{{ $action }}" method="post">
-    @csrf
+    <form id="form-action" action="{{ $action }}" method="post">
+        @csrf
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Schedule</h5>
+                <h4 class="modal-title">Schedule</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">

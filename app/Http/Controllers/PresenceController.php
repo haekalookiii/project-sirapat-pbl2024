@@ -86,6 +86,11 @@ class PresenceController extends Controller
         try {
             // Update presence dengan status baru
             $presence->attendance_id = $request->input('attendance_id');
+
+            // Jika attendance_id adalah 1, set closed_at menjadi opened_at
+            if ($request->input('attendance_id') == 1) {
+                $presence->closed_at = $presence->opened_at;
+            }
             
             // Save the presence instance to the database
             $presence->save();

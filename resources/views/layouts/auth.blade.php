@@ -40,6 +40,12 @@
     <!-- END GA -->
     {{-- logo --}}
     <link rel="icon" href="{{ asset('/img/FIX.png') }}" type="Logo-Sirapat">
+
+    <style>
+        body {
+            background-color: #48b4c95c;
+        }
+    </style>
 </head>
 
 <body>

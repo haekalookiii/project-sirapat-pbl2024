@@ -44,6 +44,12 @@
         }
     </style>
 
+    <style>
+        body {
+            background-color: #48b4c95c;
+        }
+    </style>
+
     <!-- Start GA -->
     <script async
         src="https://www.googletagmanager.com/gtag/js?id=UA-94034622-3"></script>
@@ -219,167 +225,182 @@
     <!-- JS Modal Edit Presensi -->
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-        var editButtons = document.querySelectorAll('.edit-button');
-        editButtons.forEach(function (button) {
-            button.addEventListener('click', function () {
-                var id = this.dataset.id;
-                var attendanceId = this.dataset.attendance;
-                var form = document.getElementById('presenceForm');
-                
-                // Set the form action URL
-                form.action = '/presence/' + id;
-                
-                // Set the radio buttons based on the attendance ID
-                var radios = form.querySelectorAll('input[name="attendance_id"]');
-                radios.forEach(function (radio) {
-                    radio.checked = radio.value == attendanceId;
+            var editButtons = document.querySelectorAll('.edit-button');
+            editButtons.forEach(function (button) {
+                button.addEventListener('click', function () {
+                    var id = this.dataset.id;
+                    var attendanceId = this.dataset.attendance;
+                    var form = document.getElementById('presenceForm');
+                    
+                    // Set the form action URL
+                    form.action = '/presence/' + id;
+                    
+                    // Set the radio buttons based on the attendance ID
+                    var radios = form.querySelectorAll('input[name="attendance_id"]');
+                    radios.forEach(function (radio) {
+                        radio.checked = radio.value == attendanceId;
+                    });
+                    
+                    // Show the modal
+                    var presenceModal = new bootstrap.Modal(document.getElementById('presenceModal'));
+                    presenceModal.show();
                 });
-                
-                // Show the modal
-                var presenceModal = new bootstrap.Modal(document.getElementById('presenceModal'));
-                presenceModal.show();
             });
         });
-    });
     </script>
 
     <!-- JS FullCalendar -->
     <script>
-        const modal = $('#modal-action')
-        const csrfToken = $('meta[name=csrf_token]').attr('content')
+    const modal = $('#modal-action')
+    const csrfToken = $('meta[name=csrf_token]').attr('content')
 
         document.addEventListener('DOMContentLoaded', function() {
             var calendarEl = document.getElementById('calendar');
             var calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: 'dayGridMonth',
-            themeSystem: 'bootstrap5',
-            events: `{{ route('schedule.list') }}`,
-            @can('admin')
-            editable: true,
-            dateClick: function (info) {
-                $.ajax({
-                    url: `{{ route('schedule.create') }}`,
-                    data: {
-                        start_date: info.dateStr,
-                        end_date: info.dateStr
-                    },
-                    success: function (res) {
-                        modal.html(res).modal('show')
-                        $('.datepicker').datepicker({
-                            todayHighlight: true,
-                            format: 'yyyy-mm-dd'
-                        });
+                initialView: 'dayGridMonth',
+                themeSystem: 'bootstrap5',
+                events: `{{ route('schedule.list') }}`,
+                @can('admin')
+                editable: true,
+                dateClick: function (info) {
+                    $.ajax({
+                        url: `{{ route('schedule.create') }}`,
+                        data: {
+                            start_date: info.dateStr,
+                            end_date: info.dateStr
+                        },
+                        success: function (res) {
+                            modal.html(res).modal('show');
+                            $('.datepicker').datepicker({
+                                todayHighlight: true,
+                                format: 'yyyy-mm-dd'
+                            });
 
-                        $('#form-action').on('submit', function(e) {
-                            e.preventDefault()
-                            const form = this
-                            const formData = new FormData(form)
-                            $.ajax({
-                                url: form.action,
-                                method: form.method,
-                                data: formData,
-                                processData: false,
-                                contentType: false,
-                                success: function (res) {
-                                    modal.modal('hide')
-                                    calendar.refetchEvents()
-                                },
-                                error: function (res) {
+                            $('#form-action').on('submit', function(e) {
+                                e.preventDefault();
+                                const form = this;
+                                const formData = new FormData(form);
+                                $.ajax({
+                                    url: form.action,
+                                    method: form.method,
+                                    data: formData,
+                                    processData: false,
+                                    contentType: false,
+                                    success: function (res) {
+                                        modal.modal('hide');
+                                        calendar.refetchEvents();
+                                    },
+                                    error: function (xhr) {
+                                        const errors = xhr.responseJSON.errors;
+                                        for (const field in errors) {
+                                            const input = $(`[name="${field}"]`);
+                                            input.addClass('is-invalid');
+                                            input.next('.invalid-feedback').remove();
+                                            input.after(`<div class="invalid-feedback">${errors[field][0]}</div>`);
+                                        }
+                                    }
+                                });
+                            });
+                        }
+                    });
+                },
+                @endcan
+                eventClick: function ({event}) {
+                    $.ajax({
+                        url: `{{ url('schedule') }}/${event.id}/edit`,
+                        success: function (res) {
+                            modal.html(res).modal('show');
+                            $('.datepicker').datepicker({
+                                todayHighlight: true,
+                                format: 'yyyy-mm-dd'
+                            });
 
-                                }
-                            })
-                        })
-                    }
-                })
-            },
-            @endcan
-            eventClick: function ({event}) {
-                $.ajax({
-                    url: `{{ url('schedule') }}/${event.id}/edit`,
-                    success: function (res) {
-                        modal.html(res).modal('show')
-                        $('.datepicker').datepicker({
-                            todayHighlight: true,
-                            format: 'yyyy-mm-dd'
-                        });
-                        $('#form-action').on('submit', function(e) {
-                            e.preventDefault()
-                            const form = this
-                            const formData = new FormData(form)
-                            $.ajax({
-                                url: form.action,
-                                method: form.method,
-                                data: formData,
-                                processData: false,
-                                contentType: false,
-                                success: function (res) {
-                                    modal.modal('hide')
-                                    calendar.refetchEvents()
-                                }
-                            })
-                        })
-                    }
-                })
-            },
-            @can('admin')
-            eventDrop: function (info) {
-                const event = info.event;
-                $.ajax({
-                    url: `{{ url('schedule') }}/${event.id}`,
-                    method: 'put',
-                    data: {
-                        id: event.id,
-                        start_date: event.startStr,
-                        end_date: event.end ? event.end.toISOString().substring(0, 10) : null, // Check if end date is available
-                        title: event.title,
-                        agenda: event.extendedProps.agenda,
-                        category: event.extendedProps.category,
-                        location: event.extendedProps.location // Adding locate to data
-                    },
-                    headers: {
-                        'X-CSRF-TOKEN': csrfToken,
-                        accept: 'application/json'
-                    },
-                    success: function (res) {
-                        calendar.refetchEvents();
-                    },
-                    error: function (res) {
-                        const message = res.responseJSON.message;
-                        calendar.refetchEvents();
-                        info.revert();
-                    }
-                });
-            },
-            eventResize: function (info) {
-                const {event} = info;
-                $.ajax({
-                    url: `{{ url('schedule') }}/${event.id}`,
-                    method: 'put',
-                    data: {
-                        id: event.id,
-                        start_date: event.startStr,
-                        end_date: event.end.toISOString().substring(0, 10),
-                        title: event.title,
-                        agenda: event.extendedProps.agenda,
-                        category: event.extendedProps.category,
-                        location: event.extendedProps.location // Adding locate to data
-                    },
-                    headers: {
-                        'X-CSRF-TOKEN': csrfToken,
-                        accept: 'application/json'
-                    },
-                    success: function (res) {
-                        calendar.refetchEvents();
-                    },
-                    error: function (res) {
-                        const message = res.responseJSON.message;
-                        calendar.refetchEvents();
-                        info.revert();
-                    }
-                });
-            }
-
-            @endcan
+                            $('#form-action').on('submit', function(e) {
+                                e.preventDefault();
+                                const form = this;
+                                const formData = new FormData(form);
+                                $.ajax({
+                                    url: form.action,
+                                    method: form.method,
+                                    data: formData,
+                                    processData: false,
+                                    contentType: false,
+                                    success: function (res) {
+                                        modal.modal('hide');
+                                        calendar.refetchEvents();
+                                    },
+                                    error: function (xhr) {
+                                        const errors = xhr.responseJSON.errors;
+                                        for (const field in errors) {
+                                            const input = $(`[name="${field}"]`);
+                                            input.addClass('is-invalid');
+                                            input.next('.invalid-feedback').remove();
+                                            input.after(`<div class="invalid-feedback">${errors[field][0]}</div>`);
+                                        }
+                                    }
+                                });
+                            });
+                        }
+                    });
+                },
+                @can('admin')
+                eventDrop: function (info) {
+                    const event = info.event;
+                    $.ajax({
+                        url: `{{ url('schedule') }}/${event.id}`,
+                        method: 'put',
+                        data: {
+                            id: event.id,
+                            start_date: event.startStr,
+                            end_date: event.end ? event.end.toISOString().substring(0, 10) : null,
+                            title: event.title,
+                            agenda: event.extendedProps.agenda,
+                            category: event.extendedProps.category,
+                            location: event.extendedProps.location
+                        },
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken,
+                            accept: 'application/json'
+                        },
+                        success: function (res) {
+                            calendar.refetchEvents();
+                        },
+                        error: function (res) {
+                            const message = res.responseJSON.message;
+                            calendar.refetchEvents();
+                            info.revert();
+                        }
+                    });
+                },
+                eventResize: function (info) {
+                    const {event} = info;
+                    $.ajax({
+                        url: `{{ url('schedule') }}/${event.id}`,
+                        method: 'put',
+                        data: {
+                            id: event.id,
+                            start_date: event.startStr,
+                            end_date: event.end.toISOString().substring(0, 10),
+                            title: event.title,
+                            agenda: event.extendedProps.agenda,
+                            category: event.extendedProps.category,
+                            location: event.extendedProps.location
+                        },
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken,
+                            accept: 'application/json'
+                        },
+                        success: function (res) {
+                            calendar.refetchEvents();
+                        },
+                        error: function (res) {
+                            const message = res.responseJSON.message;
+                            calendar.refetchEvents();
+                            info.revert();
+                        }
+                    });
+                }
+                @endcan
             });
             calendar.render();
         });
