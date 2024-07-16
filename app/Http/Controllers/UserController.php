@@ -63,7 +63,7 @@ class UserController extends Controller
                 'name' => 'required|string|max:255',
                 'nim' => 'required|string|max:255|unique:students,nim',
                 'email' => 'required|string|email|max:255|unique:users,email',
-                'password' => 'required|string|min:2',
+                'password' => 'required|string|min:8',
                 'roles' => 'required|string|in:admin,user',
             ]);
 
@@ -116,7 +116,7 @@ class UserController extends Controller
                     'name' => 'required|string|max:255',
                     'nim' => 'required|string|max:255|unique:students,nim',
                     'email' => 'required|string|email|max:255|unique:users,email',
-                    'password' => 'required|string|min:2',
+                    'password' => 'required|string|min:8',
                     'roles' => 'required|string|in:admin,user',
                 ]
             );

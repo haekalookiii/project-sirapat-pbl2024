@@ -73,7 +73,6 @@ class ProfileController extends Controller
                 $validasiData['foto_profil'] = $student->foto_profil;
             }
             
-            $validasiData['hobby'] = $request->input('hobby') ? implode(',', $request->input('hobby')) : $student->hobby;
 
             // Update data
             $student = Student::findOrFail($request->user()->student->id);
@@ -115,6 +114,9 @@ class ProfileController extends Controller
             }
             $validasiData['foto_profil'] = $request->foto_profil->getClientOriginalName();
             $validasiData['foto_profil'] = $request->foto_profil->storeAs('mhs-img/' . $nim, $validasiData['foto_profil']);
+        } else {
+                // Jika tidak ada file baru, gunakan foto lama
+            $validasiData['foto_profil'] = $student->foto_profil;
         }
 
         $student = Student::findOrFail($request->user()->student->id);

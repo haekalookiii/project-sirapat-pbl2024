@@ -41,11 +41,17 @@
     {{-- logo --}}
     <link rel="icon" href="{{ asset('/img/FIX.png') }}" type="Logo-Sirapat">
 
-    <style>
+    <!-- <style>
         body {
-            background-color: #48b4c95c;
+            background: linear-gradient(
+                rgba(55, 81, 126, 0.5), /* Warna biru #37517e transparan di bagian atas */
+                rgba(55, 81, 126, 0.5) /* Warna biru #37517e transparan di bagian bawah */
+            ), url('{{ asset('img/Poliban.jpg') }}');
+            background-size: cover; /* Atur agar gambar mengisi seluruh layar */
         }
-    </style>
+    </style> -->
+
+
 </head>
 
 <body>

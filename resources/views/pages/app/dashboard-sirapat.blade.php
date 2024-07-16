@@ -147,91 +147,89 @@
         </section>
 @endcan
 @can('admin')
-            <section class="section">
-    <div class="row mt-4">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header">
-                    <h4>All Schedules</h4>
-                    <div class="section-header-button">
-                                    <a href="{{ route('presence.index') }}" class="btn btn-primary">All Presences</a>
-
-                                </div>
-                </div>
-                <div class="card-body">
-                    <div class="float-right mb-3">
-                        <form method="GET" action="{{ route('home') }}">
-                            <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Search" name="query">
-                                <select name="month" class="form-control ml-2">
-                                    <option value="">All Months</option>
-                                    @foreach (range(1, 12) as $month)
-                                        <option value="{{ $month }}" {{ request('month') == $month ? 'selected' : '' }}>
-                                            {{ date('F', mktime(0, 0, 0, $month, 1)) }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                <div class="input-group-append">
-                                    <button class="btn btn-primary" type="submit"><i class="fas fa-search"></i></button>
-                                </div>
+        <section class="section">
+            <div class="row mt-4">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>All Schedules</h4>
+                            <div class="section-header-button">
+                                <a href="{{ route('presence.index') }}" class="btn btn-primary">All Presences</a>
                             </div>
-                        </form>
-                    </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="float-right mb-3">
+                                <form method="GET" action="{{ route('home') }}">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" placeholder="Search" name="query">
+                                        <select name="month" class="form-control ml-2">
+                                            <option value="">All Months</option>
+                                            @foreach (range(1, 12) as $month)
+                                                <option value="{{ $month }}" {{ request('month') == $month ? 'selected' : '' }}>
+                                                    {{ date('F', mktime(0, 0, 0, $month, 1)) }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        <div class="input-group-append">
+                                            <button class="btn btn-primary" type="submit">
+                                                <i class="fas fa-search"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
 
-                    <div class="table-responsive">
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>No.</th>
-                                    <th>Rapat</th>
-                                    <th>Tanggal</th>
-                                    <th>Lokasi</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @php
-                                    $numberOfItems = $schedules->perPage() * ($schedules->currentPage() - 1);
-                                @endphp
-                                @foreach ($schedules as $schedule)
-                                    <tr>
-                                        <td>{{ $numberOfItems + $loop->iteration }}</td>
-                                        <td>{{ $schedule->title }}</td>
-                                        <td>{{ date('d-m-Y', strtotime($schedule->start_date)) }} - {{ date('d-m-Y', strtotime($schedule->end_date)) }}</td>
-                                        <td>{{ $schedule->location }}</td>
-                                        <td>
-                                            <div class="btn-group" role="group">
-                                                <form action="{{ route('presence.show', $schedule->title) }}" method="GET" class="mr-2">
-                                                    <button type="submit" class="btn btn-info btn-sm">
-                                                        <i class="fas fa-eye"></i> Detail
-                                                    </button>
-                                                </form>
-                                                <form action="{{ route('presence.store') }}" method="POST" style="display: inline-block;">
-                                                    @csrf
-                                                    <input type="hidden" name="schedule_id" value="{{ $schedule->id }}">
-                                                    <button type="button" class="btn btn-primary btn-sm btn-create-presensi" data-schedule-title="{{ $schedule->title }}">
-                                                        Buat Presensi
-                                                    </button>
-                                                </form>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>No.</th>
+                                            <th>Rapat</th>
+                                            <th>Tanggal</th>
+                                            <th>Lokasi</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @php
+                                            $numberOfItems = $schedules->perPage() * ($schedules->currentPage() - 1);
+                                        @endphp
+                                        @foreach ($schedules as $schedule)
+                                            <tr>
+                                                <td>{{ $numberOfItems + $loop->iteration }}</td>
+                                                <td>{{ $schedule->title }}</td>
+                                                <td>{{ date('d-m-Y', strtotime($schedule->start_date)) }} - {{ date('d-m-Y', strtotime($schedule->end_date)) }}</td>
+                                                <td>{{ $schedule->location }}</td>
+                                                <td>
+                                                    <div class="btn-group" role="group">
+                                                        <form action="{{ route('presence.show', $schedule->title) }}" method="GET" class="mr-2">
+                                                            <button type="submit" class="btn btn-info btn-sm">
+                                                                <i class="fas fa-eye"></i> Detail
+                                                            </button>
+                                                        </form>
+                                                        <form action="{{ route('presence.store') }}" method="POST" style="display: inline-block;">
+                                                            @csrf
+                                                            <input type="hidden" name="schedule_id" value="{{ $schedule->id }}">
+                                                            <button type="button" class="btn btn-primary btn-sm btn-create-presensi" data-schedule-title="{{ $schedule->title }}">
+                                                                Buat Presensi
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
 
-                    <div class="float-right">
-                        {{ $schedules->withQueryString()->links() }}
+                            <div class="float-right">
+                                {{ $schedules->withQueryString()->links() }}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-</section>
-
-
-
+        </section>
 @endcan
         </div>
     </div> 

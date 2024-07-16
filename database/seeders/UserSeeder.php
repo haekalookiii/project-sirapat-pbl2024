@@ -18,7 +18,7 @@ class UserSeeder extends Seeder
             'name' => 'Admin',
             'username' => 'Admin',
             'email' => 'admin@hme.poliban.ac.id',
-            'password' => bcrypt('123'),
+            'password' => bcrypt('Admin#1234'),
         ]);
 
         $admin->assignRole('admin');

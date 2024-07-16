@@ -20,7 +20,7 @@
                     <div class="col-md-4">
                         <div class="card mb-4">
                             <div class="card-body text-center">
-                                <img src="{{ $student->foto_profil ? Storage::url($student->foto_profil) : asset('img/avatar/avatar-5.png') }}" alt="{{ $student->nama_lengkap }}" class="rounded-circle profile-picture mb-3" style="max-width: 150px; max-height: 150px;">
+                                <img src="{{ $student->foto_profil ? URL::asset('storage/'.$student->foto_profil) : asset('img/avatar/avatar-5.png') }}" alt="{{ $student->nama_lengkap }}" class="rounded-circle profile-picture mb-3" style="max-width: 150px; max-height: 150px;">
                                 <h5>{{ $student->nama_lengkap }}</h5>
                                 <a>{{ $student->nim }}</a>
                             </div>

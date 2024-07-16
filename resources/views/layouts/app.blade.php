@@ -44,11 +44,11 @@
         }
     </style>
 
-    <style>
+    <!-- <style>
         body {
             background-color: #48b4c95c;
         }
-    </style>
+    </style> -->
 
     <!-- Start GA -->
     <script async
