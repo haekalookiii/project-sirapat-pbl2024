@@ -56,24 +56,31 @@
             </div>
         </div>
         <div class="col-12">
-            <label class="form-label">Kategori:</label>
+            <label class="form-label">Divisi:</label>
             <div class="selectgroup w-100">
                 <label class="selectgroup-item">
-                    <input {{ $data->category == 'success' ? 'checked' : null }} type="radio" name="category" id="category-success" value="success" class="selectgroup-input"
-                    checked="">
-                    <span class="selectgroup-button">Hijau</span>
+                    <input {{ $data->category == 'success' ? 'checked' : null }} type="radio" name="category" id="category-success" value="success" class="selectgroup-input" checked>
+                    <span class="selectgroup-button">Agama</span>
                 </label>
                 <label class="selectgroup-item">
                     <input {{ $data->category == 'danger' ? 'checked' : null }} type="radio" name="category" id="category-danger" value="danger" class="selectgroup-input">
-                    <span class="selectgroup-button">Merah</span>
+                    <span class="selectgroup-button">Mikat</span>
                 </label>
                 <label class="selectgroup-item">
                     <input {{ $data->category == 'warning' ? 'checked' : null }} type="radio" name="category" id="category-warning" value="warning" class="selectgroup-input">
-                    <span class="selectgroup-button">Orange</span>
+                    <span class="selectgroup-button">Bidik</span>
                 </label>
                 <label class="selectgroup-item">
                     <input {{ $data->category == 'info' ? 'checked' : null }} type="radio" name="category" id="category-info" value="info" class="selectgroup-input">
-                    <span class="selectgroup-button">Biru</span>
+                    <span class="selectgroup-button">Fungsio</span>
+                </label>
+                <label class="selectgroup-item">
+                    <input {{ $data->category == 'secondary' ? 'checked' : null }} type="radio" name="category" id="category-secondary" value="secondary" class="selectgroup-input">
+                    <span class="selectgroup-button">Medinfo</span>
+                </label>
+                <label class="selectgroup-item">
+                    <input {{ $data->category == 'dark' ? 'checked' : null }} type="radio" name="category" id="category-dark" value="dark" class="selectgroup-input">
+                    <span class="selectgroup-button">Humas</span>
                 </label>
             </div>
         </div>
@@ -122,6 +129,28 @@
                 <input type="text" name="locate" disabled class="form-control" value="{{ $data->location }}">
             </div>
         </div>
+        <div class="col-12">
+        <div class="mb-3">
+            <label for="category" class="form-label">Divisi:</label>
+            @php
+                $category = '';
+                if ($data->category == 'success') {
+                    $category = 'Divisi Keagamaan';
+                } elseif ($data->category == 'danger') {
+                    $category = 'Divisi Minat dan Bakat';
+                } elseif ($data->category == 'warning') {
+                    $category = 'Divisi Bimbingan Pendidikan';
+                } elseif ($data->category == 'info') {
+                    $category = 'Divisi Fungsionaris';
+                } elseif ($data->category == 'secondary') {
+                    $category = 'Divisi Media dan Informasi';
+                } elseif ($data->category == 'dark') {
+                    $category = 'Divisi Hubungan Masyarakat';
+                }
+            @endphp
+            <input type="text" name="category" disabled class="form-control" value="{{ $category }}">
+        </div>
+    </div>
     </div>
     @endcan
 </x-modal-action>

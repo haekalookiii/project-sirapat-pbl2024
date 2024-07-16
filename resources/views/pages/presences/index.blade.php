@@ -27,10 +27,9 @@
                             </div>
                             <div class="card-body">
                                 <div class="float-right">
-                                    <form method="GET" action="{{ route('presence.show', $schedule->title) }}">
+                                    <form method="GET" action="{{ route('presence.index') }}">
                                         <div class="input-group">
                                             <input type="text" class="form-control" placeholder="Search" name="name" value="{{ request()->input('name') }}">
-                                            <input type="date" class="form-control ml-2" placeholder="Filter by date" name="tanggal" value="{{ request()->input('tanggal') }}">
                                             <div class="input-group-append">
                                                 <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>
                                             </div>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Presence;
 use App\Models\User;
 use App\Models\Student;
 use Illuminate\Support\Str;
@@ -158,18 +159,41 @@ class UserController extends Controller
      * Display the specified resource.
      */
     public function show(User $user)
-    {
-        // Retrieve the student record based on the user_id
-        $student = Student::where('user_id', $user->id)->firstOrFail();
+{
+    // Retrieve the student record based on the user_id
+    $student = Student::where('user_id', $user->id)->firstOrFail();
 
-        // Retrieve the presences related to the student and paginate them
-        $student->latest()->paginate(10)->withQueryString();
+    // Retrieve the presences related to the student and paginate them
+    $presences = Presence::where('student_id', $student->id)
+        ->latest()
+        ->paginate(10)
+        ->withQueryString();
 
-        // Pass the data to the view
-        return view('pages.users.show', [
-            'student' => $student,
-        ]);
-    }
+    // Count the occurrences of each attendance_id
+    $attendanceCounts = Presence::where('student_id', $student->id)
+        ->selectRaw('attendance_id, COUNT(*) as count')
+        ->groupBy('attendance_id')
+        ->get()
+        ->keyBy('attendance_id')
+        ->map(function ($item) {
+            return $item->count;
+        });
+
+    // Get counts for each specific attendance_id
+    $attendanceStatuses = [
+        'alpa' => $attendanceCounts->get(1, 0), // Default to 0 if not found
+        'hadir' => $attendanceCounts->get(2, 0),
+        'izin' => $attendanceCounts->get(3, 0),
+        'sakit' => $attendanceCounts->get(4, 0),
+    ];
+
+    // Pass the data to the view
+    return view('pages.users.show', [
+        'student' => $student,
+        'presences' => $presences,
+        'attendanceStatuses' => $attendanceStatuses,
+    ]);
+}
 
 
     /**

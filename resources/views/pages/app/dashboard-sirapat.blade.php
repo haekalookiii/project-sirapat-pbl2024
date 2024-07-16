@@ -153,6 +153,10 @@
             <div class="card">
                 <div class="card-header">
                     <h4>All Schedules</h4>
+                    <div class="section-header-button">
+                                    <a href="{{ route('presence.index') }}" class="btn btn-primary">All Presences</a>
+
+                                </div>
                 </div>
                 <div class="card-body">
                     <div class="float-right mb-3">

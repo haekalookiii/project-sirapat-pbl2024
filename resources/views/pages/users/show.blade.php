@@ -24,39 +24,59 @@
                                 <a>{{ $student->nim }}</a>
                             </div>
                         </div>
-                    </div>
-                        <div class="col-md-8">
                             <div class="card">
                                 <div class="card-body">
-                                    <h5>Informasi Profil</h5>
-                                    <div class="form-group">
-                                        <label>Tanggal Lahir</label>
-                                        @if($student->tanggal_lahir)
-                                        <input type="text" class="form-control" name="tanggal_lahir" value="{{ date('d-m-Y', strtotime($student->tanggal_lahir )) }}" disabled>
-                                        @else
-                                        <input type="text" class="form-control" name="tanggal_lahir" value="{{ $student->tanggal_lahir }}" disabled>
-                                        @endif
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Jenis Kelamin</label>
-                                        <input type="text" class="form-control" name="jenis_kelamin" value="{{ $student->jenis_kelamin == 'L' ? 'Laki-laki' : ($student->jenis_kelamin == 'P' ? 'Perempuan' : '') }}" disabled>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Program Studi</label>
-                                        <input type="text" class="form-control" name="program_studi" value="{{ $student->program_studi == 'TI' ? 'Teknik Informatika' : ($student->program_studi == 'Listrik' ? 'Teknik Listrik' : ($student->program_studi == 'SIKC' ? 'Sistem Informasi Kota Cerdas' : '')) }}" disabled>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Angkatan Mahasiswa</label>
-                                        <input type="text" class="form-control" name="angkatan_mahasiswa" value="{{ $student->angkatan_mahasiswa }}" disabled>
-                                    </div>
-                                    <div class="card-footer text-right">
-                                        <a class="btn btn-danger" href="{{ route('user.index') }}">Kembali</a>
-                                    </div>
+                                    <!-- <h5>History Presensi</h5> -->
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            <span>Alpa</span>
+                                            <span class="badge bg-danger rounded-pill">{{ $attendanceStatuses['alpa'] }}</span>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            <span>Hadir</span>
+                                            <span class="badge bg-success rounded-pill">{{ $attendanceStatuses['hadir'] }}</span>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            <span>Izin</span>
+                                            <span class="badge bg-info rounded-pill">{{ $attendanceStatuses['izin'] }}</span>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            <span>Sakit</span>
+                                            <span class="badge bg-warning rounded-pill">{{ $attendanceStatuses['sakit'] }}</span>
+                                        </li>
+                                    </ul>
+                                    {{ $presences->links() }}
+                                </div>
+                            </div>
+                        </div>
+                    <div class="col-md-8">
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <h5>Informasi Profil</h5>
+                                <div class="form-group">
+                                    <label>Tanggal Lahir</label>
+                                    <input type="text" class="form-control" name="tanggal_lahir" value="{{ $student->tanggal_lahir ? date('d-m-Y', strtotime($student->tanggal_lahir)) : '' }}" disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label>Jenis Kelamin</label>
+                                    <input type="text" class="form-control" name="jenis_kelamin" value="{{ $student->jenis_kelamin == 'L' ? 'Laki-laki' : ($student->jenis_kelamin == 'P' ? 'Perempuan' : '') }}" disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label>Program Studi</label>
+                                    <input type="text" class="form-control" name="program_studi" value="{{ $student->program_studi == 'TI' ? 'Teknik Informatika' : ($student->program_studi == 'Listrik' ? 'Teknik Listrik' : ($student->program_studi == 'SIKC' ? 'Sistem Informasi Kota Cerdas' : '')) }}" disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label>Angkatan Mahasiswa</label>
+                                    <input type="text" class="form-control" name="angkatan_mahasiswa" value="{{ $student->angkatan_mahasiswa }}" disabled>
+                                </div>
+                                <div class="card-footer text-right">
+                                    <a class="btn btn-danger" href="{{ route('user.index') }}">Kembali</a>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </section>
-        </div>
+            </div>
+        </section>
+    </div>
 @endsection

@@ -10,31 +10,55 @@ use Illuminate\Http\Request;
 
 class PresenceController extends Controller
 {
-    public function index()
-    {
-        // return view('pages.presences.index', [
-        //     'schedules' => Schedule::with(['presence'])->latest()->paginate(10),
-        // ]);
+    public function index(Request $request)
+{
+    $query = Presence::with(['schedule', 'student', 'attendance'])->latest();
+
+    if ($request->has('name')) {
+        $name = $request->input('name');
+        $query->whereHas('student', function ($query) use ($name) {
+            $query->where('nama_lengkap', 'like', '%' . $name . '%'); // Adjust based on the correct column name
+        });
     }
+
+    $presences = $query->paginate(10)->withQueryString();
+
+    // Fetch the schedule (assuming you have a way to determine which schedule to display)
+    
+
+    return view('pages.presences.index', [
+        'presences' => $presences,
+    ]);
+}
+
 
     public function show(Request $request, Schedule $schedule)
-    {
-        $query = $schedule->presence()->with(['schedule', 'student', 'attendance'])->latest();
+{
+    $query = $schedule->presence()->with(['schedule', 'student', 'attendance'])->latest();
 
-        // Filter berdasarkan tanggal jika ada input tanggal dari form
-        if ($request->has('tanggal')) {
-            $tanggal = $request->input('tanggal');
-            $query->whereDate('created_at', '=', $tanggal);
-        }
-
-        $presences = $query->paginate(10)->withQueryString();
-
-        return view('pages.presences.show', [
-            'id_jadwal' => $schedule->id,
-            'presences' => $presences,
-            'schedule' => $schedule, // Sertakan juga variabel $schedule untuk form filter
-        ]);
+    // Filter berdasarkan tanggal jika ada input tanggal dari form
+    if ($request->has('tanggal')) {
+        $tanggal = $request->input('tanggal');
+        $query->whereDate('created_at', '=', $tanggal);
     }
+
+    // Filter berdasarkan name jika ada input name dari form
+    if ($request->has('name')) {
+        $name = $request->input('name');
+        $query->whereHas('student', function ($query) use ($name) {
+            $query->where('nama_lengkap', 'like', '%' . $name . '%'); // Sesuaikan dengan kolom nama yang benar
+        });
+    }
+
+    $presences = $query->paginate(10)->withQueryString();
+
+    return view('pages.presences.show', [
+        'id_jadwal' => $schedule->id,
+        'presences' => $presences,
+        'schedule' => $schedule, // Sertakan juga variabel $schedule untuk form filter
+    ]);
+}
+
 
 
 
