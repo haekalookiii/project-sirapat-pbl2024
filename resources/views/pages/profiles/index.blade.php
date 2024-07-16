@@ -20,7 +20,7 @@
                     <div class="col-md-4">
                         <div class="card mb-4">
                             <div class="card-body text-center">
-                                <img src="{{ $student->foto_profil ? URL::asset('storage/'.$student->foto_profil) : asset('img/avatar/avatar-5.png') }}" alt="{{ $student->nama_lengkap }}" class="rounded-circle profile-picture mb-3" style="max-width: 150px; max-height: 150px;">
+                                <img src="{{ $student->foto_profil ? Storage::url($student->foto_profil) : asset('img/avatar/avatar-5.png') }}" alt="{{ $student->nama_lengkap }}" class="rounded-circle profile-picture mb-3" style="max-width: 150px; max-height: 150px;">
                                 <h5>{{ $student->nama_lengkap }}</h5>
                                 <a>{{ $student->nim }}</a>
                             </div>
@@ -28,10 +28,12 @@
                         <div class="card">
                             <div class="card-body">
                                 <!-- Form for changing profile picture -->
-                                <form action="{{ route('update.profile.picture') }}" method="post" enctype="multipart/form-data">
+                                <form action="{{ route('update.profile.picture', $student->nim) }}" method="post" enctype="multipart/form-data">
+                                    @method('put')
                                     @csrf
                                     <div class="form-group">
                                         <label>Ubah Foto Profil</label>
+                                        <input type="hidden" name="oldImage" value="{{ $student->foto_profil }}">
                                         <input type="file" class="form-control" name="foto_profil">
                                     </div>
                                     <button type="button" class="btn btn-primary btn-sm btn-update-profile">Simpan</button>

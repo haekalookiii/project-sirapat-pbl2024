@@ -59,8 +59,8 @@ class ProfileController extends Controller
             // Periksa apakah ada file foto baru yang diunggah
             if ($request->hasFile('foto_profil')) {
                 // Simpan foto baru dan atur path di kolom foto_profil
-                $validasiData['foto_profil'] = $request-> foto_profil ->getClientOriginalName();
-                $validasiData['foto_profil'] = $request-> foto_profil ->storeAs('mhs-img/'.$validasiData['nim'],$validasiData['foto_profil']);
+                $validasiData['foto_profil'] = $request->foto_profil->getClientOriginalName();
+                $validasiData['foto_profil'] = $request->foto_profil->storeAs('mhs-img/'.$validasiData['nim'],$validasiData['foto_profil']);
                 
                 // Hapus foto lama jika ada
                 if ($student->foto_profil) {
@@ -104,26 +104,21 @@ class ProfileController extends Controller
             'foto_profil' => 'required|image|mimes:jpeg,png,jpg|max:2048'
         ]);
         // Ambil NIM mahasiswa yang sedang login
-        $nim = $request->user()->student->nim;
-        
+        $nim = auth()->user()->student->nim;
+
         // Periksa apakah ada file foto baru yang diunggah
-        if ($request->hasFile('foto_profil')) {
-            // Simpan foto baru dan atur path di kolom foto_profil
-                $validasiData['foto_profil'] = $request-> foto_profil ->getClientOriginalName();
-                $validasiData['foto_profil'] = $request-> foto_profil ->storeAs('mhs-img/'.$nim,$validasiData['foto_profil']);
-                
-                // Hapus foto lama jika ada
-                if ($student->foto_profil) {
-                    $validasiData['foto_profil'] = Storage::deleteDirectory('mhs-img/'.$nim);
-                    $validasiData['foto_profil'] = null;
-                }
-            } else {
-                // Jika tidak ada file baru, gunakan foto lama
-                $validasiData['foto_profil'] = $student->foto_profil;
+        if ($request->file('foto_profil')) {
+            // Hapus foto lama jika ada
+            if ($request->oldImage) {
+                $validasiData['foto_profil'] = Storage::deleteDirectory('mhs-img/'.$nim);
+                $validasiData['foto_profil'] = null;
             }
+            $validasiData['foto_profil'] = $request->foto_profil->getClientOriginalName();
+            $validasiData['foto_profil'] = $request->foto_profil->storeAs('mhs-img/' . $nim, $validasiData['foto_profil']);
+        }
 
         $student = Student::findOrFail($request->user()->student->id);
-            $student->update($validasiData);
+        $student->update($validasiData);
 
             return redirect()->route('profile.index')->with('success', 'Foto profil berhasil diperbarui');
         } catch (QueryException $e) {
