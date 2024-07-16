@@ -117,6 +117,7 @@ class ProfileController extends Controller
         } else {
                 // Jika tidak ada file baru, gunakan foto lama
             $validasiData['foto_profil'] = $student->foto_profil;
+            return redirect()->back()->with('error', 'Foto profil belum diupload.');
         }
 
         $student = Student::findOrFail($request->user()->student->id);
