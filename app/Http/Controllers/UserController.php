@@ -71,8 +71,6 @@ class UserController extends Controller
                 return redirect()->back()->withErrors($validator)->withInput();
             }
 
-            //$username = Str::slug($request->name, '_');
-
             // Create a new user
             $user = User::create([
                 'name' => ucwords(strtolower($request['name'])),
